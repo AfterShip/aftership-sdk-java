@@ -21,8 +21,13 @@ public class ConnectionAPI {
     public ConnectionAPI(String keyAPI) {
       //  this.keyAPI = keyAPI;
     }
-
-
+    /**
+    * Return a list of couriers supported by AfterShip along with their names,
+    * URLs and slugs.
+    *
+    * @return     A list of Object Courier, with all the couriers returned
+     * by the API.
+    **/
     public List<Courier> getCouriers() throws Exception{
 
 

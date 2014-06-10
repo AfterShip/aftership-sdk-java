@@ -6,12 +6,19 @@ import org.json.JSONObject;
  * Created by User on 10/6/14.
  */
 public class Courier {
+
+    /** Unique code of courier */
     private String slug;
+    /** Name of courier */
     private String name;
+    /** Contact phone number of courier */
     private String phone;
+    /** Other name of courier, if several they will be separated by commas */
     private String other_name;
+    /** Website link of courier */
     private String web_url;
 
+    /** Default constructor with all the fields of the class */
     public Courier(String web_url, String slug, String name, String phone, String other_name) {
         this.web_url = web_url;
         this.slug = slug;
@@ -19,6 +26,14 @@ public class Courier {
         this.phone = phone;
         this.other_name = other_name;
     }
+
+    /**
+     * Constructor, creates a Courier from a JSONObject with the information of the Courier,
+     * if any field is not specified it will be ""
+     *
+     * @param jsonCourier   A JSONObject with information of the Courier
+     * by the API.
+     **/
     public Courier(JSONObject jsonCourier){
        this.web_url = jsonCourier.has("web_url")?jsonCourier.getString("web_url"):"";
         this.slug =  jsonCourier.has("slug")?jsonCourier.getString("slug"):"";
