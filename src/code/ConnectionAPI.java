@@ -24,6 +24,12 @@ public class ConnectionAPI {
     public ConnectionAPI(String keyAPI) {
         this.keyAPI = keyAPI;
     }
+
+    public void postTracking(Tracking tracking){
+
+
+    }
+
     /**
     * Return a list of couriers supported by AfterShip along with their names,
     * URLs and slugs.

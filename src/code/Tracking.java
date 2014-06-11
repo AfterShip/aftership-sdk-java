@@ -36,6 +36,36 @@ public class Tracking {
     /** Custom fields that accept any text string */
     private Map<String,String> customFields;
 
+    /** fields informed by Aftership*/
+
+    /** Date and time of the tracking created. */
+    private String createdAt;
+    /** Date and time of the tracking last updated. */
+    private String updatedAt;
+    /** Whether or not AfterShip will continue tracking the shipments. Value is `false` when status is `Delivered` or `Expired`. */
+    private boolean active;
+    /** Expected delivery date (if any).  */
+    private String expectedDelivery;
+    /** Origin country of the tracking. ISO Alpha-3 */
+    private String origin_country_iso3;
+    /** Number	Number of packages under the tracking. */
+    private int shipmentPackageCount;
+    /** Shipment type provided by carrier (if any). */
+    private String shipment_type;
+    /** Signed by information for delivered shipment (if any). */
+    private String signed_by;
+    /** Source of how this tracking is added. */
+    private String source;
+    /** Current status of tracking. */
+    private String tag;
+    /** Number of attempts AfterShip tracks at courier's system. */
+    private int trackedCount;
+    /** Array of Hash describes the checkpoint information. */
+    List<Checkpoint> checkPoints;
+
+
+
+
     public Tracking(String trackingNumber) {
         this.trackingNumber = trackingNumber;
         this.title = trackingNumber;

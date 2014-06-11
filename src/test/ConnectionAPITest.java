@@ -68,11 +68,7 @@ public class ConnectionAPITest {
 
     @Test
     public void testPostTracking() throws Exception {
-        JSONObject object = new JSONObject();
-            object.put("name", "Jack Hack");
-            object.put("score", new Integer(200));
-            object.put("current", new Double(152.32));
-            object.put("nickname", "Hacker");
+
 
     }
 
