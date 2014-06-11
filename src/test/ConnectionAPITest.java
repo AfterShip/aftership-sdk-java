@@ -56,7 +56,7 @@ public class ConnectionAPITest {
     public void testDetectCouriers() throws Exception {
         List<Courier> couriers = connection.detectCouriers("05167019264110");
         assertEquals("It should return 2 couriers", 2, couriers.size());
-
+       // System.out.println(couriers);
         try{
             connection.detectCouriers("asd1");
 
@@ -68,6 +68,17 @@ public class ConnectionAPITest {
 
     @Test
     public void testPostTracking() throws Exception {
+
+        Tracking  tracking1 = new Tracking("05167019264110");
+        tracking1.setSlug("dpd");
+        tracking1.addSmes("+85212345678");
+        tracking1.addSmes("+85212345679");
+        tracking1.addEmails("email@yourdomain.com");
+        tracking1.addEmails("another_email@yourdomain.com");
+        tracking1.addCustomFields("product_name","iPhone Case");
+        tracking1.addCustomFields("product_price","USD19.99");
+
+        connection.postTracking(tracking1);
 
 
     }

@@ -1,5 +1,6 @@
 package code;
 import com.sun.jmx.remote.internal.ArrayQueue;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -205,8 +206,14 @@ public class Tracking {
         trackingJSON.put("tracking_number", this.trackingNumber);
         if(this.slug!=null) trackingJSON.put("slug", this.slug);
         if(this.title!=null) trackingJSON.put("title", this.title);
-        if(this.emails!=null) trackingJSON.put("emails",this.emails);
-        if(this.smes!=null) trackingJSON.put("smses",this.smes);
+        if(this.emails!=null){
+            JSONArray emailsJSON = new JSONArray(this.emails);
+            trackingJSON.put("emails", emailsJSON);
+        }
+        if(this.smes!=null) {
+            JSONArray smsesJSON= new JSONArray(this.smes);
+            trackingJSON.put("smses", smsesJSON);
+        }
         if(this.customerName!=null) trackingJSON.put("custonmer_name",this.customerName);
         if(this.destinationCountryISO3!=null) trackingJSON.put("destination_country_iso3",this.destinationCountryISO3);
         if(this.orderID!=null) trackingJSON.put("order_id",this.orderID);

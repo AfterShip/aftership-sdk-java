@@ -6,6 +6,7 @@ import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import org.json.*;
+import java.io.OutputStreamWriter;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -25,8 +26,12 @@ public class ConnectionAPI {
         this.keyAPI = keyAPI;
     }
 
-    public void postTracking(Tracking tracking){
+    public void postTracking(Tracking tracking) throws AftershipAPIException,IOException,ParseException{
+        System.out.println(tracking.generateJSON().toString());
 
+        JSONObject response = this.request("POST","/trackings",tracking.generateJSON());
+
+        System.out.println(response);
 
     }
 
@@ -39,7 +44,7 @@ public class ConnectionAPI {
     **/
     public List<Courier> getCouriers() throws AftershipAPIException,IOException,ParseException{
 
-        JSONObject response = this.request("GET","/couriers","");
+        JSONObject response = this.request("GET","/couriers",null);
 
         List<Courier> couriers = new ArrayList<Courier>();
 
@@ -64,7 +69,7 @@ public class ConnectionAPI {
      * @exception code.AftershipAPIException Invalid JSON data. If the tracking number doesn't match any courier
      **/
     public List<Courier> detectCouriers(String trackingNumber)throws AftershipAPIException,IOException,ParseException{
-        JSONObject response = this.request("GET","/couriers/detect/"+trackingNumber,"");
+        JSONObject response = this.request("GET","/couriers/detect/"+trackingNumber,null);
        // System.out.println(response);
         List<Courier> couriers = new ArrayList<Courier>();
 
@@ -87,8 +92,11 @@ public class ConnectionAPI {
      * @return A JSONObject with the response
      * @exception code.AftershipAPIException if the request response an error
      **/
-    public JSONObject request(String method, String url, String params)
+    public JSONObject request(String method, String url, JSONObject params)
             throws AftershipAPIException,IOException,ParseException{
+        BufferedReader rd;
+        StringBuilder sb;
+        OutputStreamWriter wr;
 
         HttpURLConnection connection;
         URL serverAddress= new URL(new URL(URL_SERVER),VERSION_API+ url);
@@ -97,13 +105,20 @@ public class ConnectionAPI {
         connection.setReadTimeout(10000);
         connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("aftership-api-key", keyAPI);
+        if(params!=null){ connection.setDoOutput(true);}//if there is information in params, doOutput true, to write
+
         connection.connect();
+        if(params!=null){
+            wr = new OutputStreamWriter(connection.getOutputStream());
+            wr.write(params.toString());
+            wr.flush();
+        }
 //        System.out.println(connection.getURL());
 //        System.out.println(connection.getResponseCode()+connection.getResponseMessage());
         this.checkAPIResponse(connection.getResponseCode());
 
-        BufferedReader rd  = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder sb = new StringBuilder();
+        rd  = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        sb = new StringBuilder();
         String line;
         while ((line = rd.readLine()) != null)
         {
