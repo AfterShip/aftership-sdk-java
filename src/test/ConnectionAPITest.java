@@ -1,17 +1,26 @@
 package test;
 
 import code.*;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import java.util.List;
+import org.json.*;
 
 import static org.junit.Assert.*;
 
 public class ConnectionAPITest {
+    ConnectionAPI connection;
+    @Before
+    public void setUp(){
+         connection = new ConnectionAPI("a61d6204-6477-4f6d-93ec-86c4f872fb6b");
 
-    @Test
+    }
+
+    @Ignore
     public void testGetCouriers() throws Exception {
 
-        ConnectionAPI connection = new ConnectionAPI("");
+
         List<Courier> couriers = connection.getCouriers();
         //total Couriers returned
         assertEquals("It should return 189 couriers", 189, couriers.size());
@@ -33,5 +42,38 @@ public class ConnectionAPITest {
         assertEquals("Last courier phone be +33 3631","+33 3631",couriers.get(188).getPhone());
         assertEquals("Last courier other_name should be Coliposte","Coliposte",couriers.get(188).getOther_name());
         assertEquals("Last courier web_url be http://www.csuivi.courrier.laposte.fr","http://www.csuivi.courrier.laposte.fr",couriers.get(188).getWeb_url());
+
+        ConnectionAPI connectionBadKey = new ConnectionAPI("badKey");
+
+        try{
+            connectionBadKey.getCouriers();
+        }catch (AftershipAPIException e){
+            assertEquals("Exception should be InvalidCredentials", "InvalidCredentials - Invalid API Key.", e.getMessage());
+        }
+
     }
+    @Test
+    public void testDetectCouriers() throws Exception {
+        List<Courier> couriers = connection.detectCouriers("05167019264110");
+        assertEquals("It should return 2 couriers", 2, couriers.size());
+
+        try{
+            connection.detectCouriers("asd1");
+
+        }catch (Exception e){
+            assertEquals("It should return a exception if the tracking number doesnt matching any courier you have defined"
+                    , "Invalid JSON data.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testPostTracking() throws Exception {
+        JSONObject object = new JSONObject();
+            object.put("name", "Jack Hack");
+            object.put("score", new Integer(200));
+            object.put("current", new Double(152.32));
+            object.put("nickname", "Hacker");
+
+    }
+
 }

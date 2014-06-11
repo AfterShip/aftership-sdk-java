@@ -35,7 +35,7 @@ public class Courier {
      * by the API.
      **/
     public Courier(JSONObject jsonCourier){
-       this.web_url = jsonCourier.has("web_url")?jsonCourier.getString("web_url"):"";
+        this.web_url = jsonCourier.has("web_url")?jsonCourier.getString("web_url"):"";
         this.slug =  jsonCourier.has("slug")?jsonCourier.getString("slug"):"";
         this.name = jsonCourier.has("name")?jsonCourier.getString("name"):"";
         this.phone = jsonCourier.has("phone")?jsonCourier.getString("phone"):"";
@@ -81,5 +81,16 @@ public class Courier {
 
     public void setWeb_url(String web_url) {
         this.web_url = web_url;
+    }
+
+    @Override
+    public String toString() {
+        return "Courier{" +
+                "slug='" + slug + '\'' +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", other_name='" + other_name + '\'' +
+                ", web_url='" + web_url + '\'' +
+                '}';
     }
 }
