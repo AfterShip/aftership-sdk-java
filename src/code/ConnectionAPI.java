@@ -26,12 +26,37 @@ public class ConnectionAPI {
         this.keyAPI = keyAPI;
     }
 
-    public void postTracking(Tracking tracking) throws AftershipAPIException,IOException,ParseException{
-        System.out.println(tracking.generateJSON().toString());
+    public List<Tracking> getTracking()throws Exception{
 
-        JSONObject response = this.request("POST","/trackings",tracking.generateJSON());
+        List<Tracking> trackingList = null;
+        JSONObject response = this.request("GET","/trackings",null);
 
-        System.out.println(response);
+        JSONArray trackingJSON = response.getJSONObject("data").getJSONArray("trackings");
+
+        if(trackingJSON.length()!=0) {
+             trackingList = new ArrayList<Tracking>(trackingJSON.length());
+
+            for (int i = 0; i < trackingJSON.length(); i++) {
+                trackingList.add(new Tracking((JSONObject)trackingJSON.get(i)));
+            }
+        }
+
+        return trackingList;
+
+    }
+
+    public JSONObject deleteTracking(String slug,String trackingNumber)throws AftershipAPIException,IOException,ParseException{
+        JSONObject response = this.request("DELETE","/trackings/"+slug+"/"+trackingNumber,null);
+        System.out.println("Deleted number: "+response.getJSONObject("data").getJSONObject("tracking").getString("tracking_number"));
+
+        return response;
+    }
+
+    public JSONObject postTracking(Tracking tracking) throws AftershipAPIException,IOException,ParseException {
+
+        JSONObject response = this.request("POST", "/trackings", tracking.generateJSON());
+
+        return response.getJSONObject("data").getJSONObject("tracking");
 
     }
 
@@ -46,9 +71,10 @@ public class ConnectionAPI {
 
         JSONObject response = this.request("GET","/couriers",null);
 
-        List<Courier> couriers = new ArrayList<Courier>();
 
         JSONArray couriersJSON = response.getJSONObject("data").getJSONArray("couriers");
+        List<Courier> couriers = new ArrayList<Courier>(couriersJSON.length());
+
         JSONObject element;
 
         for (int i = 0; i < couriersJSON.length(); i++) {
@@ -124,7 +150,7 @@ public class ConnectionAPI {
         {
             sb.append(line + '\n');
         }
-//        System.out.println(sb.toString());
+ //       System.out.println(sb.toString());
         JSONObject response;
         response  = new JSONObject(sb.toString());
 
@@ -161,6 +187,16 @@ public class ConnectionAPI {
 
         }
 
+    }
+
+    public void prettyPrintJSON(JSONObject oldJSON){
+        try {
+            JSONTokener tokener = new JSONTokener(oldJSON.toString()); //tokenize the ugly JSON string
+            JSONObject finalResult = new JSONObject(tokener); // convert it to JSON object
+            System.out.println(finalResult.toString(4)); // To string method prints it with specified indentation.
+        }catch( Exception e){
+            System.out.println("exception printing pretty JSON: "+e.getMessage() );
+        }
     }
 
 

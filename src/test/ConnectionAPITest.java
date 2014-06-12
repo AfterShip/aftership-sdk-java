@@ -1,20 +1,57 @@
 package test;
 
 import code.*;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.json.*;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ConnectionAPITest {
-    ConnectionAPI connection;
-    @Before
-    public void setUp(){
-         connection = new ConnectionAPI("a61d6204-6477-4f6d-93ec-86c4f872fb6b");
+    ConnectionAPI connection  = new ConnectionAPI("a61d6204-6477-4f6d-93ec-86c4f872fb6b");
+    ;
+    private static boolean setUpIsDone = false;
 
+    @Ignore
+    public void setUp()throws Exception{
+
+        if (setUpIsDone) {
+            return;
+        }
+//        Tracking  tracking1 = new Tracking("RC933607107HK");
+//        tracking1.setSlug("hong-kong-post");
+//        JSONObject response = connection.postTracking(tracking1);
+//        System.out.println(response);
+//
+//        Tracking  tracking2= new Tracking("RT224265042HK");
+//        tracking2.setSlug("hong-kong-post");
+//        response = connection.postTracking(tracking2);
+//        System.out.println(response);
+//
+//        Tracking  tracking3 = new Tracking("LK059460815HK");
+//        tracking3.setSlug("hong-kong-post");
+//        response = connection.postTracking(tracking3);
+//        System.out.println(response);
+//
+//        Tracking  tracking4 = new Tracking("9400109699939938223564");
+//        tracking4.setSlug("usps");
+//        response = connection.postTracking(tracking4);
+//        System.out.println(response);
+//
+//        Tracking  tracking5 = new Tracking("9374889949033131111143");
+//        tracking5.setSlug("usps");
+//        response = connection.postTracking(tracking5);
+//        System.out.println(response);
+//
+//        Tracking  tracking6 = new Tracking("9405509699939943080223");
+//        tracking6.setSlug("usps");
+//        response = connection.postTracking(tracking6);
+//        System.out.println(response);
+
+        setUpIsDone = true;
     }
 
     @Ignore
@@ -23,25 +60,25 @@ public class ConnectionAPITest {
 
         List<Courier> couriers = connection.getCouriers();
         //total Couriers returned
-        assertEquals("It should return 189 couriers", 189, couriers.size());
+        assertEquals("It should return 190 couriers", 190, couriers.size());
         /* First Courier
         {"slug":"india-post-int","name":"India Post International","phone":"+91 1800 11 2011",
         "other_name":"भारतीय डाक, Speed Post & eMO, EMS, IPS Web","web_url":"http://www.indiapost.gov.in/"}
         */
-        assertEquals("First courier slug be india-post-int","india-post-int",couriers.get(0).getSlug());
-        assertEquals("First courier name be India Post International","India Post International",couriers.get(0).getName());
-        assertEquals("First courier phone be +91 1800 11 2011","+91 1800 11 2011",couriers.get(0).getPhone());
+        assertEquals("First courier slug should be india-post-int", "india-post-int", couriers.get(0).getSlug());
+        assertEquals("First courier name should be India Post International","India Post International",couriers.get(0).getName());
+        assertEquals("First courier phone should be +91 1800 11 2011","+91 1800 11 2011",couriers.get(0).getPhone());
         assertEquals("First courier other_name should be भारतीय डाक, Speed Post & eMO, EMS, IPS Web","भारतीय डाक, Speed Post & eMO, EMS, IPS Web",couriers.get(0).getOther_name());
         assertEquals("First courier web_url be http://www.indiapost.gov.in/","http://www.indiapost.gov.in/",couriers.get(0).getWeb_url());
         /* Last Courier
         {"slug":"la-poste-colissimo","name":"La Poste Colissimo","phone":"+33 3631","other_name":"Coliposte",
         "web_url":"http://www.csuivi.courrier.laposte.fr"}
         */
-        assertEquals("Last courier slug be la-poste-colissimo","la-poste-colissimo",couriers.get(188).getSlug());
-        assertEquals("Last courier name be La Poste Colissimo","La Poste Colissimo",couriers.get(188).getName());
-        assertEquals("Last courier phone be +33 3631","+33 3631",couriers.get(188).getPhone());
-        assertEquals("Last courier other_name should be Coliposte","Coliposte",couriers.get(188).getOther_name());
-        assertEquals("Last courier web_url be http://www.csuivi.courrier.laposte.fr","http://www.csuivi.courrier.laposte.fr",couriers.get(188).getWeb_url());
+        assertEquals("Last courier slug should be sto", "sto", couriers.get(189).getSlug());
+        assertEquals("Last courier name should be sto express","sto express",couriers.get(189).getName());
+        assertEquals("Last courier phone should be +86 95543","+86 95543",couriers.get(189).getPhone());
+        assertEquals("Last courier other_name should be 申通快遞, 申通快递","申通快遞, 申通快递",couriers.get(189).getOther_name());
+        assertEquals("Last courier web_url shouldbe http://www.sto.cn/","http://www.sto.cn/",couriers.get(189).getWeb_url());
 
         ConnectionAPI connectionBadKey = new ConnectionAPI("badKey");
 
@@ -61,7 +98,7 @@ public class ConnectionAPITest {
             connection.detectCouriers("asd1");
 
         }catch (Exception e){
-            assertEquals("It should return a exception if the tracking number doesnt matching any courier you have defined"
+            assertEquals("It should return a exception if the tracking number doesn't matching any courier you have defined"
                     , "Invalid JSON data.", e.getMessage());
         }
     }
@@ -71,15 +108,29 @@ public class ConnectionAPITest {
 
         Tracking  tracking1 = new Tracking("05167019264110");
         tracking1.setSlug("dpd");
-        tracking1.addSmes("+85212345678");
-        tracking1.addSmes("+85212345679");
+        tracking1.setOrderIDPath("www.whatever.com");
+        tracking1.setCustomerName("Mr Smith");
+        tracking1.setOrderID("ID 1234");
+        tracking1.setTitle("this title");
+        tracking1.setDestinationCountryISO3("USA");
         tracking1.addEmails("email@yourdomain.com");
         tracking1.addEmails("another_email@yourdomain.com");
         tracking1.addCustomFields("product_name","iPhone Case");
         tracking1.addCustomFields("product_price","USD19.99");
+        tracking1.addSmses("+85292345678");
+        tracking1.addSmses("+85292345679");
 
-        connection.postTracking(tracking1);
+        JSONObject trackingPosted = connection.postTracking(tracking1);
+        trackingPosted= connection.deleteTracking("dpd","05167019264110");
+        System.out.println(trackingPosted);
 
+    }
+    @Test
+    public void testGetTracking() throws Exception {
+
+        List<Tracking> listTrackings = new ArrayList<Tracking>();
+        listTrackings = connection.getTracking();
+        System.out.println(listTrackings);
 
     }
 

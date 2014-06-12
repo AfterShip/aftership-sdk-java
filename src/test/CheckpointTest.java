@@ -12,7 +12,7 @@ public class CheckpointTest {
 
 
         // MyClass is tested
-        Checkpoint tester = new Checkpoint();
+      //  Checkpoint tester = new Checkpoint();
     }
 
 
