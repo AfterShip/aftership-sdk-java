@@ -1,11 +1,13 @@
 package test;
 
 import code.*;
+import code.Enums.Field;
 import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.json.*;
+import org.junit.experimental.theories.suppliers.TestedOn;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
@@ -103,7 +105,7 @@ public class ConnectionAPITest {
         }
     }
 
-    @Test
+    @Ignore
     public void testPostTracking() throws Exception {
 
         Tracking  tracking1 = new Tracking("05167019264110");
@@ -125,12 +127,35 @@ public class ConnectionAPITest {
         System.out.println(trackingPosted);
 
     }
+
     @Test
     public void testGetTracking() throws Exception {
 
         List<Tracking> listTrackings = new ArrayList<Tracking>();
         listTrackings = connection.getTracking();
-        System.out.println(listTrackings);
+       // System.out.println(listTrackings);
+
+    }
+
+    @Test
+    public void testGetTracking2() throws Exception{
+        ParametersTracking param = new ParametersTracking();
+//        param.addSlug("hong-kong-post");
+        param.addField(Field.message);
+        param.addField(Field.title);
+        param.addField(Field.checkpoints);
+        param.addField(Field.checkpointTime);
+        param.setLimit(1);
+        int results = connection.getTracking(param);
+        for (Tracking tracking: param){
+            System.out.println("imprimiendo");
+            System.out.println(tracking);
+        }
+//        System.out.println(param.getBuffer());
+//        assertEquals("It should return 3, the HKpost in the account", 3, results);
+
+
+
 
     }
 

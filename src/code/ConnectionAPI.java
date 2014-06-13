@@ -26,6 +26,27 @@ public class ConnectionAPI {
         this.keyAPI = keyAPI;
     }
 
+    public int getTracking(ParametersTracking parameters)throws Exception{
+        List<Tracking> trackingList = null;
+        int size =0;
+       System.out.println(parameters.generateQueryString());
+
+        JSONObject response = this.request("GET","/trackings?"+parameters.generateQueryString(),null);
+        JSONArray trackingJSON = response.getJSONObject("data").getJSONArray("trackings");
+        if(trackingJSON.length()!=0) {
+            size = response.getJSONObject("data").getInt("count");
+            trackingList = new ArrayList<Tracking>(trackingJSON.length());
+            for (int i = 0; i < trackingJSON.length(); i++) {
+                trackingList.add(new Tracking(trackingJSON.getJSONObject(i)));
+            }
+            parameters.setBuffer(trackingList);
+            parameters.setTotal(size);
+            parameters.setConnectionApi(this);
+        }
+
+        return size;
+    }
+
     public List<Tracking> getTracking()throws Exception{
 
         List<Tracking> trackingList = null;

@@ -48,7 +48,7 @@ public class Tracking {
     /** Custom fields that accept any TEXT STRING*/
     private Map<String, String> customFields;
 
-    /** fields informed by Aftership*/
+    /** fields informed by Aftership API*/
 
     /**  Date and time of the tracking created. */
     private String createdAt;
@@ -97,8 +97,8 @@ public class Tracking {
 
         //fields that can be updated by the user
 
-        this.trackingNumber = trackingJSON.getString("tracking_number");
-        this.slug= trackingJSON.getString("slug");
+        this.trackingNumber = trackingJSON.isNull("tracking_number")?null:trackingJSON.getString("tracking_number");
+        this.slug= trackingJSON.isNull("slug")?null:trackingJSON.getString("slug");
         this.title = trackingJSON.isNull("title")?null:trackingJSON.getString("title");
         this.customerName = trackingJSON.isNull("customer_name")?null:trackingJSON.getString("customer_name");
         this.destinationCountryISO3 = trackingJSON.isNull("destination_country_iso3")?
@@ -106,23 +106,23 @@ public class Tracking {
         this.orderID = trackingJSON.isNull("order_id")?null:trackingJSON.getString("order_id");
         this.orderIDPath = trackingJSON.isNull("order_id_path")?null:trackingJSON.getString("order_id_path");
 
-        JSONArray smsesArray = (JSONArray) trackingJSON.get("smses");
-        if(smsesArray.length()!=0){
+        JSONArray smsesArray =trackingJSON.isNull("smses")?null:trackingJSON.getJSONArray("smses");
+        if(smsesArray !=null && smsesArray.length()!=0){
             this.smses = new ArrayList<String>();
             for (int i=0;i<smsesArray.length();i++){
                 this.smses.add(smsesArray.get(i).toString());
             }
         }
 
-        JSONArray emailsArray = (JSONArray) trackingJSON.get("emails");
-        if(emailsArray.length()!=0){
+        JSONArray emailsArray = trackingJSON.isNull("emails")?null: trackingJSON.getJSONArray("emails");
+        if(emailsArray!=null && emailsArray.length()!=0){
             this.emails = new ArrayList<String>();
             for (int i=0;i<emailsArray.length();i++){
                 this.emails.add(emailsArray.get(i).toString());
             }
         }
 
-        JSONObject customFieldsJSON = (JSONObject) trackingJSON.get("custom_fields");
+        JSONObject customFieldsJSON =trackingJSON.isNull("custom_fields")?null:trackingJSON.getJSONObject("custom_fields");
         if(customFieldsJSON!=null){
             this.customFields = new HashMap<String, String>();
             Iterator<?> keys = customFieldsJSON.keys();
@@ -136,19 +136,19 @@ public class Tracking {
 
         this.createdAt = trackingJSON.isNull("created_at")?null:trackingJSON.getString("created_at");
         this.updatedAt = trackingJSON.isNull("updated_at")?null:trackingJSON.getString("updated_at");
-        this.active = trackingJSON.getBoolean("active");
+        this.active = trackingJSON.isNull("active")?false:trackingJSON.getBoolean("active");
         this.expectedDelivery = trackingJSON.isNull("expected_delivery")?null:trackingJSON.getString("expected_delivery");
         this.originCountryISO3 = trackingJSON.isNull("origin_country_iso3")?null:trackingJSON.getString("origin_country_iso3");
-        this.shipmentPackageCount = trackingJSON.getInt("shipment_package_count");
+        this.shipmentPackageCount =  trackingJSON.isNull("shipment_package_count")?0:trackingJSON.getInt("shipment_package_count");
         this.shipmentType = trackingJSON.isNull("shipment_type")?null:trackingJSON.getString("shipment_type");
         this.signedBy = trackingJSON.isNull("singned_by")?null:trackingJSON.getString("signed_by");
         this.source = trackingJSON.isNull("source")?null:trackingJSON.getString("source");
         this.tag = trackingJSON.isNull("tag")?null:trackingJSON.getString("tag");
-        this.trackedCount = trackingJSON.getInt("tracked_count");
+        this.trackedCount = trackingJSON.isNull("tracked_count")?0:trackingJSON.getInt("tracked_count");
 
        // checkpoints
-        JSONArray checkpointsArray = (JSONArray) trackingJSON.get("checkpoints");
-        if(checkpointsArray.length()!=0){
+        JSONArray checkpointsArray =  trackingJSON.isNull("checkpoints")?null:trackingJSON.getJSONArray("checkpoints");
+        if(checkpointsArray!=null && checkpointsArray.length()!=0){
             this.checkpoints = new ArrayList<Checkpoint>();
             for (int i=0;i<checkpointsArray.length();i++){
                 this.checkpoints.add(new Checkpoint((JSONObject)checkpointsArray.get(i)));
@@ -360,29 +360,31 @@ public class Tracking {
 
     @Override
     public String toString() {
-        return "Tracking{" +
-                "trackingNumber='" + trackingNumber + '\'' +
-                ", slug='" + slug + '\'' +
-                ", emails=" + emails +
-                ", smses=" + smses +
-                ", title='" + title + '\'' +
-                ", customerName='" + customerName + '\'' +
-                ", destinationCountryISO3='" + destinationCountryISO3 + '\'' +
-                ", orderID='" + orderID + '\'' +
-                ", orderIDPath='" + orderIDPath + '\'' +
-                ", customFields=" + customFields +
-                ", createdAt='" + createdAt + '\'' +
-                ", updatedAt='" + updatedAt + '\'' +
-                ", active=" + active +
-                ", expectedDelivery='" + expectedDelivery + '\'' +
-                ", originCountryISO3='" + originCountryISO3 + '\'' +
-                ", shipmentPackageCount=" + shipmentPackageCount +
-                ", shipmentType='" + shipmentType + '\'' +
-                ", signedBy='" + signedBy + '\'' +
-                ", source='" + source + '\'' +
-                ", tag='" + tag + '\'' +
-                ", trackedCount=" + trackedCount +
-                ", checkpoints=" + checkpoints +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("tracking{");
+        sb.append((trackingNumber==null)?"":"\n\tTrackingNumber="+trackingNumber);
+        sb.append((slug==null)?"":"\n\tslug=" +slug);
+        sb.append((emails==null)?"":"\n\temails="+emails);
+        sb.append((smses==null)?"":"\n\tsmses="+smses);
+        sb.append(title==null?"": "\n\ttitle="+title);
+        sb.append(customerName==null?"":"\n\tcustomerName=" +customerName);
+        sb.append(destinationCountryISO3==null?"":"\n\tdestinationCountryISO3='" + destinationCountryISO3);
+        sb.append(orderID==null?"": "\n\torderID='" +orderID);
+        sb.append(orderIDPath==null?"": "\n\torderIDPath='" + orderIDPath);
+        sb.append(customFields==null?"": "\n\tcustomFields=" +customFields);
+        sb.append(createdAt==null?"":"\n\tcreatedAt='" + createdAt);
+        sb.append(updatedAt==null?"":"\n\tupdatedAt='" +  updatedAt);
+        sb.append("\n\t" + "active=" + active);
+        sb.append(expectedDelivery==null?"":"\n\texpectedDelivery='" + expectedDelivery);
+        sb.append(originCountryISO3==null?"":"\n\toriginCountryISO3='" +originCountryISO3);
+        sb.append("\n\t" + "shipmentPackageCount=" + shipmentPackageCount);
+        sb.append(shipmentType==null?"": "\n\tshipmentType='" +shipmentType);
+        sb.append(signedBy==null?"":"\n\tsignedBy='" + signedBy);
+        sb.append(source==null?"":  "\n\tsource='" +source);
+        sb.append((tag==null)?"":"\n\ttag='" +tag );
+        sb.append("\n\t" + "trackedCount=" + trackedCount);
+        sb.append((checkpoints==null)?"": "\n\tcheckpoints=" +checkpoints);
+        sb.append("\n}");
+        return sb.toString();
     }
 }

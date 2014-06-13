@@ -5,3 +5,6 @@ in Courier delete set MEthods?? can user change something of the class?
 Post tracking dont return any checkpoing,, correct??
 
 what is the field uniqueToken, should I keep it?
+
+make method getNextTracking();
+            getNextTracking(ParametersTracking);

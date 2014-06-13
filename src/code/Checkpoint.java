@@ -55,17 +55,18 @@ public class Checkpoint {
 
     @Override
     public String toString() {
-        return "Checkpoint{" +
-                "createdAt='" + createdAt + '\'' +
-                ", checkpointTime='" + checkpointTime + '\'' +
-                ", city='" + city + '\'' +
-                ", countryISO3='" + countryISO3 + '\'' +
-                ", countryName='" + countryName + '\'' +
-                ", message='" + message + '\'' +
-                ", state='" + state + '\'' +
-                ", tag='" + tag + '\'' +
-                ", zip='" + zip + '\'' +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n\tCheckpoint{");
+        sb.append((checkpointTime==null)?"":"\n\t\tcheckpointTime="+checkpointTime);
+        sb.append((city==null)?"":"\n\t\tcity="+city);
+        sb.append((countryISO3==null)?"":"\n\t\tcountryISO3="+countryISO3);
+        sb.append((countryName==null)?"":"\n\t\tcountryName="+countryName);
+        sb.append((message==null)?"":"\n\t\tmessage="+message);
+        sb.append((state==null)?"":"\n\t\tstate="+state);
+        sb.append((tag==null)?"":"\n\t\ttag="+tag);
+        sb.append((zip==null)?"":"\n\t\tzip="+zip);
+
+        return sb.toString();
     }
 }
 
