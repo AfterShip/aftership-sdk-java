@@ -147,15 +147,22 @@ public class ConnectionAPITest {
         param.addField(Field.checkpointTime);
         param.setLimit(1);
         int results = connection.getTracking(param);
-        for (Tracking tracking: param){
-            System.out.println("imprimiendo");
-            System.out.println(tracking);
-        }
+//        for (Tracking tracking: param){
+//            System.out.println("imprimiendo");
+//            System.out.println(tracking);
+//        }
 //        System.out.println(param.getBuffer());
 //        assertEquals("It should return 3, the HKpost in the account", 3, results);
 
 
 
+
+    }
+    @Test
+    public void testGetTrackingByNumber()throws Exception{
+
+        Tracking tracking = connection.getTrackingByNumber("9405509699939943080223","usps");
+        System.out.println(tracking);
 
     }
 

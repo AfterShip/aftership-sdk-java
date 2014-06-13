@@ -26,6 +26,18 @@ public class ConnectionAPI {
         this.keyAPI = keyAPI;
     }
 
+    public Tracking getTrackingByNumber(String trackingNumber,String slug)throws Exception{
+
+        JSONObject response = this.request("GET","/trackings/"+slug+"/"+trackingNumber,null);
+        JSONObject trackingJSON = response.getJSONObject("data").getJSONObject("tracking");
+        Tracking tracking = null;
+        if(trackingJSON.length()!=0) {
+            tracking = new Tracking(trackingJSON);
+        }
+
+        return tracking;
+    }
+
     public int getTracking(ParametersTracking parameters)throws Exception{
         List<Tracking> trackingList = null;
         int size =0;
