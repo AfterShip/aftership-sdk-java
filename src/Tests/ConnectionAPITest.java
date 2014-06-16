@@ -1,15 +1,14 @@
-package test;
+package Tests;
 
-import code.*;
-import code.Enums.Field;
+import Enums.Field;
 import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.json.*;
-import org.junit.experimental.theories.suppliers.TestedOn;
+import Classes.*;
 
-import static org.junit.Assert.*;
+
 import static org.junit.Assert.assertEquals;
 
 public class ConnectionAPITest {
@@ -66,27 +65,27 @@ public class ConnectionAPITest {
         {"slug":"india-post-int","name":"India Post International","phone":"+91 1800 11 2011",
         "other_name":"भारतीय डाक, Speed Post & eMO, EMS, IPS Web","web_url":"http://www.indiapost.gov.in/"}
         */
-        assertEquals("First courier slug should be india-post-int", "india-post-int", couriers.get(0).getSlug());
-        assertEquals("First courier name should be India Post International","India Post International",couriers.get(0).getName());
-        assertEquals("First courier phone should be +91 1800 11 2011","+91 1800 11 2011",couriers.get(0).getPhone());
-        assertEquals("First courier other_name should be भारतीय डाक, Speed Post & eMO, EMS, IPS Web","भारतीय डाक, Speed Post & eMO, EMS, IPS Web",couriers.get(0).getOther_name());
-        assertEquals("First courier web_url be http://www.indiapost.gov.in/","http://www.indiapost.gov.in/",couriers.get(0).getWeb_url());
+        Assert.assertEquals("First courier slug should be india-post-int", "india-post-int", couriers.get(0).getSlug());
+        Assert.assertEquals("First courier name should be India Post International", "India Post International", couriers.get(0).getName());
+        Assert.assertEquals("First courier phone should be +91 1800 11 2011", "+91 1800 11 2011", couriers.get(0).getPhone());
+        Assert.assertEquals("First courier other_name should be भारतीय डाक, Speed Post & eMO, EMS, IPS Web", "भारतीय डाक, Speed Post & eMO, EMS, IPS Web", couriers.get(0).getOther_name());
+        Assert.assertEquals("First courier web_url be http://www.indiapost.gov.in/", "http://www.indiapost.gov.in/", couriers.get(0).getWeb_url());
         /* Last Courier
         {"slug":"la-poste-colissimo","name":"La Poste Colissimo","phone":"+33 3631","other_name":"Coliposte",
         "web_url":"http://www.csuivi.courrier.laposte.fr"}
         */
-        assertEquals("Last courier slug should be sto", "sto", couriers.get(189).getSlug());
-        assertEquals("Last courier name should be sto express","sto express",couriers.get(189).getName());
-        assertEquals("Last courier phone should be +86 95543","+86 95543",couriers.get(189).getPhone());
-        assertEquals("Last courier other_name should be 申通快遞, 申通快递","申通快遞, 申通快递",couriers.get(189).getOther_name());
-        assertEquals("Last courier web_url shouldbe http://www.sto.cn/","http://www.sto.cn/",couriers.get(189).getWeb_url());
+        Assert.assertEquals("Last courier slug should be sto", "sto", couriers.get(189).getSlug());
+        Assert.assertEquals("Last courier name should be sto express", "sto express", couriers.get(189).getName());
+        Assert.assertEquals("Last courier phone should be +86 95543", "+86 95543", couriers.get(189).getPhone());
+        Assert.assertEquals("Last courier other_name should be 申通快遞, 申通快递", "申通快遞, 申通快递", couriers.get(189).getOther_name());
+        Assert.assertEquals("Last courier web_url shouldbe http://www.sto.cn/", "http://www.sto.cn/", couriers.get(189).getWeb_url());
 
         ConnectionAPI connectionBadKey = new ConnectionAPI("badKey");
 
         try{
             connectionBadKey.getCouriers();
         }catch (AftershipAPIException e){
-            assertEquals("Exception should be InvalidCredentials", "InvalidCredentials - Invalid API Key.", e.getMessage());
+            Assert.assertEquals("Exception should be InvalidCredentials", "InvalidCredentials - Invalid API Key.", e.getMessage());
         }
 
     }
@@ -107,7 +106,7 @@ public class ConnectionAPITest {
     @Ignore
     public void testPostTracking() throws Exception {
 
-        Tracking  tracking1 = new Tracking("05167019264110");
+        Tracking tracking1 = new Tracking("05167019264110");
         tracking1.setSlug("dpd");
         tracking1.setOrderIDPath("www.whatever.com");
         tracking1.setCustomerName("Mr Smith");
@@ -121,8 +120,8 @@ public class ConnectionAPITest {
         tracking1.addSmses("+85292345678");
         tracking1.addSmses("+85292345679");
 
-        JSONObject trackingPosted = connection.postTracking(tracking1);
-        trackingPosted= connection.deleteTracking("dpd","05167019264110");
+        Tracking trackingPosted = connection.postTracking(tracking1);
+        JSONObject objectJSON= connection.deleteTracking("dpd","05167019264110");
         System.out.println(trackingPosted);
 
     }
@@ -185,7 +184,7 @@ public class ConnectionAPITest {
     @Test
     public void testGetLastCheckpoint()throws Exception{
 
-        System.out.println(connection.getLastCheckpoint("9405509699939943080223","usps"));
+        System.out.println(connection.getLastCheckpoint("9405509699939943080223", "usps"));
 
     }
 
