@@ -1,5 +1,6 @@
 package Classes;
 
+import Enums.ISO3Country;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,7 +10,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 /**
- * Created by User on 11/6/14.
+ * Define a Tracking element
+ * Created by User on 11/6/14
  */
 public class Tracking {
 
@@ -37,7 +39,10 @@ public class Tracking {
     /** ISO Alpha-3(three letters)to specify the destination of the shipment.
      * If you use postal service to send international shipments, AfterShip will automatically
      * get tracking results at destination courier as well (e.g. USPS for USA). */
-    private String destinationCountryISO3;
+    private ISO3Country destinationCountryISO3;
+
+    /**  Origin country of the tracking. ISO Alpha-3 */
+    private ISO3Country originCountryISO3;
 
     /** Text field for order ID */
     private String orderID;
@@ -62,9 +67,6 @@ public class Tracking {
 
     /** Expected delivery date (if any). */
     private String expectedDelivery;
-
-    /**  Origin country of the tracking. ISO Alpha-3 */
-    private String originCountryISO3;
 
     /**  Number	Number of packages under the tracking. */
     private int shipmentPackageCount;
@@ -102,7 +104,7 @@ public class Tracking {
         this.title = trackingJSON.isNull("title")?null:trackingJSON.getString("title");
         this.customerName = trackingJSON.isNull("customer_name")?null:trackingJSON.getString("customer_name");
         this.destinationCountryISO3 = trackingJSON.isNull("destination_country_iso3")?
-                null:trackingJSON.getString("destination_country_iso3");
+                null:ISO3Country.valueOf(trackingJSON.getString("destination_country_iso3"));
         this.orderID = trackingJSON.isNull("order_id")?null:trackingJSON.getString("order_id");
         this.orderIDPath = trackingJSON.isNull("order_id_path")?null:trackingJSON.getString("order_id_path");
 
@@ -136,9 +138,10 @@ public class Tracking {
 
         this.createdAt = trackingJSON.isNull("created_at")?null:trackingJSON.getString("created_at");
         this.updatedAt = trackingJSON.isNull("updated_at")?null:trackingJSON.getString("updated_at");
-        this.active = trackingJSON.isNull("active")?false:trackingJSON.getBoolean("active");
+        this.active = !trackingJSON.isNull("active") && trackingJSON.getBoolean("active");
         this.expectedDelivery = trackingJSON.isNull("expected_delivery")?null:trackingJSON.getString("expected_delivery");
-        this.originCountryISO3 = trackingJSON.isNull("origin_country_iso3")?null:trackingJSON.getString("origin_country_iso3");
+        this.originCountryISO3 = trackingJSON.isNull("origin_country_iso3")?null:
+                ISO3Country.valueOf(trackingJSON.getString("origin_country_iso3"));
         this.shipmentPackageCount =  trackingJSON.isNull("shipment_package_count")?0:trackingJSON.getInt("shipment_package_count");
         this.shipmentType = trackingJSON.isNull("shipment_type")?null:trackingJSON.getString("shipment_type");
         this.signedBy = trackingJSON.isNull("singned_by")?null:trackingJSON.getString("signed_by");
@@ -230,11 +233,11 @@ public class Tracking {
         this.customerName = customerName;
     }
 
-    public String getDestinationCountryISO3() {
+    public ISO3Country getDestinationCountryISO3() {
         return destinationCountryISO3;
     }
 
-    public void setDestinationCountryISO3(String destinationCountryISO3) {
+    public void setDestinationCountryISO3(ISO3Country destinationCountryISO3) {
         this.destinationCountryISO3 = destinationCountryISO3;
     }
 
@@ -292,7 +295,7 @@ public class Tracking {
         return expectedDelivery;
     }
 
-    public String getOriginCountryISO3() {
+    public ISO3Country getOriginCountryISO3() {
         return originCountryISO3;
     }
 

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import java.util.Date;
 
 import Classes.*;
 
@@ -170,9 +171,10 @@ public class TrackingTest {
         assertTrue("Emails should contain this email@yourdomain.com",emailsList.contains("email@yourdomain.com"));
         assertTrue("Emails should contain this another_email@yourdomain.com",emailsList.contains("another_email@yourdomain.com"));
         assertEquals("Emails should have a size of 2", 2, emailsList.size());
+     }
 
-
-
+    @Test
+    public void testDates(){
 
     }
 

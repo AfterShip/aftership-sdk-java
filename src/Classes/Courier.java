@@ -3,6 +3,7 @@ package Classes;
 import org.json.JSONObject;
 
 /**
+ * Define a Courier
  * Created by User on 10/6/14.
  */
 public class Courier {
@@ -41,6 +42,17 @@ public class Courier {
         this.phone = jsonCourier.has("phone")?jsonCourier.getString("phone"):"";
         this.other_name = jsonCourier.has("other_name")?jsonCourier.getString("other_name"):"";
 
+    }
+
+    @Override
+    public String toString() {
+        return "Courier{" +
+                "slug='" + slug + '\'' +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", other_name='" + other_name + '\'' +
+                ", web_url='" + web_url + '\'' +
+                '}';
     }
 
     public String getSlug() {
@@ -83,14 +95,4 @@ public class Courier {
         this.web_url = web_url;
     }
 
-    @Override
-    public String toString() {
-        return "Courier{" +
-                "slug='" + slug + '\'' +
-                ", name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", other_name='" + other_name + '\'' +
-                ", web_url='" + web_url + '\'' +
-                '}';
-    }
 }

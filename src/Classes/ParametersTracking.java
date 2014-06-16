@@ -6,121 +6,138 @@ import Enums.StatusTag;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Iterator;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.io.IOException;
+import java.text.ParseException;
+
 /**
+ * Keep the information for get trackings from the server, and interact with the results
  * Created by User on 13/6/14.
  */
-public class ParametersTracking implements Iterable<Tracking> {
+public class ParametersTracking {
 
-    /**
-     * Page to show. (Default: 1)
-     */
+    /** Page to show. (Default: 1) */
     private int page;
 
-    /**
-     * Number of trackings each page contain. (Default: 100)
-     */
+    /** Number of trackings each page contain. (Default: 100) */
     private int limit;
 
-    /**
-     * Search the content of the tracking record fields: trackingNumber, title, orderId, customerName,
-     * customFields, orderId, emails, smses
-     */
+    /** Search the content of the tracking record fields: trackingNumber, title, orderId, customerName,
+     * customFields, orderId, emails, smses */
     private String keyword;
 
-    /**
-     * Unique courier code Use comma for multiple values. (Example: dhl,ups,usps)
-     */
+    /** Unique courier code Use comma for multiple values. (Example: dhl,ups,usps) */
     private List<String> slugs;
 
-    /**
-     * Origin country of trackings. Use ISO Alpha-3 (three letters). Use comma for multiple values. (Example: USA,HKG)
-     */
+    /**  Origin country of trackings. Use ISO Alpha-3 (three letters).
+     * (Example: USA,HKG) */
     private List<ISO3Country> origin;
 
-    /**
-     * Destination country of trackings. Use ISO Alpha-3 (three letters). Use comma for multiple values. (Example: USA,HKG)
-     */
+    /** Destination country of trackings. Use ISO Alpha-3 (three letters).
+     * (Example: USA,HKG) */
     private List<ISO3Country> destination;
 
-    /**
-     * Current status of tracking.
-     */
+    /** Current status of tracking. */
     private List<StatusTag> tags;
 
-    /**
-     * Start date and time of trackings created. AfterShip only stores data of 90 days. (Defaults: 30 days ago, Example: 2013-03-15T16:41:56+08:00)
-     */
+    /** Start date and time of trackings created. AfterShip only stores data of 90 days.
+     * (Defaults: 30 days ago, Example: 2013-03-15T16:41:56+08:00) */
     private String createdAtMin;
 
-    /**
-     * End date and time of trackings created. (Defaults: now, Example: 2013-04-15T16:41:56+08:00)
-     */
+    /** End date and time of trackings created. (Defaults: now, Example: 2013-04-15T16:41:56+08:00) */
     private String createdAtMax;
 
-    /**
-     * List of fields to include in the response. Use comma for multiple values. Fields to include: title, orderId, tag, checkpoints,
-     * checkpointTime, message, countryName. (Defaults: none, Example: title,orderId)
-     */
+    /** List of fields to include in the response. Fields to include: title, orderId, tag, checkpoints,
+     * checkpointTime, message, countryName. (Defaults: none, Example: title,orderId) */
     private List<Field> fields;
 
-    /**
-     * Default: '' / Example: 'en' Support Chinese to English translation for  china-ems  and  china-post  only
-     */
+    /** Language, default: ''
+     * Example: 'en' Support Chinese to English translation for  china-ems  and  china-post  only */
     private String lang;
 
+    /** A buffer where save the information of the las petition and access it later*/
     private List<Tracking> buffer;
 
+    /** Saves which is the last element returned by Next()*/
     private int position;
 
+    /** Total of tracking elements from the user that match the ParametersTracking object*/
     private int total;
 
+    /** Save a reference to ConnectionAPI, so it's possible in the next() method call through this instance*/
     private ConnectionAPI connectionApi;
 
     public ParametersTracking() {
         this.page = 1;
         this.limit = 100;
+        this.position=0;
     }
 
-    public Iterator<Tracking> iterator() {
-        // TODO Auto-generated method stub
-        return new Iterator<Tracking>() {
-
-            @Override
-            public boolean hasNext() {
-
-                return position<total;
-
-            }
-
-            @Override
-            public Tracking next(){
-
-                position++;
-                if(position<page*limit) {
-                    return ParametersTracking.this.buffer.get(position - (page - 1) * limit);
-                }
-                else{
-                    try{//I dont like this at all!! look another way
-                    page++;
-                    ParametersTracking.this.connectionApi.getTracking(ParametersTracking.this);
-                    }catch (Exception e){
-                         System.out.println(e.getMessage());
-                    }
-                    return ParametersTracking.this.buffer.get(position - (page - 1) * limit);
-
-                }
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        };
-
+    /**
+    * Check if there is more trackings to get
+    *
+    * @return true if there is more, and false if there isn't
+    */
+    public boolean hasNext(){
+        return position<total;
     }
+    /**
+    * return the next Tracking of the user or if it already has send all the Trackings in buffer, makes another call
+     * with the next page and save the result in buffer
+    *
+    * @return the next Tracking obtained
+    * @throws   Classes.AftershipAPIException  If the request response an error
+    * @throws   java.io.IOException If there is a problem with the connection
+    * @throws   java.text.ParseException    If the response can not be parse to JSONObject
+    */
+    public Tracking next()throws AftershipAPIException,IOException,ParseException{
+        position++;
+        if(position<page*limit) {
+            return ParametersTracking.this.buffer.get(position - (page - 1) * limit);
+        }
+        else{
+            page++;
+            ParametersTracking.this.connectionApi.getTracking(ParametersTracking.this);
+            return ParametersTracking.this.buffer.get(position - (page - 1) * limit);
+        }
+    }
+//    public Iterator<Tracking> iterator() {
+//        return new Iterator<Tracking>() {
+//
+//           @Override
+//            public boolean hasNext() {
+//
+//                return position<total;
+//
+//            }
+//
+//            @Override
+//            public Tracking next(){
+//
+//                position++;
+//                if(position<page*limit) {
+//                    return ParametersTracking.this.buffer.get(position - (page - 1) * limit);
+//                }
+//                else{
+//                    try{//I dont like this at all!! look another way
+//                    page++;
+//                    ParametersTracking.this.connectionApi.getTracking(ParametersTracking.this);
+//                    }catch (Exception e){
+//                         System.out.println(e.getMessage());
+//                    }
+//                    return ParametersTracking.this.buffer.get(position - (page - 1) * limit);
+//
+//                }
+//            }
+//
+//            @Override
+//            public void remove() {
+//                throw new UnsupportedOperationException();
+//            }
+//        };
+//
+//    }
 
     public void addSlug(String slug) {
 
@@ -294,6 +311,11 @@ public class ParametersTracking implements Iterable<Tracking> {
         this.connectionApi = connectionApi;
     }
 
+    /**
+    * Create a QueryString with all the fields of this class different of Null
+    *
+    * @return the String with the param codified in the QueryString
+    */
     public String generateQueryString() {
 
         QueryString qs = new QueryString("page", Integer.toString(this.page));
@@ -320,41 +342,3 @@ public class ParametersTracking implements Iterable<Tracking> {
     }
 }
 
-
-class QueryString {
-
-    private String query = "";
-
-    public QueryString(String name, String value) {
-        encode(name, value);
-    }
-
-    public void add(String name, List<?> list) {
-        query += "&";
-        String value = list.toString().replace("[", "").replace("]","");
-        encode(name, value);
-    }
-
-    public void add(String name, String value) {
-        query += "&";
-        encode(name, value);
-    }
-
-    private void encode(String name, String value) {
-        try {
-            query +=URLEncoder.encode(name, "UTF-8");
-            query += "=";
-            query += URLEncoder.encode(value, "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            throw new RuntimeException("Broken VM does not support UTF-8");
-        }
-    }
-
-    public String getQuery() {
-        return query;
-    }
-
-    public String toString() {
-        return getQuery();
-    }
-}
