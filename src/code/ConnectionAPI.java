@@ -26,6 +26,23 @@ public class ConnectionAPI {
         this.keyAPI = keyAPI;
     }
 
+    public Checkpoint getLastCheckpoint(String trackingNumber,String slug)throws Exception{
+
+        JSONObject response = this.request("GET","/last_checkpoint/"+slug+"/"+trackingNumber,null);
+        JSONObject checkpointJSON = response.getJSONObject("data").getJSONObject("checkpoint");
+        Checkpoint checkpoint = null;
+        if(checkpointJSON.length()!=0) {
+            checkpoint = new Checkpoint(checkpointJSON);
+        }
+
+        return checkpoint;
+    }
+
+    public void reactivate(String trackingNumber, String slug)throws Exception{
+
+        JSONObject response = this.request("POST","/trackings/"+slug+"/"+trackingNumber+"/reactivate",null);
+
+    }
     public Tracking getTrackingByNumber(String trackingNumber,String slug)throws Exception{
 
         JSONObject response = this.request("GET","/trackings/"+slug+"/"+trackingNumber,null);
@@ -59,10 +76,11 @@ public class ConnectionAPI {
         return size;
     }
 
-    public List<Tracking> getTracking()throws Exception{
+    public List<Tracking> getTracking(int page)throws Exception{
 
         List<Tracking> trackingList = null;
-        JSONObject response = this.request("GET","/trackings",null);
+
+        JSONObject response = this.request("GET","/trackings?page="+page,null);
 
         JSONArray trackingJSON = response.getJSONObject("data").getJSONArray("trackings");
 
@@ -93,6 +111,17 @@ public class ConnectionAPI {
 
     }
 
+    public JSONObject putTracking(Tracking tracking) throws AftershipAPIException,IOException,ParseException {
+
+        System.out.println( "/trackings/"+tracking.getSlug()+ "/"+tracking.getTrackingNumber());
+        System.out.println(tracking.generatePutJSON());
+
+        JSONObject response = this.request("PUT", "/trackings/"+tracking.getSlug()+
+                "/"+tracking.getTrackingNumber(), tracking.generatePutJSON());
+
+        return response.getJSONObject("data").getJSONObject("tracking");
+
+    }
     /**
     * Return a list of couriers supported by AfterShip along with their names,
     * URLs and slugs.
@@ -151,7 +180,7 @@ public class ConnectionAPI {
      * @return A JSONObject with the response
      * @exception code.AftershipAPIException if the request response an error
      **/
-    public JSONObject request(String method, String url, JSONObject params)
+    public JSONObject request(String method, String url, JSONObject body)
             throws AftershipAPIException,IOException,ParseException{
         BufferedReader rd;
         StringBuilder sb;
@@ -163,16 +192,20 @@ public class ConnectionAPI {
         connection.setRequestMethod(method);
         connection.setReadTimeout(10000);
         connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("Content-Type","application/json");
         connection.setRequestProperty("aftership-api-key", keyAPI);
-        if(params!=null){ connection.setDoOutput(true);}//if there is information in params, doOutput true, to write
+        if(body!=null){ connection.setDoOutput(true);}//if there is information in body, doOutput true, to write
 
         connection.connect();
-        if(params!=null){
+        if(body!=null){
             wr = new OutputStreamWriter(connection.getOutputStream());
-            wr.write(params.toString());
+            wr.write(body.toString());
             wr.flush();
+            System.out.println("entramos");
         }
-//        System.out.println(connection.getURL());
+//        System.out.println("URL: "+connection.getURL());
+//        System.out.println("Method: "+ connection.getRequestMethod());
+//        System.out.println("Body: "+ body.toString());
 //        System.out.println(connection.getResponseCode()+connection.getResponseMessage());
         this.checkAPIResponse(connection.getResponseCode());
 

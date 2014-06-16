@@ -2,9 +2,11 @@ Remember the Android platform includes the json.org libraries.
 
 in Courier delete set MEthods?? can user change something of the class?
 
-Post tracking dont return any checkpoing,, correct??
+Post tracking dont return any checkpoint,, correct?? Yes
 
 what is the field uniqueToken, should I keep it?
 
 make method getNextTracking();
             getNextTracking(ParametersTracking);
+
+in the connections, setTimeOut??? sometimes exceed the time.

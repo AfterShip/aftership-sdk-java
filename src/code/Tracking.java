@@ -358,6 +358,36 @@ public class Tracking {
         return globalJSON;
     }
 
+    public JSONObject generatePutJSON() {
+        JSONObject globalJSON = new JSONObject();
+        JSONObject trackingJSON = new JSONObject();
+        JSONObject customFieldsJSON;
+
+        if (this.title != null) trackingJSON.put("title", this.title);
+        if (this.emails != null) {
+            JSONArray emailsJSON = new JSONArray(this.emails);
+            trackingJSON.put("emails", emailsJSON);
+        }
+        if (this.smses != null) {
+            JSONArray smsesJSON = new JSONArray(this.smses);
+            trackingJSON.put("smses", smsesJSON);
+        }
+        if (this.customerName != null) trackingJSON.put("customer_name", this.customerName);
+        if (this.orderID != null) trackingJSON.put("order_id", this.orderID);
+        if (this.orderIDPath != null) trackingJSON.put("order_id_path", this.orderIDPath);
+        if (this.customFields != null) {
+            customFieldsJSON = new JSONObject();
+
+            for (Map.Entry<String, String> entry : this.customFields.entrySet()) {
+                customFieldsJSON.put(entry.getKey(), entry.getValue());
+            }
+            trackingJSON.put("custom_fields", customFieldsJSON);
+        }
+        globalJSON.put("tracking", trackingJSON);
+
+        return globalJSON;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

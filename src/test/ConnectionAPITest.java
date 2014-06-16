@@ -14,7 +14,6 @@ import static org.junit.Assert.assertEquals;
 
 public class ConnectionAPITest {
     ConnectionAPI connection  = new ConnectionAPI("a61d6204-6477-4f6d-93ec-86c4f872fb6b");
-    ;
     private static boolean setUpIsDone = false;
 
     @Ignore
@@ -132,7 +131,7 @@ public class ConnectionAPITest {
     public void testGetTracking() throws Exception {
 
         List<Tracking> listTrackings = new ArrayList<Tracking>();
-        listTrackings = connection.getTracking();
+        listTrackings = connection.getTracking(1);
        // System.out.println(listTrackings);
 
     }
@@ -162,8 +161,33 @@ public class ConnectionAPITest {
     public void testGetTrackingByNumber()throws Exception{
 
         Tracking tracking = connection.getTrackingByNumber("9405509699939943080223","usps");
-        System.out.println(tracking);
+      //  System.out.println(tracking);
+
 
     }
+
+    @Test
+    public void testPutTracking()throws Exception{
+        Tracking tracking2 = new Tracking("9405509699939943080223");
+        tracking2.setTitle("pedo");
+        tracking2.setSlug("usps");
+        System.out.println(connection.putTracking(tracking2));
+
+//        System.out.println(tracking)
+
+    }
+
+    @Test
+    public void testReactivate()throws Exception{
+        connection.reactivate("RT224265042HK","hong-kong-post");
+    }
+
+    @Test
+    public void testGetLastCheckpoint()throws Exception{
+
+        System.out.println(connection.getLastCheckpoint("9405509699939943080223","usps"));
+
+    }
+
 
 }
