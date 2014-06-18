@@ -80,6 +80,7 @@ public class ParametersTracking {
     * @return true if there is more, and false if there isn't
     */
     public boolean hasNext(){
+        System.out.println("position "+position +" total"+total);
         return position<total;
     }
     /**
@@ -92,15 +93,20 @@ public class ParametersTracking {
     * @throws   java.text.ParseException    If the response can not be parse to JSONObject
     */
     public Tracking next()throws AftershipAPIException,IOException,ParseException{
-        position++;
-        if(position<page*limit) {
-            return ParametersTracking.this.buffer.get(position - (page - 1) * limit);
+        int element=0;
+        if(position<page*limit){
+            element = position - (page - 1) * limit;
+            position++;
+            return ParametersTracking.this.buffer.get(element);
         }
         else{
             page++;
             ParametersTracking.this.connectionApi.getTracking(ParametersTracking.this);
-            return ParametersTracking.this.buffer.get(position - (page - 1) * limit);
+            element=position - (page - 1) * limit;
+            position++;
+            return ParametersTracking.this.buffer.get(element);
         }
+
     }
 //    public Iterator<Tracking> iterator() {
 //        return new Iterator<Tracking>() {

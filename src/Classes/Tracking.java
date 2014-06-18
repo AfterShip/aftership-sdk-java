@@ -345,7 +345,7 @@ public class Tracking {
         }
         if (this.customerName != null) trackingJSON.put("customer_name", this.customerName);
         if (this.destinationCountryISO3 != null)
-            trackingJSON.put("destination_country_iso3", this.destinationCountryISO3);
+            trackingJSON.put("destination_country_iso3", this.destinationCountryISO3.toString());
         if (this.orderID != null) trackingJSON.put("order_id", this.orderID);
         if (this.orderIDPath != null) trackingJSON.put("order_id_path", this.orderIDPath);
         if (this.customFields != null) {

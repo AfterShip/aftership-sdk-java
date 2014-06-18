@@ -1,5 +1,6 @@
 package Tests;
 
+import Enums.ISO3Country;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
@@ -153,7 +154,7 @@ public class TrackingTest {
         assertEquals("OrderIDPath should be www.whatever.com", "www.whatever.com", newTracking.getOrderIDPath());
         assertEquals("Title should be this title", "this title", newTracking.getTitle());
         assertEquals("UpdatedAt should be 2014-06-12T06:59:27+00:00", "2014-06-12T06:59:27+00:00", newTracking.getUpdatedAt());
-        assertEquals("DestinationCountryISO3 should be USA", "USA", newTracking.getDestinationCountryISO3());
+        assertEquals("DestinationCountryISO3 should be USA", ISO3Country.USA, newTracking.getDestinationCountryISO3());
         assertEquals("ShipmentPackageCount should be 0", 0, newTracking.getShipmentPackageCount());
         assertEquals("Source should be api", "api", newTracking.getSource());
         assertEquals("ExpectedDelivery should be null", null, newTracking.getExpectedDelivery());
