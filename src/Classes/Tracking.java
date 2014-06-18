@@ -1,14 +1,12 @@
 package Classes;
 
 import Enums.ISO3Country;
+import Enums.StatusTag;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
+
 /**
  * Define a Tracking element
  * Created by User on 11/6/14
@@ -56,17 +54,17 @@ public class Tracking {
     /** fields informed by Aftership API*/
 
     /**  Date and time of the tracking created. */
-    private String createdAt;
+    private Date createdAt;
 
     /** Date and time of the tracking last updated. */
-    private String updatedAt;
+    private Date updatedAt;
 
     /** Whether or not AfterShip will continue tracking the shipments.
      * Value is `false` when status is `Delivered` or `Expired`. */
     private boolean active;
 
     /** Expected delivery date (if any). */
-    private String expectedDelivery;
+    private Date expectedDelivery;
 
     /**  Number	Number of packages under the tracking. */
     private int shipmentPackageCount;
@@ -81,7 +79,7 @@ public class Tracking {
     private String source;
 
     /** Current status of tracking. */
-    private String tag;
+    private StatusTag tag;
 
     /**  Number of attempts AfterShip tracks at courier's system. */
     private int trackedCount;
@@ -136,17 +134,18 @@ public class Tracking {
 
         //fields that can't be updated by the user, only retrieve
 
-        this.createdAt = trackingJSON.isNull("created_at")?null:trackingJSON.getString("created_at");
-        this.updatedAt = trackingJSON.isNull("updated_at")?null:trackingJSON.getString("updated_at");
+        this.createdAt = trackingJSON.isNull("created_at")?null:DateMethods.getDate(trackingJSON.getString("created_at"));
+        this.updatedAt = trackingJSON.isNull("updated_at")?null:DateMethods.getDate(trackingJSON.getString("updated_at"));
+        this.expectedDelivery = trackingJSON.isNull("expected_delivery")?null:DateMethods.getDate(trackingJSON.getString("expected_delivery"));
+
         this.active = !trackingJSON.isNull("active") && trackingJSON.getBoolean("active");
-        this.expectedDelivery = trackingJSON.isNull("expected_delivery")?null:trackingJSON.getString("expected_delivery");
         this.originCountryISO3 = trackingJSON.isNull("origin_country_iso3")?null:
                 ISO3Country.valueOf(trackingJSON.getString("origin_country_iso3"));
         this.shipmentPackageCount =  trackingJSON.isNull("shipment_package_count")?0:trackingJSON.getInt("shipment_package_count");
         this.shipmentType = trackingJSON.isNull("shipment_type")?null:trackingJSON.getString("shipment_type");
         this.signedBy = trackingJSON.isNull("singned_by")?null:trackingJSON.getString("signed_by");
         this.source = trackingJSON.isNull("source")?null:trackingJSON.getString("source");
-        this.tag = trackingJSON.isNull("tag")?null:trackingJSON.getString("tag");
+        this.tag = trackingJSON.isNull("tag")?null:StatusTag.valueOf(trackingJSON.getString("tag"));
         this.trackedCount = trackingJSON.isNull("tracked_count")?0:trackingJSON.getInt("tracked_count");
 
        // checkpoints
@@ -279,20 +278,32 @@ public class Tracking {
         this.customFields = null;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public String getUpdatedAt() {
+    public String getCreatedAtString() {
+        return DateMethods.toString(createdAt);
+    }
+
+    public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public String getUpdatedAtString() {
+        return DateMethods.toString(createdAt);
     }
 
     public boolean isActive() {
         return active;
     }
 
-    public String getExpectedDelivery() {
+    public Date getExpectedDelivery() {
         return expectedDelivery;
+    }
+
+    public String getExpectedDeliveryString() {
+        return DateMethods.toString(expectedDelivery);
     }
 
     public ISO3Country getOriginCountryISO3() {
@@ -315,7 +326,7 @@ public class Tracking {
         return source;
     }
 
-    public String getTag() {
+    public StatusTag getTag() {
         return tag;
     }
 
@@ -420,4 +431,5 @@ public class Tracking {
         sb.append("\n}");
         return sb.toString();
     }
+
 }

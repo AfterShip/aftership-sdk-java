@@ -4,9 +4,8 @@ import Enums.ISO3Country;
 import Enums.StatusTag;
 import org.junit.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
 import Classes.*;
 
 
@@ -251,7 +250,12 @@ public class ConnectionAPITest {
     public void testGetTracking2() throws Exception{
         ParametersTracking param = new ParametersTracking();
         param.addSlug("dhl");
-
+        Date date = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.MONTH,-1);
+        date = c.getTime();
+        param.setCreatedAtMin(date);
         int totalDHL =connection.getTracking(param);
         Assert.assertEquals("Should be 35 trackings", 35, totalDHL);
 
@@ -288,7 +292,7 @@ public class ConnectionAPITest {
 
         //slug is bad informed
         try{
-            connection.getTrackingByNumber("RC328021065CN","");
+            connection.getTrackingByNumber("RC328021065CN", "");
             //always should give an exception before this
             assertTrue("This never should be executed",false);
         }catch (Exception e){
@@ -297,7 +301,7 @@ public class ConnectionAPITest {
         }
         //if the trackingNumber is bad informed
         try{
-            connection.getTrackingByNumber("adf","fedex");
+            connection.getTrackingByNumber("adf", "fedex");
             //always should give an exception before this
             assertTrue("This never should be executed",false);
         }catch (Exception e){
@@ -366,7 +370,7 @@ public class ConnectionAPITest {
         }
         //if the trackingNumber is bad informed
         try{
-            connection.reactivate("adf","fedex");
+            connection.reactivate("adf", "fedex");
             //always should give an exception before this
             assertTrue("This never should be executed",false);
         }catch (Exception e){

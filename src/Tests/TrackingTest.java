@@ -1,6 +1,7 @@
 package Tests;
 
 import Enums.ISO3Country;
+import Enums.StatusTag;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
@@ -12,10 +13,10 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import Classes.*;
-
 public class TrackingTest {
 
     Tracking tracking;
@@ -146,14 +147,16 @@ public class TrackingTest {
         assertEquals("Slug should be dpd", "dpd", newTracking.getSlug());
 
         assertEquals("SignedBy should be null", null, newTracking.getSignedBy());
-        assertEquals("Tag should be Pending", "Pending", newTracking.getTag());
+        assertEquals("Tag should be Pending", StatusTag.Pending, newTracking.getTag());
         assertEquals("TrackedCount should be 0", 0, newTracking.getTrackedCount());
         assertEquals("CustomerName should be Mr Smith", "Mr Smith", newTracking.getCustomerName());
         assertEquals("OriginCountryISO3 should be null", null, newTracking.getOriginCountryISO3());
         assertEquals("OrderID should be ID 1234", "ID 1234", newTracking.getOrderID());
         assertEquals("OrderIDPath should be www.whatever.com", "www.whatever.com", newTracking.getOrderIDPath());
         assertEquals("Title should be this title", "this title", newTracking.getTitle());
-        assertEquals("UpdatedAt should be 2014-06-12T06:59:27+00:00", "2014-06-12T06:59:27+00:00", newTracking.getUpdatedAt());
+        assertEquals("UpdatedAt should be 2014-06-12T06:59:27+00:00", "2014-06-12T06:59:27+00:00",
+                newTracking.getUpdatedAtString());
+
         assertEquals("DestinationCountryISO3 should be USA", ISO3Country.USA, newTracking.getDestinationCountryISO3());
         assertEquals("ShipmentPackageCount should be 0", 0, newTracking.getShipmentPackageCount());
         assertEquals("Source should be api", "api", newTracking.getSource());
@@ -161,7 +164,8 @@ public class TrackingTest {
         assertEquals("ShipmentType should be null", null, newTracking.getShipmentType());
         //assertEquals("UniqueToken should be ly02uA2okl", "ly02uA2okl", newTracking.uniqueToken());
         assertEquals("Active should be true", true, newTracking.isActive());
-        assertEquals("CreatedAt should be 2014-06-12T06:59:27+00:00", "2014-06-12T06:59:27+00:00", newTracking.getCreatedAt());
+        assertEquals("CreatedAt should be 2014-06-12T06:59:27+00:00", "2014-06-12T06:59:27+00:00",
+                newTracking.getCreatedAtString());
 
         List<String> smsesList = newTracking.getSmses();
         assertTrue("Smses should contain this +85292345678",smsesList.contains("+85292345678"));
@@ -175,8 +179,31 @@ public class TrackingTest {
      }
 
     @Test
-    public void testDates(){
+    public void testDates() throws Exception{
 
-    }
+        SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        String dateReceived = "2014-06-18T06:22:17+00:00";
+        StringBuilder sb = new StringBuilder("2014-06-18T06:22:17+00:00");
+        if(dateReceived.length()==25)
+        {
+           sb.deleteCharAt(22);
+            Date newDate = ISO8601DATEFORMAT.parse(sb.toString());
+            StringBuilder sb1 = new StringBuilder(ISO8601DATEFORMAT.format(newDate));
+            sb1.insert(22,':');
+        }
+//        String parsed = dateReceived.replaceAll("\\+0([0-9]){1}\\:00", "+0$100");
+//
+//        Date newDate = ISO8601DATEFORMAT.parse(parsed);
+//        System.out.println(newDate);
+//
+//        System.out.println(ISO8601DATEFORMAT.format(newDate));
+//
+        SimpleDateFormat ISO8601= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+        Date anotherDate = ISO8601.parse("2014-05-09T13:39:00");
+
+        System.out.println(anotherDate);
+        System.out.println(ISO8601DATEFORMAT.format(anotherDate));
+       }
 
 }

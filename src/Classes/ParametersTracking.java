@@ -4,6 +4,7 @@ import Enums.Field;
 import Enums.ISO3Country;
 import Enums.StatusTag;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.io.IOException;
 import java.text.ParseException;
@@ -40,10 +41,10 @@ public class ParametersTracking {
 
     /** Start date and time of trackings created. AfterShip only stores data of 90 days.
      * (Defaults: 30 days ago, Example: 2013-03-15T16:41:56+08:00) */
-    private String createdAtMin;
+    private Date createdAtMin;
 
     /** End date and time of trackings created. (Defaults: now, Example: 2013-04-15T16:41:56+08:00) */
-    private String createdAtMax;
+    private Date createdAtMax;
 
     /** List of fields to include in the response. Fields to include: title, orderId, tag, checkpoints,
      * checkpointTime, message, countryName. (Defaults: none, Example: title,orderId) */
@@ -77,7 +78,6 @@ public class ParametersTracking {
     * @return true if there is more, and false if there isn't
     */
     public boolean hasNext(){
-        System.out.println("position "+position +" total"+total);
         return position<total;
     }
     /**
@@ -266,19 +266,19 @@ public class ParametersTracking {
         this.keyword = keyword;
     }
 
-    public String getCreatedAtMin() {
+    public Date getCreatedAtMin() {
         return createdAtMin;
     }
 
-    public void setCreatedAtMin(String createdAtMin) {
+    public void setCreatedAtMin(Date createdAtMin) {
         this.createdAtMin = createdAtMin;
     }
 
-    public String getCreatedAtMax() {
+    public Date getCreatedAtMax() {
         return createdAtMax;
     }
 
-    public void setCreatedAtMax(String createdAtMax) {
+    public void setCreatedAtMax(Date createdAtMax) {
         this.createdAtMax = createdAtMax;
     }
 
@@ -325,8 +325,8 @@ public class ParametersTracking {
         qs.add("limit",Integer.toString(this.limit));
 
         if (this.keyword != null) qs.add("keyword", this.keyword);
-        if (this.createdAtMin != null) qs.add("created_at_min", this.createdAtMin);
-        if (this.createdAtMax != null) qs.add("created_at_max", this.createdAtMax);
+        if (this.createdAtMin != null) qs.add("created_at_min", DateMethods.toString(this.createdAtMin));
+        if (this.createdAtMax != null) qs.add("created_at_max", DateMethods.toString(this.createdAtMax));
         if (this.lang != null)qs.add("lang", this.lang);
 
         if (this.slugs != null) qs.add("slug",this.slugs);

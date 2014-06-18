@@ -4,6 +4,8 @@ import Enums.ISO3Country;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 /**
  * Created by User on 10/6/14.
  */
@@ -17,7 +19,7 @@ public class Checkpoint {
      YYYY-MM-DD,
      YYYY-MM-DDTHH:MM:SS, or
      YYYY-MM-DDTHH:MM:SS+TIMEZONE */
-    private String checkpointTime;
+    private Date checkpointTime;
 
     /** Location info (if any) */
     private String city;
@@ -43,9 +45,11 @@ public class Checkpoint {
     public Checkpoint(JSONObject checkPointJSON){
 
         this.createdAt = checkPointJSON.isNull("created_at")?null:checkPointJSON.getString("created_at");
-        this.checkpointTime = checkPointJSON.isNull("checkpoint_time")?null:checkPointJSON.getString("checkpoint_time");
+        this.checkpointTime = checkPointJSON.isNull("checkpoint_time")?null:
+                DateMethods.getDate(checkPointJSON.getString("checkpoint_time"));
         this.city = checkPointJSON.isNull("city")?null:checkPointJSON.getString("city");
-        this.countryISO3 = checkPointJSON.isNull("country_iso_3")?null: ISO3Country.valueOf(checkPointJSON.getString("country_iso3"));
+        this.countryISO3 = checkPointJSON.isNull("country_iso_3")?null:
+                ISO3Country.valueOf(checkPointJSON.getString("country_iso3"));
         this.countryName = checkPointJSON.isNull("country_name")?null:checkPointJSON.getString("country_name");
         this.message = checkPointJSON.isNull("message")?null:checkPointJSON.getString("message");
         this.state = checkPointJSON.isNull("state")?null:checkPointJSON.getString("state");
@@ -74,7 +78,7 @@ public class Checkpoint {
         return createdAt;
     }
 
-    public String getCheckpointTime() {
+    public Date getCheckpointTime() {
         return checkpointTime;
     }
 

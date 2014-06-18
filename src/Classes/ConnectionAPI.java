@@ -187,7 +187,7 @@ public class ConnectionAPI {
     public int getTracking(ParametersTracking parameters)throws AftershipAPIException,IOException,ParseException{
         List<Tracking> trackingList = null;
         int size =0;
-
+        System.out.println(parameters.generateQueryString());
         JSONObject response = this.request("GET","/trackings?"+parameters.generateQueryString(),null);
         JSONArray trackingJSON = response.getJSONObject("data").getJSONArray("trackings");
         if(trackingJSON.length()!=0) {
@@ -221,9 +221,7 @@ public class ConnectionAPI {
         List<Tracking> trackingList = null;
 
         JSONObject response = this.request("GET","/trackings?limit=100&page="+page,null);
-        System.out.println("/trackings?limit=100&page="+page);
         JSONArray trackingJSON = response.getJSONObject("data").getJSONArray("trackings");
-        System.out.println(trackingJSON.length());
         if(trackingJSON.length()!=0) {
              trackingList = new ArrayList<Tracking>(trackingJSON.length());
 
