@@ -3,11 +3,8 @@ package Classes;
 import Enums.Field;
 import Enums.ISO3Country;
 import Enums.StatusTag;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -20,7 +17,7 @@ public class ParametersTracking {
     /** Page to show. (Default: 1) */
     private int page;
 
-    /** Number of trackings each page contain. (Default: 100) */
+    /** Number of trackings each page contain. (Default and max: 100) */
     private int limit;
 
     /** Search the content of the tracking record fields: trackingNumber, title, orderId, customerName,

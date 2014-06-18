@@ -205,10 +205,11 @@ public class ConnectionAPI {
     }
 
     /**
-     * Get as much as 99 trackings from your account, created less than 30 days ago.
+     * Get as much as 100 trackings from your account, created less than 30 days ago. If you delete right before,
+     *          you may obtain less than 100 trackings.
      *
-     * @param page Indicated the page of 99 trackings to return, if page is 1 will return the first 99, if is 2
-     *             99-108 etc
+     * @param page Indicated the page of 100 trackings to return, if page is 1 will return the first 100, if is 2
+     *             100-200 etc
      * @return  A List of Tracking Objects from your account. Max 100 trackings
      * @throws Classes.AftershipAPIException  If the request response an error
      * @throws  java.io.IOException If there is a problem with the connection
@@ -219,9 +220,10 @@ public class ConnectionAPI {
 
         List<Tracking> trackingList = null;
 
-        JSONObject response = this.request("GET","/trackings?limit=101&page="+page,null);
-
+        JSONObject response = this.request("GET","/trackings?limit=100&page="+page,null);
+        System.out.println("/trackings?limit=100&page="+page);
         JSONArray trackingJSON = response.getJSONObject("data").getJSONArray("trackings");
+        System.out.println(trackingJSON.length());
         if(trackingJSON.length()!=0) {
              trackingList = new ArrayList<Tracking>(trackingJSON.length());
 

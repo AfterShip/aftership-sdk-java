@@ -1,6 +1,5 @@
 package Tests;
 
-import Enums.Field;
 import Enums.ISO3Country;
 import Enums.StatusTag;
 import org.junit.*;
@@ -8,13 +7,7 @@ import org.junit.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.json.*;
 import Classes.*;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Map;
 
 
 import static org.junit.Assert.assertEquals;
@@ -238,9 +231,9 @@ public class ConnectionAPITest {
     @Test
     public void testGetTracking() throws Exception {
 
-        List<Tracking> listTrackings100 = new ArrayList<Tracking>();
+
         //get the first 100 Trackings
-        listTrackings100 = connection.getTracking(1);
+        List<Tracking> listTrackings100 = connection.getTracking(1);
         Assert.assertEquals("Should receive 100", 100, listTrackings100.size());
         Assert.assertTrue("TrackingNumber should be informed", !listTrackings100.get(0).equals(""));
         Assert.assertTrue("TrackingNumber should be informed",!listTrackings100.get(98).equals(""));
@@ -321,7 +314,7 @@ public class ConnectionAPITest {
         tracking.setTitle("another title");
 
         Tracking tracking2 = connection.putTracking(tracking);
-        Assert.assertEquals("Should be equals title", "another title", tracking.getTitle());
+        Assert.assertEquals("Should be equals title", "another title", tracking2.getTitle());
 
         //test post tracking number doesn't exist
         Tracking tracking3 = new Tracking(trackingNumberToDetectError);
