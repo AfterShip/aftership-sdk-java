@@ -280,6 +280,15 @@ public class ConnectionAPITest {
 
         }
 
+//        ParametersTracking param3 = new ParametersTracking();
+//        int totalTotal = connection.getTracking(param3);
+//        System.out.println(totalTotal);
+//        int number=0;
+//        while(param3.hasNext()){
+//            System.out.println(++number +". "+param3.next().getTrackingNumber());
+//        }
+
+
     }
 
     @Test
