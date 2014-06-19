@@ -2,9 +2,11 @@ package Classes;
 
 import Enums.ISO3Country;
 import Enums.StatusTag;
+import com.oracle.javafx.jmx.json.JSONException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -64,7 +66,7 @@ public class Tracking {
     private boolean active;
 
     /** Expected delivery date (if any). */
-    private Date expectedDelivery;
+    private String expectedDelivery;
 
     /**  Number	Number of packages under the tracking. */
     private int shipmentPackageCount;
@@ -93,7 +95,7 @@ public class Tracking {
         this.title = trackingNumber;
     }
 
-    public Tracking(JSONObject trackingJSON){
+    public Tracking(JSONObject trackingJSON) throws JSONException,AftershipAPIException,ParseException {
 
         //fields that can be updated by the user
 
@@ -136,7 +138,7 @@ public class Tracking {
 
         this.createdAt = trackingJSON.isNull("created_at")?null:DateMethods.getDate(trackingJSON.getString("created_at"));
         this.updatedAt = trackingJSON.isNull("updated_at")?null:DateMethods.getDate(trackingJSON.getString("updated_at"));
-        this.expectedDelivery = trackingJSON.isNull("expected_delivery")?null:DateMethods.getDate(trackingJSON.getString("expected_delivery"));
+        this.expectedDelivery = trackingJSON.isNull("expected_delivery")?null:trackingJSON.getString("expected_delivery");
 
         this.active = !trackingJSON.isNull("active") && trackingJSON.getBoolean("active");
         this.originCountryISO3 = trackingJSON.isNull("origin_country_iso3")?null:
@@ -298,12 +300,8 @@ public class Tracking {
         return active;
     }
 
-    public Date getExpectedDelivery() {
+    public String getExpectedDelivery() {
         return expectedDelivery;
-    }
-
-    public String getExpectedDeliveryString() {
-        return DateMethods.toString(expectedDelivery);
     }
 
     public ISO3Country getOriginCountryISO3() {

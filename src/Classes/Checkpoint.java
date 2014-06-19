@@ -1,6 +1,7 @@
 package Classes;
 
 import Enums.ISO3Country;
+import com.oracle.javafx.jmx.json.JSONException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,7 +20,7 @@ public class Checkpoint {
      YYYY-MM-DD,
      YYYY-MM-DDTHH:MM:SS, or
      YYYY-MM-DDTHH:MM:SS+TIMEZONE */
-    private Date checkpointTime;
+    private String checkpointTime;
 
     /** Location info (if any) */
     private String city;
@@ -42,11 +43,10 @@ public class Checkpoint {
     /** Location info (if any) */
     private String zip;
 
-    public Checkpoint(JSONObject checkPointJSON){
+    public Checkpoint(JSONObject checkPointJSON) throws JSONException{
 
         this.createdAt = checkPointJSON.isNull("created_at")?null:checkPointJSON.getString("created_at");
-        this.checkpointTime = checkPointJSON.isNull("checkpoint_time")?null:
-                DateMethods.getDate(checkPointJSON.getString("checkpoint_time"));
+        this.checkpointTime = checkPointJSON.isNull("checkpoint_time")?null:checkPointJSON.getString("checkpoint_time");
         this.city = checkPointJSON.isNull("city")?null:checkPointJSON.getString("city");
         this.countryISO3 = checkPointJSON.isNull("country_iso_3")?null:
                 ISO3Country.valueOf(checkPointJSON.getString("country_iso3"));
@@ -78,7 +78,7 @@ public class Checkpoint {
         return createdAt;
     }
 
-    public Date getCheckpointTime() {
+    public String getCheckpointTime() {
         return checkpointTime;
     }
 

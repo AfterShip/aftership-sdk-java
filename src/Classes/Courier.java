@@ -1,5 +1,6 @@
 package Classes;
 
+import com.oracle.javafx.jmx.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -35,7 +36,7 @@ public class Courier {
      * @param jsonCourier   A JSONObject with information of the Courier
      * by the API.
      **/
-    public Courier(JSONObject jsonCourier){
+    public Courier(JSONObject jsonCourier) throws JSONException {
         this.web_url = jsonCourier.has("web_url")?jsonCourier.getString("web_url"):"";
         this.slug =  jsonCourier.has("slug")?jsonCourier.getString("slug"):"";
         this.name = jsonCourier.has("name")?jsonCourier.getString("name"):"";
