@@ -73,8 +73,8 @@ Quick Start
 
 	//1- Simplest way, with the page you want to get
 
-	List<Tracking> listTrackings100 = connection.getTracking(1);//get first 100
-	List<Tracking> listTrackings200 = connection.getTracking(2);//get 100-200
+	List<Tracking> listTrackings100 = connection.getTrackings(1);//get first 100
+	List<Tracking> listTrackings200 = connection.getTrackings(2);//get 100-200
 	//If you delete tracings right before, you may get less number.
 
 	//2- Using Parameters tracking
@@ -92,7 +92,7 @@ Quick Start
     param.setCreatedAtMin(date);//SetCreadtedMin to the date of one month ago
 
 	//Return the number of trackings in your account from dhl and created less than a month ago.
-	int totalDHL =connection.getTracking(param);
+	int totalDHL =connection.getTrackings(param);
 
 	//For actually get the trackings we use the parameter created
     Tracking aux;
@@ -106,16 +106,16 @@ Quick Start
 	//Get trackings with destination Spain
 	ParametersTracking param1 = new ParametersTracking();
     param1.addDestination(ISO3Country.ESP);
-    int totalSpain =connection.getTracking(param1);
+    int totalSpain =connection.getTrackings(param1);
 
 	//Get trackings that are OutForDelivery
     ParametersTracking param2 = new ParametersTracking();
     param2.addTag(StatusTag.OutForDelivery);
-    int totalOutDelivery=connection.getTracking(param2);
+    int totalOutDelivery=connection.getTrackings(param2);
 
 	//Get all the elements in your account and print their tracking number
     ParametersTracking param3 = new ParametersTracking();//We don't add any value to params
-    int totalTotal = connection.getTracking(param3);
+    int totalTotal = connection.getTrackings(param3);
     System.out.println(totalTotal);
     int number=0;
     //We don't have to worry about the page, only need to call hasNext() and next()

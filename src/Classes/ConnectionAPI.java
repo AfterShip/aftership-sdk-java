@@ -184,7 +184,7 @@ public class ConnectionAPI {
      * @see     ParametersTracking
      * @see     Tracking
      **/
-    public int getTracking(ParametersTracking parameters)throws AftershipAPIException,IOException,ParseException{
+    public int getTrackings(ParametersTracking parameters)throws AftershipAPIException,IOException,ParseException{
         List<Tracking> trackingList = null;
         int size =0;
         JSONObject response = this.request("GET","/trackings?"+parameters.generateQueryString(),null);
@@ -215,7 +215,7 @@ public class ConnectionAPI {
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      * @see     Tracking
      **/
-    public List<Tracking> getTracking(int page)throws AftershipAPIException,IOException,ParseException{
+    public List<Tracking> getTrackings(int page)throws AftershipAPIException,IOException,ParseException{
 
         List<Tracking> trackingList = null;
 

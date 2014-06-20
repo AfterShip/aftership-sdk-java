@@ -98,7 +98,7 @@ public class ParametersTracking {
         }
         else{
             page++;
-            ParametersTracking.this.connectionApi.getTracking(ParametersTracking.this);
+            ParametersTracking.this.connectionApi.getTrackings(ParametersTracking.this);
             element=position - (page - 1) * limit;
             position++;
             return ParametersTracking.this.buffer.get(element);
