@@ -54,93 +54,14 @@ public class ParametersTracking {
      * Example: 'en' Support Chinese to English translation for  china-ems  and  china-post  only */
     private String lang;
 
-    /** A buffer where save the information of the las petition and access it later*/
-    private List<Tracking> buffer;
-
-    /** Saves which is the last element returned by Next()*/
-    private int position;
-
     /** Total of tracking elements from the user that match the ParametersTracking object*/
     private int total;
 
-    /** Save a reference to ConnectionAPI, so it's possible in the next() method call through this instance*/
-    private ConnectionAPI connectionApi;
 
     public ParametersTracking() {
         this.page = 1;
         this.limit = 100;
-        this.position=0;
     }
-
-    /**
-    * Check if there is more trackings to get
-    *
-    * @return true if there is more, and false if there isn't
-    */
-    public boolean hasNext(){
-        return position<total;
-    }
-    /**
-    * return the next Tracking of the user or if it already has send all the Trackings in buffer, makes another call
-     * with the next page and save the result in buffer
-    *
-    * @return the next Tracking obtained
-    * @throws   Classes.AftershipAPIException  If the request response an error
-    * @throws   java.io.IOException If there is a problem with the connection
-    * @throws   java.text.ParseException    If the response can not be parse to JSONObject
-    */
-    public Tracking next()throws AftershipAPIException,IOException,ParseException{
-        int element=0;
-        if(position<page*limit){
-            element = position - (page - 1) * limit;
-            position++;
-            return ParametersTracking.this.buffer.get(element);
-        }
-        else{
-            page++;
-            ParametersTracking.this.connectionApi.getTrackings(ParametersTracking.this);
-            element=position - (page - 1) * limit;
-            position++;
-            return ParametersTracking.this.buffer.get(element);
-        }
-
-    }
-//    public Iterator<Tracking> iterator() {
-//        return new Iterator<Tracking>() {
-//
-//           @Override
-//            public boolean hasNext() {
-//
-//                return position<total;
-//
-//            }
-//
-//            @Override
-//            public Tracking next(){
-//
-//                position++;
-//                if(position<page*limit) {
-//                    return ParametersTracking.this.buffer.get(position - (page - 1) * limit);
-//                }
-//                else{
-//                    try{//I dont like this at all!! look another way
-//                    page++;
-//                    ParametersTracking.this.connectionApi.getTracking(ParametersTracking.this);
-//                    }catch (Exception e){
-//                         System.out.println(e.getMessage());
-//                    }
-//                    return ParametersTracking.this.buffer.get(position - (page - 1) * limit);
-//
-//                }
-//            }
-//
-//            @Override
-//            public void remove() {
-//                throw new UnsupportedOperationException();
-//            }
-//        };
-//
-//    }
 
     public void addSlug(String slug) {
 
@@ -290,28 +211,12 @@ public class ParametersTracking {
         this.lang = lang;
     }
 
-    public List<Tracking> getBuffer() {
-        return buffer;
-    }
-
-    public void setBuffer(List<Tracking> buffer) {
-        this.buffer = buffer;
-    }
-
     public int getTotal() {
         return total;
     }
 
     public void setTotal(int total) {
         this.total = total;
-    }
-
-    public ConnectionAPI getConnectionApi() {
-        return connectionApi;
-    }
-
-    public void setConnectionApi(ConnectionAPI connectionApi) {
-        this.connectionApi = connectionApi;
     }
 
     /**

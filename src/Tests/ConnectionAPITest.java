@@ -256,29 +256,22 @@ public class ConnectionAPITest {
         c.add(Calendar.MONTH,-1);
         date = c.getTime();
         param.setCreatedAtMin(date);
-        int totalDHL =connection.getTrackings(param);
-        Assert.assertEquals("Should be 35 trackings", 35, totalDHL);
+        List<Tracking> totalDHL =connection.getTrackings(param);
+        Assert.assertEquals("Should be 35 trackings", 35, totalDHL.size());
 
         ParametersTracking param1 = new ParametersTracking();
         param1.addDestination(ISO3Country.ESP);
-        int totalSpain =connection.getTrackings(param1);
-        Assert.assertEquals("Should be 23 trackings", 23, totalSpain);
+        param1.setLimit(20);
+        List<Tracking> totalSpain =connection.getTrackings(param1);
+        Assert.assertEquals("Should be 20 trackings", 20, totalSpain.size());
+        List<Tracking> totalSpain2 =connection.getTrackingsNext(param1);
+        Assert.assertEquals("Should be 3 trackings", 3, totalSpain2.size());
+
 
         ParametersTracking param2 = new ParametersTracking();
         param2.addTag(StatusTag.OutForDelivery);
-        int totalOutDelivery=connection.getTrackings(param2);
-        Assert.assertEquals("Should be 4 trackings", 4, totalOutDelivery);
-
-        Tracking aux;
-        while(param2.hasNext()){
-            aux = param2.next();
-            Assert.assertTrue("TrackingNumber should be",
-                    aux.getTrackingNumber().equals("RF228685685SG") ||
-                    aux.getTrackingNumber().equals("LK032612415CN") ||
-                    aux.getTrackingNumber().equals("RW101815764SG") ||
-                    aux.getTrackingNumber().equals("RQ246778993SG"));
-
-        }
+        List<Tracking> totalOutDelivery=connection.getTrackings(param2);
+        Assert.assertEquals("Should be 3 trackings", 3, totalOutDelivery.size());
 
 //        ParametersTracking param3 = new ParametersTracking();
 //        int totalTotal = connection.getTracking(param3);

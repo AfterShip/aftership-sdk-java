@@ -91,37 +91,25 @@ Quick Start
     date = c.getTime();
     param.setCreatedAtMin(date);//SetCreadtedMin to the date of one month ago
 
-	//Return the number of trackings in your account from dhl and created less than a month ago.
-	int totalDHL =connection.getTrackings(param);
+	//Return the first page of trackings in your account from dhl and created less than a month ago.
+	List <Tracking> totalDHL =connection.getTrackings(param);
 
-	//For actually get the trackings we use the parameter created
-    Tracking aux;
-	while(param.hasNext()){//Check if there is more trackings
-		aux = param.next();//Get the next tracking
-		aux.getTrackingNumber();//Here you can iterate on all the result
-	}
 
-	//Other examples
+	//if the get has several pages, you can either modify the page you want in your get with param.setPage(page), or
+	call getTrackingsNext(param1) instead, it automatically increase the page , example:
 
-	//Get trackings with destination Spain
+	//Get trackings with destination Spain, total 23
 	ParametersTracking param1 = new ParametersTracking();
     param1.addDestination(ISO3Country.ESP);
-    int totalSpain =connection.getTrackings(param1);
+    param1.setLimit(20);//set limit of the page to 20
+    List<Tracking> totalSpain =connection.getTrackings(param1);//we will receive the 20 first
+    List<Tracking> totalSpain2 =connection.getTrackingsNext(param1); //we will receive the next 3
+    int total = param1.getTotal(); // we will receive the total 23;
 
 	//Get trackings that are OutForDelivery
     ParametersTracking param2 = new ParametersTracking();
     param2.addTag(StatusTag.OutForDelivery);
     int totalOutDelivery=connection.getTrackings(param2);
-
-	//Get all the elements in your account and print their tracking number
-    ParametersTracking param3 = new ParametersTracking();//We don't add any value to params
-    int totalTotal = connection.getTrackings(param3);
-    System.out.println(totalTotal);
-    int number=0;
-    //We don't have to worry about the page, only need to call hasNext() and next()
-    while(param3.hasNext()){
-        System.out.println(++number +". "+param3.next().getTrackingNumber());
-    }
 
 
 **Get a tracking from your account**
@@ -154,4 +142,7 @@ Quick Start
 	newCheckpoint.getMessage()//"Delivered"
 	newCheckpoint.getCountryName()//"BUDERIM QLD, AU"
 	newCheckpoint.getTag()//"Delivered"
+
+
+
 

@@ -176,7 +176,7 @@ public class ConnectionAPI {
      * Get trackings from your account with the ParametersTracking defined in the params
      *
      * @param parameters ParametersTracking Object, with the information to get
-     * @return  An int with the total number of trackings that match then values of ParametersTracking in param,
+     * @return  A Tracking List with the trackings that match the values of ParametersTracking in param,
      *          accessing the trackings should be made through the ParametersTracking passed as param
      * @throws Classes.AftershipAPIException  If the request response an error
      * @throws  java.io.IOException If there is a problem with the connection
@@ -184,7 +184,7 @@ public class ConnectionAPI {
      * @see     ParametersTracking
      * @see     Tracking
      **/
-    public int getTrackings(ParametersTracking parameters)throws AftershipAPIException,IOException,ParseException{
+    public List<Tracking> getTrackings(ParametersTracking parameters)throws AftershipAPIException,IOException,ParseException{
         List<Tracking> trackingList = null;
         int size =0;
         JSONObject response = this.request("GET","/trackings?"+parameters.generateQueryString(),null);
@@ -195,12 +195,27 @@ public class ConnectionAPI {
             for (int i = 0; i < trackingJSON.length(); i++) {
                 trackingList.add(new Tracking(trackingJSON.getJSONObject(i)));
             }
-            parameters.setBuffer(trackingList);
             parameters.setTotal(size);
-            parameters.setConnectionApi(this);
         }
+        return trackingList;
+    }
 
-        return size;
+    /**
+     * Get next page of Trackings from your account with the ParametersTracking defined in the params
+     *
+     * @param parameters ParametersTracking Object, with the information to get
+     * @return  The next page of Tracking List that match then values of ParametersTracking in param,
+     *          accessing the trackings should be made through the ParametersTracking passed as param
+     * @throws Classes.AftershipAPIException  If the request response an error
+     * @throws  java.io.IOException If there is a problem with the connection
+     * @throws  java.text.ParseException    If the response can not be parse to JSONObject
+     * @see     ParametersTracking
+     * @see     Tracking
+     **/
+    public List<Tracking> getTrackingsNext(ParametersTracking parameters)
+            throws AftershipAPIException,IOException,ParseException{
+        parameters.setPage(parameters.getPage()+1);
+        return this.getTrackings(parameters);
     }
 
     /**
