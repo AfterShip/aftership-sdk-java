@@ -10,7 +10,7 @@
 # =============== RubyMine.gitignore
 # =============== PhPStorm.gitignore
 # =============== IntelliJ.gitignore
-#.idea
+.idea
 
 
 # =============== OSX.gitignore
