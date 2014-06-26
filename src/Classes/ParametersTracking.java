@@ -1,6 +1,7 @@
 package Classes;
 
-import Enums.Field;
+import Enums.*;
+import Enums.FieldTracking;
 import Enums.ISO3Country;
 import Enums.StatusTag;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class ParametersTracking {
 
     /** List of fields to include in the response. Fields to include: title, orderId, tag, checkpoints,
      * checkpointTime, message, countryName. (Defaults: none, Example: title,orderId) */
-    private List<Field> fields;
+    private List<FieldTracking> fields;
 
     /** Language, default: ''
      * Example: 'en' Support Chinese to English translation for  china-ems  and  china-post  only */
@@ -143,17 +144,17 @@ public class ParametersTracking {
         this.tags = null;
     }
 
-    public void addField(Field field) {
+    public void addField(FieldTracking field) {
 
         if (this.fields == null) {
-            this.fields = new ArrayList<Field>();
+            this.fields = new ArrayList<FieldTracking>();
             this.fields.add(field);
         } else {
             this.fields.add(field);
         }
     }
 
-    public void deleteField(Field field) {
+    public void deleteField(FieldTracking field) {
         if (this.fields != null) {
             this.fields.remove(field);
         }

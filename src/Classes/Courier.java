@@ -1,7 +1,11 @@
 package Classes;
 
 import com.oracle.javafx.jmx.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Define a Courier
@@ -19,6 +23,8 @@ public class Courier {
     private String other_name;
     /** Website link of courier */
     private String web_url;
+    /** Require fields for this courier */
+    private List<String> requireFields;
 
     /** Default constructor with all the fields of the class */
     public Courier(String web_url, String slug, String name, String phone, String other_name) {
@@ -42,6 +48,14 @@ public class Courier {
         this.name = jsonCourier.has("name")?jsonCourier.getString("name"):"";
         this.phone = jsonCourier.has("phone")?jsonCourier.getString("phone"):"";
         this.other_name = jsonCourier.has("other_name")?jsonCourier.getString("other_name"):"";
+
+        JSONArray requireFieldsArray =jsonCourier.isNull("require_fields")?null:jsonCourier.getJSONArray("require_fields");
+        if(requireFieldsArray !=null && requireFieldsArray.length()!=0){
+            this.requireFields = new ArrayList<String>();
+            for (int i=0;i<requireFieldsArray.length();i++){
+                this.requireFields.add(requireFieldsArray.get(i).toString());
+            }
+        }
 
     }
 

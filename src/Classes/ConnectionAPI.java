@@ -6,13 +6,16 @@ import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import Enums.FieldCheckpoint;
+import Enums.FieldTracking;
 import org.json.*;
 import java.io.OutputStreamWriter;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import Enums.Field;
+import Enums.*;
 
 /**
  * ConnectionAPI is the class responsible of the iteration with the HTTP API of Aftership, it wrap all the
@@ -21,8 +24,8 @@ import Enums.Field;
  */
 public class ConnectionAPI {
 
-    private static String URL_SERVER = "https://api.aftership.com/";
-    private static String VERSION_API = "v3";
+    private static String URL_SERVER = "http://54.88.19.48:3003";
+    private static String VERSION_API = "v4";
 
     private String keyAPI;
 
@@ -60,7 +63,7 @@ public class ConnectionAPI {
      *
      * @param trackingNumber A String with the trackingNumber to get the last checkpoint, mandatory param
      * @param slug A String with the slug of the courier to get the last checkpoint, mandatory param
-     * @param fields         A list of fields wanted to be in the response
+     * @param fields         A list of fields of checkpoint wanted to be in the response
      * @param lang           A String with the language desired. Support Chinese to English translation
      *                       for china-ems and china-post only
      * @return   The last Checkpoint object
@@ -70,14 +73,14 @@ public class ConnectionAPI {
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
      * @see Checkpoint
      **/
-    public Checkpoint getLastCheckpoint(String trackingNumber,String slug,List<Field> fields, String lang)
+    public Checkpoint getLastCheckpoint(String trackingNumber,String slug,List<FieldCheckpoint> fields, String lang)
             throws AftershipAPIException,IOException,ParseException{
 
         String params;
         QueryString qs = new QueryString();
         if (fields!=null) qs.add("fields", fields);
         if (lang!=null || !lang.equals("")) qs.add("lang",lang);
-        params = qs.toString().replace('&','?');
+        params = qs.toString().replaceFirst("&","?");
 
         JSONObject response = this.request("GET","/last_checkpoint/"+slug+"/"+trackingNumber+params,null);
         JSONObject checkpointJSON = response.getJSONObject("data").getJSONObject("checkpoint");
@@ -153,14 +156,15 @@ public class ConnectionAPI {
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      * @see     Tracking
      **/
-    public Tracking getTrackingByNumber(String trackingNumber,String slug,List<Field> fields,String lang)
+    public Tracking getTrackingByNumber(String trackingNumber,String slug,List<FieldTracking> fields,String lang)
             throws AftershipAPIException,IOException,ParseException{
+
 
         String params;
         QueryString qs = new QueryString();
         if (fields!=null) qs.add("fields", fields);
         if (lang!=null || !lang.equals("")) qs.add("lang",lang);
-        params = qs.toString().replace('&','?');
+        params = qs.toString().replaceFirst("&","?");
 
         JSONObject response = this.request("GET","/trackings/"+slug+"/"+trackingNumber+params,null);
         JSONObject trackingJSON = response.getJSONObject("data").getJSONObject("tracking");
@@ -321,6 +325,33 @@ public class ConnectionAPI {
     * @throws   java.io.IOException If there is a problem with the connection
     * @throws   java.text.ParseException    If the response can not be parse to JSONObject
     **/
+    public List<Courier> getAllCouriers() throws AftershipAPIException,IOException,ParseException{
+
+        JSONObject response = this.request("GET","/couriers/all",null);
+
+
+        JSONArray couriersJSON = response.getJSONObject("data").getJSONArray("couriers");
+        List<Courier> couriers = new ArrayList<Courier>(couriersJSON.length());
+
+        JSONObject element;
+
+        for (int i = 0; i < couriersJSON.length(); i++) {
+            element = couriersJSON.getJSONObject(i);
+
+            Courier newCourier = new Courier(element);
+            couriers.add(newCourier);
+        }
+        return couriers;
+    }
+
+    /**
+     * Return a list of user couriers enabled by user's account along their names, URLs, slugs, required fields.
+     *
+     * @return   A list of Object Courier, with all the couriers supported by the API
+     * @throws   AftershipAPIException  If the request response an error
+     * @throws   java.io.IOException If there is a problem with the connection
+     * @throws   java.text.ParseException    If the response can not be parse to JSONObject
+     **/
     public List<Courier> getCouriers() throws AftershipAPIException,IOException,ParseException{
 
         JSONObject response = this.request("GET","/couriers",null);
@@ -339,7 +370,6 @@ public class ConnectionAPI {
         }
         return couriers;
     }
-
      /**
      * Get a list of matched couriers for a tracking number based on the tracking number format
      * Note, only check the couriers you have defined in your account
@@ -353,7 +383,11 @@ public class ConnectionAPI {
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      **/
     public List<Courier> detectCouriers(String trackingNumber)throws AftershipAPIException,IOException,ParseException{
-        JSONObject response = this.request("GET","/couriers/detect/"+trackingNumber,null);
+        JSONObject body = new JSONObject();
+        if (trackingNumber == null || trackingNumber.equals(""))
+            throw new AftershipAPIException("the tracking number should be always informed for the method detectCouriers");
+        body.put("tracking_number",trackingNumber);
+        JSONObject response = this.request("POST","/couriers/detect",body);
         List<Courier> couriers = new ArrayList<Courier>();
 
         JSONArray couriersJSON = response.getJSONObject("data").getJSONArray("couriers");
@@ -368,6 +402,58 @@ public class ConnectionAPI {
         return couriers;
     }
 
+    /**
+     * Get a list of matched couriers for a tracking number based on the tracking number format
+     * Note, only check the couriers you have defined in your account
+     *
+     * @param trackingNumber Tracking number to match with couriers (mandatory)
+     * @param trackingPostalCode The postal code of the ship to address. Required by some couriers, such as `dx` (optional)
+     * @param trackingShipDate Usually it is refer to the posting date of the shipment, format in YYYYMMDD.
+     *                         Required by some couriers, such as `deutsch-post`.(optional)
+     * @param trackingAccountNumber The account number for particular courier. Required by some couriers,
+     *                              such as `dynamic-logistics`.(optional)
+     * @param slugs The slug of couriers to detect.
+     * @return A List of Couriers objects that match the provided trackingNumber
+     * @throws AftershipAPIException if the request response an error
+     * Invalid JSON data. If the tracking number doesn't match any courier defined in your account,
+     * or it doesn't match any courier defined in Aftership
+     * @throws  java.io.IOException If there is a problem with the connection
+     * @throws  java.text.ParseException    If the response can not be parse to JSONObject
+     **/
+    public List<Courier> detectCouriers(String trackingNumber,String trackingPostalCode, String trackingShipDate,
+            String trackingAccountNumber, List<String> slugs)throws AftershipAPIException,IOException,ParseException{
+        JSONObject body = new JSONObject();
+
+        if (trackingNumber == null || trackingNumber.equals(""))
+            throw new AftershipAPIException("Tracking number should be always informed for the method detectCouriers");
+        body.put("tracking_number",trackingNumber);
+        if (trackingPostalCode!= null && !trackingPostalCode.equals(""))
+            body.put("tracking_postal_code",trackingPostalCode);
+        if (trackingShipDate!= null && !trackingShipDate.equals(""))
+            body.put("tracking_ship_date",trackingShipDate);
+        if (trackingAccountNumber!= null && !trackingAccountNumber.equals(""))
+            body.put("tracking_account_number",trackingAccountNumber);
+
+        if (slugs != null && slugs.size()!=0) {
+
+            JSONArray slugsJSON = new JSONArray(slugs);
+            body.put("slugs", slugsJSON);
+        }
+
+        JSONObject response = this.request("POST","/couriers/detect",body);
+        List<Courier> couriers = new ArrayList<Courier>();
+
+        JSONArray couriersJSON = response.getJSONObject("data").getJSONArray("couriers");
+        JSONObject element;
+
+        for (int i = 0; i < couriersJSON.length(); i++) {
+            element = couriersJSON.getJSONObject(i);
+
+            Courier newCourier = new Courier(element);
+            couriers.add(newCourier);
+        }
+        return couriers;
+    }
 
     /**
      * make a request to the HTTP API of Aftership
@@ -422,16 +508,17 @@ public class ConnectionAPI {
      * Check the status of a http response and if the status is an error throws an exception
      *
      * @param status Status of the connection response
-     * @exception AftershipAPIException A customize exception with a different message
+     * @exception AftershipAPIException A customize exception with a message
      * depending of the status error
      **/
     public void checkAPIResponse(int status,HttpURLConnection connection)throws AftershipAPIException,IOException,ParseException{
-        BufferedReader rd;
-        StringBuilder sb;
-        String message = "";
 
-        if (status>201)
-        {
+        if (status>201){
+
+            BufferedReader rd;
+            StringBuilder sb;
+            String message = "";
+            String type = "";
             rd  = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
             sb = new StringBuilder();
             String line;
@@ -440,29 +527,19 @@ public class ConnectionAPI {
                 sb.append(line + '\n');
             }
             JSONObject response = new JSONObject(sb.toString());
-            message = response.getJSONObject("meta").getString("error_message");
-        }
+            JSONObject meta = response.has("meta")?response.getJSONObject("meta"):new JSONObject();
+            JSONObject data = response.has("data")?response.getJSONObject("data"):new JSONObject();
+            message = meta.has("message")?meta.getString("message"):"";
+            type = meta.has("type")?meta.getString("type"):"";
+            StringBuilder newInformation = new StringBuilder();
+            Iterator<?> keys = data.keys();
+            String key;
+            while( keys.hasNext() ) {
+                key = (String) keys.next();
+                newInformation.append(" " + key + " = " + data.getString(key));
+            }
 
-        switch (status){
-            case 200:
-            case 201:
-                break;
-            case 400:
-                throw new AftershipAPIException("Invalid JSON data. "+message);
-            case 401:
-                throw new AftershipAPIException("InvalidCredentials. "+message);
-            case 402:
-                throw new AftershipAPIException("Request Failed. "+message);
-            case 404:
-                throw new AftershipAPIException("ResourceNotFound. "+message);
-            case 409:
-                throw new AftershipAPIException("InvalidArgument. "+message);
-            case 500:
-            case 502:
-            case 503:
-            case 504:
-                throw new AftershipAPIException("Server errors - something went wrong on AfterShip's end. "+message);
-
+            throw new AftershipAPIException((type+". "+message+" "+newInformation.toString()).trim());
         }
 
     }
