@@ -1,7 +1,7 @@
 package Classes;
 
 import Enums.ISO3Country;
-import com.oracle.javafx.jmx.json.JSONException;
+import org.json.JSONException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

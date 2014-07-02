@@ -24,7 +24,7 @@ import Enums.*;
  */
 public class ConnectionAPI {
 
-    private static String URL_SERVER = "http://54.88.19.48:3003";
+    private static String URL_SERVER = "https://api.aftership.com/";
     private static String VERSION_API = "v4";
 
     private String keyAPI;
@@ -46,7 +46,7 @@ public class ConnectionAPI {
      * @see Checkpoint
      **/
     public Checkpoint getLastCheckpoint(String trackingNumber,String slug)
-            throws AftershipAPIException,IOException,ParseException{
+            throws AftershipAPIException,IOException,ParseException,JSONException{
 
         JSONObject response = this.request("GET","/last_checkpoint/"+slug+"/"+trackingNumber,null);
         JSONObject checkpointJSON = response.getJSONObject("data").getJSONObject("checkpoint");
@@ -74,7 +74,7 @@ public class ConnectionAPI {
      * @see Checkpoint
      **/
     public Checkpoint getLastCheckpoint(String trackingNumber,String slug,List<FieldCheckpoint> fields, String lang)
-            throws AftershipAPIException,IOException,ParseException{
+            throws AftershipAPIException,IOException,ParseException,JSONException{
 
         String params;
         QueryString qs = new QueryString();
@@ -104,7 +104,7 @@ public class ConnectionAPI {
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
      **/
     public boolean reactivate(String trackingNumber, String slug)
-            throws AftershipAPIException,IOException,ParseException{
+            throws AftershipAPIException,IOException,ParseException,JSONException{
 
         JSONObject response = this.request("POST","/trackings/"+slug+"/"+trackingNumber+"/reactivate",null);
 
@@ -128,7 +128,7 @@ public class ConnectionAPI {
      * @see     Tracking
      **/
     public Tracking getTrackingByNumber(String trackingNumber,String slug)
-            throws AftershipAPIException,IOException,ParseException{
+            throws AftershipAPIException,IOException,ParseException,JSONException{
 
         JSONObject response = this.request("GET","/trackings/"+slug+"/"+trackingNumber,null);
         JSONObject trackingJSON = response.getJSONObject("data").getJSONObject("tracking");
@@ -157,7 +157,7 @@ public class ConnectionAPI {
      * @see     Tracking
      **/
     public Tracking getTrackingByNumber(String trackingNumber,String slug,List<FieldTracking> fields,String lang)
-            throws AftershipAPIException,IOException,ParseException{
+            throws AftershipAPIException,IOException,ParseException,JSONException{
 
 
         String params;
@@ -188,7 +188,8 @@ public class ConnectionAPI {
      * @see     ParametersTracking
      * @see     Tracking
      **/
-    public List<Tracking> getTrackings(ParametersTracking parameters)throws AftershipAPIException,IOException,ParseException{
+    public List<Tracking> getTrackings(ParametersTracking parameters)
+            throws AftershipAPIException,IOException,ParseException,JSONException{
         List<Tracking> trackingList = null;
         int size =0;
         JSONObject response = this.request("GET","/trackings?"+parameters.generateQueryString(),null);
@@ -217,7 +218,7 @@ public class ConnectionAPI {
      * @see     Tracking
      **/
     public List<Tracking> getTrackingsNext(ParametersTracking parameters)
-            throws AftershipAPIException,IOException,ParseException{
+            throws AftershipAPIException,IOException,ParseException,JSONException{
         parameters.setPage(parameters.getPage()+1);
         return this.getTrackings(parameters);
     }
@@ -234,7 +235,7 @@ public class ConnectionAPI {
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      * @see     Tracking
      **/
-    public List<Tracking> getTrackings(int page)throws AftershipAPIException,IOException,ParseException{
+    public List<Tracking> getTrackings(int page)throws AftershipAPIException,IOException,ParseException,JSONException{
 
         List<Tracking> trackingList = null;
 
@@ -262,9 +263,9 @@ public class ConnectionAPI {
      * @throws   java.io.IOException If there is a problem with the connection
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
      **/
-    public boolean deleteTracking(String trackingNumber,String slug)throws AftershipAPIException,IOException,ParseException{
+    public boolean deleteTracking(String trackingNumber,String slug)
+            throws AftershipAPIException,IOException,ParseException,JSONException{
         JSONObject response = this.request("DELETE","/trackings/"+slug+"/"+trackingNumber,null);
-
         if (response.getJSONObject("meta").getInt("code")==200)
             return true;
         else
@@ -286,7 +287,8 @@ public class ConnectionAPI {
      * @throws   java.io.IOException If there is a problem with the connection
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
      **/
-    public Tracking postTracking(Tracking tracking) throws AftershipAPIException,IOException,ParseException {
+    public Tracking postTracking(Tracking tracking)
+            throws AftershipAPIException,IOException,ParseException,JSONException{
 
         JSONObject response = this.request("POST", "/trackings", tracking.generateJSON());
 
@@ -308,7 +310,7 @@ public class ConnectionAPI {
      * @throws   java.io.IOException If there is a problem with the connection
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
      **/
-    public Tracking putTracking(Tracking tracking) throws AftershipAPIException,IOException,ParseException {
+    public Tracking putTracking(Tracking tracking) throws AftershipAPIException,IOException,ParseException,JSONException{
 
         JSONObject response = this.request("PUT", "/trackings/"+tracking.getSlug()+
                 "/"+tracking.getTrackingNumber(), tracking.generatePutJSON());
@@ -325,7 +327,7 @@ public class ConnectionAPI {
     * @throws   java.io.IOException If there is a problem with the connection
     * @throws   java.text.ParseException    If the response can not be parse to JSONObject
     **/
-    public List<Courier> getAllCouriers() throws AftershipAPIException,IOException,ParseException{
+    public List<Courier> getAllCouriers() throws AftershipAPIException,IOException,ParseException,JSONException{
 
         JSONObject response = this.request("GET","/couriers/all",null);
 
@@ -352,7 +354,7 @@ public class ConnectionAPI {
      * @throws   java.io.IOException If there is a problem with the connection
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
      **/
-    public List<Courier> getCouriers() throws AftershipAPIException,IOException,ParseException{
+    public List<Courier> getCouriers() throws AftershipAPIException,IOException,ParseException,JSONException{
 
         JSONObject response = this.request("GET","/couriers",null);
 
@@ -382,7 +384,8 @@ public class ConnectionAPI {
      * @throws  java.io.IOException If there is a problem with the connection
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      **/
-    public List<Courier> detectCouriers(String trackingNumber)throws AftershipAPIException,IOException,ParseException{
+    public List<Courier> detectCouriers(String trackingNumber)
+            throws AftershipAPIException,IOException,ParseException,JSONException{
         JSONObject body = new JSONObject();
         if (trackingNumber == null || trackingNumber.equals(""))
             throw new AftershipAPIException("the tracking number should be always informed for the method detectCouriers");
@@ -421,7 +424,8 @@ public class ConnectionAPI {
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      **/
     public List<Courier> detectCouriers(String trackingNumber,String trackingPostalCode, String trackingShipDate,
-            String trackingAccountNumber, List<String> slugs)throws AftershipAPIException,IOException,ParseException{
+            String trackingAccountNumber, List<String> slugs)
+            throws AftershipAPIException,IOException,ParseException,JSONException{
         JSONObject body = new JSONObject();
 
         if (trackingNumber == null || trackingNumber.equals(""))
@@ -468,13 +472,14 @@ public class ConnectionAPI {
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      **/
     public JSONObject request(String method, String url, JSONObject body)
-            throws AftershipAPIException,IOException,ParseException{
+            throws AftershipAPIException,IOException,ParseException,JSONException{
         BufferedReader rd;
         StringBuilder sb;
         OutputStreamWriter wr;
 
         HttpURLConnection connection;
         URL serverAddress= new URL(new URL(URL_SERVER),VERSION_API+ url);
+        //System.out.println(serverAddress.getPath());
         connection= (HttpURLConnection)serverAddress.openConnection();
         connection.setRequestMethod(method);
         connection.setReadTimeout(10000);
@@ -501,6 +506,7 @@ public class ConnectionAPI {
         JSONObject response;
         response  = new JSONObject(sb.toString());
 
+
         return response;
     }
 
@@ -511,7 +517,8 @@ public class ConnectionAPI {
      * @exception AftershipAPIException A customize exception with a message
      * depending of the status error
      **/
-    public void checkAPIResponse(int status,HttpURLConnection connection)throws AftershipAPIException,IOException,ParseException{
+    public void checkAPIResponse(int status,HttpURLConnection connection)
+            throws AftershipAPIException,IOException,ParseException,JSONException{
 
         if (status>201){
 
@@ -526,20 +533,20 @@ public class ConnectionAPI {
             {
                 sb.append(line + '\n');
             }
-            JSONObject response = new JSONObject(sb.toString());
-            JSONObject meta = response.has("meta")?response.getJSONObject("meta"):new JSONObject();
-            JSONObject data = response.has("data")?response.getJSONObject("data"):new JSONObject();
-            message = meta.has("message")?meta.getString("message"):"";
-            type = meta.has("type")?meta.getString("type"):"";
-            StringBuilder newInformation = new StringBuilder();
-            Iterator<?> keys = data.keys();
-            String key;
-            while( keys.hasNext() ) {
-                key = (String) keys.next();
-                newInformation.append(" " + key + " = " + data.getString(key));
-            }
+//            JSONObject response = new JSONObject(sb.toString());
+//            JSONObject meta = response.has("meta")?response.getJSONObject("meta"):new JSONObject();
+//            JSONObject data = response.has("data")?response.getJSONObject("data"):new JSONObject();
+//            message = meta.has("message")?meta.getString("message"):"";
+//            type = meta.has("type")?meta.getString("type"):"";
+//            StringBuilder newInformation = new StringBuilder();
+//            Iterator<?> keys = data.keys();
+//            String key;
+//            while( keys.hasNext() ) {
+//                key = (String) keys.next();
+//                newInformation.append(" " + key + " = " + data.getString(key));
+//            }
 
-            throw new AftershipAPIException((type+". "+message+" "+newInformation.toString()).trim());
+            throw new AftershipAPIException(sb.toString().trim());
         }
 
     }

@@ -1,6 +1,7 @@
 import Classes.ConnectionAPI;
 import Classes.Tracking;
 import Enums.ISO3Country;
+import org.json.JSONException;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -24,7 +25,7 @@ public class LoadFiles {
 
     }
 
-    public void loadFile()throws IOException{
+    public void loadFile()throws IOException, JSONException{
         BufferedReader br =
                 new BufferedReader( new InputStreamReader(new FileInputStream("../TrackingsToAdd.txt"), "UTF8"));
         ConnectionAPI connection  = new ConnectionAPI("a61d6204-6477-4f6d-93ec-86c4f872fb6b");

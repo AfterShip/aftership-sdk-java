@@ -2,7 +2,7 @@ package Classes;
 
 import Enums.ISO3Country;
 import Enums.StatusTag;
-import com.oracle.javafx.jmx.json.JSONException;
+import org.json.JSONException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -336,7 +336,7 @@ public class Tracking {
         return checkpoints;
     }
 
-    public JSONObject generateJSON() {
+    public JSONObject generateJSON() throws JSONException{
         JSONObject globalJSON = new JSONObject();
         JSONObject trackingJSON = new JSONObject();
         JSONObject customFieldsJSON;
@@ -370,7 +370,7 @@ public class Tracking {
         return globalJSON;
     }
 
-    public JSONObject generatePutJSON() {
+    public JSONObject generatePutJSON() throws JSONException {
         JSONObject globalJSON = new JSONObject();
         JSONObject trackingJSON = new JSONObject();
         JSONObject customFieldsJSON;

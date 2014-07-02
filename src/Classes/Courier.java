@@ -1,6 +1,6 @@
 package Classes;
 
-import com.oracle.javafx.jmx.json.JSONException;
+import org.json.JSONException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -43,11 +43,11 @@ public class Courier {
      * by the API.
      **/
     public Courier(JSONObject jsonCourier) throws JSONException {
-        this.web_url = jsonCourier.has("web_url")?jsonCourier.getString("web_url"):"";
-        this.slug =  jsonCourier.has("slug")?jsonCourier.getString("slug"):"";
-        this.name = jsonCourier.has("name")?jsonCourier.getString("name"):"";
-        this.phone = jsonCourier.has("phone")?jsonCourier.getString("phone"):"";
-        this.other_name = jsonCourier.has("other_name")?jsonCourier.getString("other_name"):"";
+        this.web_url = jsonCourier.has("web_url")  && !jsonCourier.isNull("web_url")?jsonCourier.getString("web_url"):"";
+        this.slug =  jsonCourier.has("slug")  && !jsonCourier.isNull("slug")?jsonCourier.getString("slug"):"";
+        this.name = jsonCourier.has("name") && !jsonCourier.isNull("name")?jsonCourier.getString("name"):"";
+        this.phone = jsonCourier.has("phone") && !jsonCourier.isNull("phone")?jsonCourier.getString("phone"):"";
+        this.other_name = jsonCourier.has("other_name") && !jsonCourier.isNull("other_name")?jsonCourier.getString("other_name"):"";
 
         JSONArray requireFieldsArray =jsonCourier.isNull("require_fields")?null:jsonCourier.getJSONArray("require_fields");
         if(requireFieldsArray !=null && requireFieldsArray.length()!=0){
@@ -108,6 +108,29 @@ public class Courier {
 
     public void setWeb_url(String web_url) {
         this.web_url = web_url;
+    }
+
+    public List<String> getRequireFields() {
+        return this.requireFields;
+    }
+
+    public void addRequierField(String requierField) {
+
+        if (this.requireFields == null) {
+            this.requireFields = new ArrayList<String>();
+            this.requireFields.add(requierField);
+        } else
+            this.requireFields.add(requierField);
+    }
+
+    public void deleteRequierField(String requierField) {
+        if (this.requireFields != null) {
+            this.requireFields.remove(requierField);
+        }
+    }
+
+    public void deleteRequierFields() {
+        this.requireFields = null;
     }
 
 }
