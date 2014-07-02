@@ -1,9 +1,0 @@
-Remember the Android platform includes the json.org libraries.
-
-
-Post tracking dont return any checkpoint, comment with Teddy
-what is the field uniqueToken, should I keep it?
-
-in the connections, setTimeOut??? sometimes exceed the time.
-
-limit max 100 (so they will return 99).

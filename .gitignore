@@ -2,34 +2,8 @@
 *.war
 *.ear
 *.class
-
-
-
-# =========================== DO NOT touch below v1.0.1 ===============================
-
-# =============== RubyMine.gitignore
-# =============== PhPStorm.gitignore
-# =============== IntelliJ.gitignore
 .idea
-
-
-# =============== OSX.gitignore
+*.iml
+To_do.txt
 .DS_Store
-.AppleDouble
-.LSOverride
 
-# Thumbnails
-._*
-
-# =============== # Windows image file caches
-Thumbs.db
-ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Except the .htpassed
-!.htpasswd
