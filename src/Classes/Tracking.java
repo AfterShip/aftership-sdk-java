@@ -89,6 +89,8 @@ public class Tracking {
     /** Array of Hash describes the checkpoint information. */
     List<Checkpoint> checkpoints;
 
+    /**Unique Token*/
+    private String uniqueToken;
 
     public Tracking(String trackingNumber) {
         this.trackingNumber = trackingNumber;
@@ -149,6 +151,7 @@ public class Tracking {
         this.source = trackingJSON.isNull("source")?null:trackingJSON.getString("source");
         this.tag = trackingJSON.isNull("tag")?null:StatusTag.valueOf(trackingJSON.getString("tag"));
         this.trackedCount = trackingJSON.isNull("tracked_count")?0:trackingJSON.getInt("tracked_count");
+        this.uniqueToken = trackingJSON.isNull("unique_token")?null:trackingJSON.getString("unique_token");
 
        // checkpoints
         JSONArray checkpointsArray =  trackingJSON.isNull("checkpoints")?null:trackingJSON.getJSONArray("checkpoints");
@@ -334,6 +337,14 @@ public class Tracking {
 
     public List<Checkpoint> getCheckpoints() {
         return checkpoints;
+    }
+
+    public String getUniqueToken() {
+        return uniqueToken;
+    }
+
+    public void setUniqueToken(String uniqueToken) {
+        this.uniqueToken = uniqueToken;
     }
 
     public JSONObject generateJSON() throws JSONException{

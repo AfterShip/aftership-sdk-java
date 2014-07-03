@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ConnectionAPITest {
-    final static int TOTAL_COURIERS_API = 190;
+    final static int TOTAL_COURIERS_API = 192;
     ConnectionAPI connection = new ConnectionAPI("a61d6204-6477-4f6d-93ec-86c4f872fb6b");
     //getCouriers
     HashMap<String,String> firstCourier= new HashMap<String,String>();
@@ -87,15 +87,15 @@ public class ConnectionAPITest {
     public void testGetAllCouriers()throws Exception{
 
         List<Courier> couriers = connection.getAllCouriers();
-        //total Couriers returned
-        assertEquals("It should return total couriers", TOTAL_COURIERS_API, couriers.size());
+
         //check first courier
         Assert.assertEquals("First courier slug", firstCourier.get("slug"), couriers.get(0).getSlug());
         Assert.assertEquals("First courier name", firstCourier.get("name"), couriers.get(0).getName());
         Assert.assertEquals("First courier phone", firstCourier.get("phone"), couriers.get(0).getPhone());
         Assert.assertEquals("First courier other_name", firstCourier.get("other_name"), couriers.get(0).getOther_name());
         Assert.assertEquals("First courier web_url", firstCourier.get("web_url"), couriers.get(0).getWeb_url());
-
+        //total Couriers returned
+        assertEquals("It should return total couriers", TOTAL_COURIERS_API, couriers.size());
         //try to acces with a bad API Key
         ConnectionAPI connectionBadKey = new ConnectionAPI("badKey");
 
@@ -297,7 +297,7 @@ public class ConnectionAPITest {
         ParametersTracking param3 = new ParametersTracking();
         param3.setLimit(195);
         List<Tracking> totalOutDelivery1=connection.getTrackings(param3);
-        Assert.assertEquals("Should be 195 trackings", 194, totalOutDelivery1.size());
+        Assert.assertEquals("Should be 195 trackings", 195, totalOutDelivery1.size());
 
         ParametersTracking param4 = new ParametersTracking();
         param4.setKeyword("title");

@@ -79,7 +79,7 @@ public class ConnectionAPI {
         String params;
         QueryString qs = new QueryString();
         if (fields!=null) qs.add("fields", fields);
-        if (lang!=null || !lang.equals("")) qs.add("lang",lang);
+        if (lang!=null && !lang.equals("")) qs.add("lang",lang);
         params = qs.toString().replaceFirst("&","?");
 
         JSONObject response = this.request("GET","/last_checkpoint/"+slug+"/"+trackingNumber+params,null);
@@ -163,7 +163,7 @@ public class ConnectionAPI {
         String params;
         QueryString qs = new QueryString();
         if (fields!=null) qs.add("fields", fields);
-        if (lang!=null || !lang.equals("")) qs.add("lang",lang);
+        if (lang!=null && !lang.equals("")) qs.add("lang",lang);
         params = qs.toString().replaceFirst("&","?");
 
         JSONObject response = this.request("GET","/trackings/"+slug+"/"+trackingNumber+params,null);
