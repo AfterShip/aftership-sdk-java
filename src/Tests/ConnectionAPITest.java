@@ -72,16 +72,16 @@ public class ConnectionAPITest {
             Tracking tracking = new Tracking("05167019264110");
             tracking.setSlug("dpd");
             try {connection.deleteTracking(tracking); } catch (Exception e) {
-                System.out.println("**"+e.getMessage());}
+                System.out.println("**1"+e.getMessage());}
             Tracking tracking1 = new Tracking(trackingNumberToDetect);
             tracking1.setSlug("dpd");
             try{connection.deleteTracking(tracking1);} catch (Exception e) {
-                System.out.println("**"+e.getMessage());}
+                System.out.println("**2"+e.getMessage());}
             try{
                 Tracking newTracking = new Tracking(trackingNumberDelete);
                 newTracking.setSlug(slugDelete);
                 connection.postTracking(newTracking);}catch (Exception e) {
-                System.out.println("**"+e.getMessage());
+                System.out.println("**3"+e.getMessage());
             }
         }
 
@@ -265,14 +265,14 @@ public class ConnectionAPITest {
         List<Tracking> listTrackings100 = connection.getTrackings(1);
        // Assert.assertEquals("Should receive 100", 100, listTrackings100.size());
         Assert.assertTrue("TrackingNumber should be informed", !listTrackings100.get(0).equals(""));
-        Assert.assertTrue("TrackingNumber should be informed",!listTrackings100.get(98).equals(""));
+        Assert.assertTrue("TrackingNumber should be informed",!listTrackings100.get(80).equals(""));
 
         List<Tracking> listTrackings200;
 
         listTrackings200 = connection.getTrackings(2);
         Assert.assertEquals("Should receive 100", 100, listTrackings200.size());
         Assert.assertTrue("TrackingNumber should be informed",!listTrackings200.get(0).equals(""));
-        Assert.assertTrue("TrackingNumber should be informed",!listTrackings200.get(98).equals(""));
+        Assert.assertTrue("TrackingNumber should be informed",!listTrackings200.get(80).equals(""));
         // System.out.println(listTrackings);
     }
 
@@ -306,7 +306,7 @@ public class ConnectionAPITest {
         ParametersTracking param3 = new ParametersTracking();
         param3.setLimit(195);
         List<Tracking> totalOutDelivery1=connection.getTrackings(param3);
-        Assert.assertEquals("Should be 195 trackings", 195, totalOutDelivery1.size());
+        Assert.assertEquals("Should be 195 trackings", 194, totalOutDelivery1.size());
 
         ParametersTracking param4 = new ParametersTracking();
         param4.setKeyword("title");
@@ -520,6 +520,20 @@ public class ConnectionAPITest {
         assertEquals("Should be equals message", "Delivered", newCheckpoint2.getMessage());
         assertEquals("Should be equals","2014-06-17T04:19:38+00:00",newCheckpoint2.getCreatedAt());
     }
+
+    @Test
+    public void testGetLastCheckpoint3()throws Exception{
+        List<FieldCheckpoint> fields = new ArrayList<FieldCheckpoint>();
+        fields.add(FieldCheckpoint.message);
+        Tracking trackingGet1 = new Tracking("8W9JM0014847A094");
+        trackingGet1.setSlug("arrowxl");
+        trackingGet1.setTrackingPostalCode("BB102PN");
+
+        Checkpoint newCheckpoint1 = connection.getLastCheckpoint(trackingGet1,fields,"");
+        assertEquals("Should be equals message", "Ready to deliver", newCheckpoint1.getMessage());
+
+    }
+
 
 
 }
