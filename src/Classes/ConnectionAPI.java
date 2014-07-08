@@ -36,8 +36,7 @@ public class ConnectionAPI {
     /**
      * Return the tracking information of the last checkpoint of a single tracking
      *
-     * @param trackingNumber A String with the trackingNumber to get the last checkpoint, mandatory param
-     * @param slug A String with the slug of the courier to get the last checkpoint, mandatory param
+     * @param tracking A Tracking to get the last checkpoint of, it should have tracking number and slug at least.
      * @return   The last Checkpoint object
      * @throws Classes.AftershipAPIException  If the request response an error
      *           The tracking is not defined in your account
@@ -45,10 +44,14 @@ public class ConnectionAPI {
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
      * @see Checkpoint
      **/
-    public Checkpoint getLastCheckpoint(String trackingNumber,String slug)
+    public Checkpoint getLastCheckpoint(Tracking tracking)
             throws AftershipAPIException,IOException,ParseException,JSONException{
 
-        JSONObject response = this.request("GET","/last_checkpoint/"+slug+"/"+trackingNumber,null);
+        String paramRequiredFields = tracking.getQueryRequiredFields().replaceFirst("&","?");
+
+        JSONObject response = this.request("GET","/last_checkpoint/"+tracking.getSlug()+
+                "/"+tracking.getTrackingNumber()+paramRequiredFields,null);
+
         JSONObject checkpointJSON = response.getJSONObject("data").getJSONObject("checkpoint");
         Checkpoint checkpoint = null;
         if(checkpointJSON.length()!=0) {
@@ -61,8 +64,7 @@ public class ConnectionAPI {
     /**
      * Return the tracking information of the last checkpoint of a single tracking
      *
-     * @param trackingNumber A String with the trackingNumber to get the last checkpoint, mandatory param
-     * @param slug A String with the slug of the courier to get the last checkpoint, mandatory param
+     * @param tracking A Tracking to get the last checkpoint of, it should have tracking number and slug at least.
      * @param fields         A list of fields of checkpoint wanted to be in the response
      * @param lang           A String with the language desired. Support Chinese to English translation
      *                       for china-ems and china-post only
@@ -73,16 +75,20 @@ public class ConnectionAPI {
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
      * @see Checkpoint
      **/
-    public Checkpoint getLastCheckpoint(String trackingNumber,String slug,List<FieldCheckpoint> fields, String lang)
+    public Checkpoint getLastCheckpoint(Tracking tracking,List<FieldCheckpoint> fields, String lang)
             throws AftershipAPIException,IOException,ParseException,JSONException{
 
         String params;
         QueryString qs = new QueryString();
+        String paramRequiredFields = tracking.getQueryRequiredFields();
+
         if (fields!=null) qs.add("fields", fields);
         if (lang!=null && !lang.equals("")) qs.add("lang",lang);
         params = qs.toString().replaceFirst("&","?");
 
-        JSONObject response = this.request("GET","/last_checkpoint/"+slug+"/"+trackingNumber+params,null);
+        JSONObject response = this.request("GET","/last_checkpoint/"+tracking.getSlug()+
+                "/"+tracking.getTrackingNumber()+params+paramRequiredFields,null);
+
         JSONObject checkpointJSON = response.getJSONObject("data").getJSONObject("checkpoint");
         Checkpoint checkpoint = null;
         if(checkpointJSON.length()!=0) {
@@ -94,8 +100,7 @@ public class ConnectionAPI {
     /**
      * Reactivate an expired tracking from your account
      *
-     * @param trackingNumber A String with the trackingNumber to reactivate, mandatory param
-     * @param slug A String with the slug of the courier to reactivate, mandatory param
+     * @param tracking A Tracking to reactivate, it should have tracking number and slug at least.
      * @return   A JSONObject with the response. It will contain the status code of the operation, trackingNumber,
      *           slug and active (to true)
      * @throws Classes.AftershipAPIException  If the request response an error
@@ -103,10 +108,13 @@ public class ConnectionAPI {
      * @throws   java.io.IOException If there is a problem with the connection
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
      **/
-    public boolean reactivate(String trackingNumber, String slug)
+    public boolean reactivate(Tracking tracking)
             throws AftershipAPIException,IOException,ParseException,JSONException{
 
-        JSONObject response = this.request("POST","/trackings/"+slug+"/"+trackingNumber+"/reactivate",null);
+        String paramRequiredFields = tracking.getQueryRequiredFields().replaceFirst("&","?");
+
+        JSONObject response = this.request("POST","/trackings/"+tracking.getSlug()+
+                "/"+tracking.getTrackingNumber()+"/reactivate"+paramRequiredFields,null);
 
         if (response.getJSONObject("meta").getInt("code")==200)
             return true;
@@ -118,8 +126,7 @@ public class ConnectionAPI {
     /**
      * Get a specific tracking from your account
      *
-     * @param trackingNumber A String with the trackingNumber to get, mandatory param
-     * @param slug A String with the slug of the courier to get, mandatory param
+     * @param tracking A Tracking to get, it should have tracking number and slug at least.
      * @return  A Tracking object with the response
      * @throws Classes.AftershipAPIException  If the request response an error
      *          The tracking is not defined in your account
@@ -127,10 +134,13 @@ public class ConnectionAPI {
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      * @see     Tracking
      **/
-    public Tracking getTrackingByNumber(String trackingNumber,String slug)
+    public Tracking getTrackingByNumber(Tracking trackingGet)
             throws AftershipAPIException,IOException,ParseException,JSONException{
 
-        JSONObject response = this.request("GET","/trackings/"+slug+"/"+trackingNumber,null);
+        String paramRequiredFields = trackingGet.getQueryRequiredFields().replaceFirst("&","?");
+
+        JSONObject response = this.request("GET","/trackings/"+trackingGet.getSlug()+
+                "/"+trackingGet.getTrackingNumber()+paramRequiredFields,null);
         JSONObject trackingJSON = response.getJSONObject("data").getJSONObject("tracking");
         Tracking tracking = null;
         if(trackingJSON.length()!=0) {
@@ -143,8 +153,7 @@ public class ConnectionAPI {
     /**
      * Get a specific tracking from your account
      *
-     * @param trackingNumber A String with the trackingNumber to get, mandatory param
-     * @param slug           A String with the slug of the courier to get, mandatory param
+     * @param tracking A Tracking to get, it should have tracking number and slug at least.
      * @param fields         A list of fields wanted to be in the response
      * @param lang           A String with the language desired. Support Chinese to English translation
      *                       for china-ems and china-post only
@@ -156,7 +165,7 @@ public class ConnectionAPI {
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      * @see     Tracking
      **/
-    public Tracking getTrackingByNumber(String trackingNumber,String slug,List<FieldTracking> fields,String lang)
+    public Tracking getTrackingByNumber(Tracking trackingGet,List<FieldTracking> fields,String lang)
             throws AftershipAPIException,IOException,ParseException,JSONException{
 
 
@@ -165,8 +174,10 @@ public class ConnectionAPI {
         if (fields!=null) qs.add("fields", fields);
         if (lang!=null && !lang.equals("")) qs.add("lang",lang);
         params = qs.toString().replaceFirst("&","?");
+        String paramRequiredFields = trackingGet.getQueryRequiredFields();
 
-        JSONObject response = this.request("GET","/trackings/"+slug+"/"+trackingNumber+params,null);
+        JSONObject response = this.request("GET","/trackings/"+trackingGet.getSlug()+
+                "/"+trackingGet.getTrackingNumber()+params+paramRequiredFields,null);
         JSONObject trackingJSON = response.getJSONObject("data").getJSONObject("tracking");
         Tracking tracking = null;
         if(trackingJSON.length()!=0) {

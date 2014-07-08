@@ -92,6 +92,17 @@ public class Tracking {
     /**Unique Token*/
     private String uniqueToken;
 
+    /**Tracking Account number tracking_account_number*/
+    private String trackingAccountNumber;
+
+    /**Tracking postal code tracking_postal_code*/
+    private String trackingPostalCode;
+
+    /**Tracking ship date tracking_ship_date*/
+    private String trackingShipDate;
+
+
+
     public Tracking(String trackingNumber) {
         this.trackingNumber = trackingNumber;
         this.title = trackingNumber;
@@ -109,6 +120,13 @@ public class Tracking {
                 null:ISO3Country.valueOf(trackingJSON.getString("destination_country_iso3"));
         this.orderID = trackingJSON.isNull("order_id")?null:trackingJSON.getString("order_id");
         this.orderIDPath = trackingJSON.isNull("order_id_path")?null:trackingJSON.getString("order_id_path");
+
+        this.trackingAccountNumber = trackingJSON.isNull("tracking_account_number")?null:
+                trackingJSON.getString("tracking_account_number");
+        this.trackingPostalCode = trackingJSON.isNull("tracking_postal_code")?null:
+                trackingJSON.getString("tracking_postal_code");
+        this.trackingShipDate = trackingJSON.isNull("tracking_ship_date")?null:
+                trackingJSON.getString("tracking_ship_date");
 
         JSONArray smsesArray =trackingJSON.isNull("smses")?null:trackingJSON.getJSONArray("smses");
         if(smsesArray !=null && smsesArray.length()!=0){
@@ -347,6 +365,30 @@ public class Tracking {
         this.uniqueToken = uniqueToken;
     }
 
+    public String getTrackingAccount_Number() {
+        return trackingAccountNumber;
+    }
+
+    public void setTrackingAccount_Number(String trackingAccount_Number) {
+        this.trackingAccountNumber = trackingAccount_Number;
+    }
+
+    public String getTrackingPostalCode() {
+        return trackingPostalCode;
+    }
+
+    public void setTrackingPostalCode(String trackingPostalCode) {
+        this.trackingPostalCode = trackingPostalCode;
+    }
+
+    public String getTrackingShipDate() {
+        return trackingShipDate;
+    }
+
+    public void setTrackingShipDate(String trackingShipDate) {
+        this.trackingShipDate = trackingShipDate;
+    }
+
     public JSONObject generateJSON() throws JSONException{
         JSONObject globalJSON = new JSONObject();
         JSONObject trackingJSON = new JSONObject();
@@ -368,6 +410,11 @@ public class Tracking {
             trackingJSON.put("destination_country_iso3", this.destinationCountryISO3.toString());
         if (this.orderID != null) trackingJSON.put("order_id", this.orderID);
         if (this.orderIDPath != null) trackingJSON.put("order_id_path", this.orderIDPath);
+
+        if (this.trackingAccountNumber != null) trackingJSON.put("tracking_account_number", this.trackingAccountNumber);
+        if (this.trackingPostalCode != null) trackingJSON.put("tracking_postal_code", this.trackingPostalCode);
+        if (this.trackingShipDate != null) trackingJSON.put("tracking_ship_date", this.trackingShipDate);
+
         if (this.customFields != null) {
             customFieldsJSON = new JSONObject();
 
@@ -441,4 +488,28 @@ public class Tracking {
         return sb.toString();
     }
 
+    public String getQueryRequiredFields(){
+        boolean containsInfo = false;
+        QueryString qs = new QueryString();
+        if (this.trackingAccountNumber!=null) {
+            containsInfo=true;
+            qs.add("tracking_account_number", this.trackingAccountNumber);
+        }
+        if (this.trackingPostalCode!=null){
+            qs.add("tracking_postal_code", this.trackingPostalCode);
+            containsInfo=true;
+        }
+        if (this.trackingShipDate!=null){
+            qs.add("tracking_ship_date", this.trackingShipDate);
+            containsInfo=true;
+        }
+        if(containsInfo){
+            return  qs.toString();
+        }
+        return "";
+
+    }
+
 }
+
+

@@ -49,7 +49,7 @@ public class Courier {
         this.phone = jsonCourier.has("phone") && !jsonCourier.isNull("phone")?jsonCourier.getString("phone"):"";
         this.other_name = jsonCourier.has("other_name") && !jsonCourier.isNull("other_name")?jsonCourier.getString("other_name"):"";
 
-        JSONArray requireFieldsArray =jsonCourier.isNull("require_fields")?null:jsonCourier.getJSONArray("require_fields");
+        JSONArray requireFieldsArray =jsonCourier.isNull("required_fields")?null:jsonCourier.getJSONArray("required_fields");
         if(requireFieldsArray !=null && requireFieldsArray.length()!=0){
             this.requireFields = new ArrayList<String>();
             for (int i=0;i<requireFieldsArray.length();i++){
