@@ -126,7 +126,7 @@ public class ConnectionAPI {
     /**
      * Get a specific tracking from your account
      *
-     * @param tracking A Tracking to get, it should have tracking number and slug at least.
+     * @param trackingGet A Tracking to get, it should have tracking number and slug at least.
      * @return  A Tracking object with the response
      * @throws Classes.AftershipAPIException  If the request response an error
      *          The tracking is not defined in your account
@@ -153,7 +153,7 @@ public class ConnectionAPI {
     /**
      * Get a specific tracking from your account
      *
-     * @param tracking A Tracking to get, it should have tracking number and slug at least.
+     * @param trackingGet A Tracking to get, it should have tracking number and slug at least.
      * @param fields         A list of fields wanted to be in the response
      * @param lang           A String with the language desired. Support Chinese to English translation
      *                       for china-ems and china-post only
@@ -266,17 +266,17 @@ public class ConnectionAPI {
     /**
      * Delete a tracking from your account
      *
-     * @param trackingNumber A String with the trackingNumber to delete, mandatory param
-     * @param slug A String with the slug of the courier to delete, mandatory param
+     * @param tracking A Tracking to delete
      * @return   A boolean, true if delete correctly, and false otherwise
      * @throws Classes.AftershipAPIException  If the request response an error
      *           The tracking is not defined in your account
      * @throws   java.io.IOException If there is a problem with the connection
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
      **/
-    public boolean deleteTracking(String trackingNumber,String slug)
+    public boolean deleteTracking(Tracking tracking)
             throws AftershipAPIException,IOException,ParseException,JSONException{
-        JSONObject response = this.request("DELETE","/trackings/"+slug+"/"+trackingNumber,null);
+        JSONObject response = this.request("DELETE","/trackings/"+tracking.getSlug()+
+                "/"+tracking.getTrackingNumber(),null);
         if (response.getJSONObject("meta").getInt("code")==200)
             return true;
         else

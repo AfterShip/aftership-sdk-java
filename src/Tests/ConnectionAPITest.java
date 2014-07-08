@@ -69,9 +69,13 @@ public class ConnectionAPITest {
         if(firstTime) {
             firstTime=false;
             //delete the tracking we are going to post (in case it exist)
-            try {connection.deleteTracking("05167019264110", "dpd"); } catch (Exception e) {
+            Tracking tracking = new Tracking("05167019264110");
+            tracking.setSlug("dpd");
+            try {connection.deleteTracking(tracking); } catch (Exception e) {
                 System.out.println("**"+e.getMessage());}
-            try{connection.deleteTracking(trackingNumberToDetect, "dpd");} catch (Exception e) {
+            Tracking tracking1 = new Tracking(trackingNumberToDetect);
+            tracking1.setSlug("dpd");
+            try{connection.deleteTracking(tracking1);} catch (Exception e) {
                 System.out.println("**"+e.getMessage());}
             try{
                 Tracking newTracking = new Tracking(trackingNumberDelete);
@@ -227,19 +231,24 @@ public class ConnectionAPITest {
     public void testDeleteTracking() throws Exception{
 
          //delete a tracking number (posted in the setup)
-         Assert.assertTrue("Delete should return true", connection.deleteTracking(trackingNumberDelete,slugDelete));
+         Tracking deleteTracking = new Tracking(trackingNumberDelete);
+            deleteTracking.setSlug(slugDelete);
+         Assert.assertTrue("Delete should return true", connection.deleteTracking(deleteTracking));
          //if the slug is bad informed
          try{
-            Assert.assertTrue("Delete should return true", connection.deleteTracking(trackingNumberDelete2,""));
+             Tracking deleteTracking2 = new Tracking(trackingNumberDelete2);
+            Assert.assertTrue("Delete should return true", connection.deleteTracking(deleteTracking2));
              //always should give an exception before this
              assertTrue("This never should be executed",false);
          }catch (Exception e){
              assertEquals("It should return a exception if the slug is not informed properly"
-                     , "{\"meta\":{\"code\":404,\"message\":\"The URI requested is invalid or the resource requested does not exist.\",\"type\":\"NotFound\"},\"data\":{\"resource\":\"/v4/trackings//798865638020\"}}", e.getMessage());
+                     , "{\"meta\":{\"code\":4004,\"message\":\"Tracking does not exist.\",\"type\":\"NotFound\"},\"data\":{\"tracking\":{\"slug\":\"null\",\"tracking_number\":\"798865638020\"}}}", e.getMessage());
          }
         //if the trackingNumber is bad informed
         try{
-            Assert.assertTrue("Delete should return true", connection.deleteTracking("adfa","fedex"));
+            Tracking deleteTracking3 = new Tracking("adfa");
+            deleteTracking3.setSlug("fedex");
+            Assert.assertTrue("Delete should return true", connection.deleteTracking(deleteTracking3));
             //always should give an exception before this
             assertTrue("This never should be executed",false);
         }catch (Exception e){
