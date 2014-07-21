@@ -15,6 +15,8 @@ import java.util.*;
  */
 public class Tracking {
 
+    /**Identifier of the tracking in the Aftership system*/
+    private String id;
     /**Tracking number of a shipment. Duplicate tracking numbers, or tracking number with invalid tracking
      * number format will not be accepted. */
     private String trackingNumber;
@@ -108,78 +110,81 @@ public class Tracking {
         this.title = trackingNumber;
     }
 
-    public Tracking(JSONObject trackingJSON) throws JSONException,AftershipAPIException,ParseException {
+        public Tracking(JSONObject trackingJSON) throws JSONException,AftershipAPIException,ParseException {
 
-        //fields that can be updated by the user
+            //fields that can be updated by the user
+            this.id = trackingJSON.isNull("id")?null:trackingJSON.getString("id");
+            this.trackingNumber = trackingJSON.isNull("tracking_number")?null:trackingJSON.getString("tracking_number");
+            this.slug= trackingJSON.isNull("slug")?null:trackingJSON.getString("slug");
+            this.title = trackingJSON.isNull("title")?null:trackingJSON.getString("title");
+            this.customerName = trackingJSON.isNull("customer_name")?null:trackingJSON.getString("customer_name");
+            this.destinationCountryISO3 = trackingJSON.isNull("destination_country_iso3")?
+                    null:ISO3Country.valueOf(trackingJSON.getString("destination_country_iso3"));
+            this.orderID = trackingJSON.isNull("order_id")?null:trackingJSON.getString("order_id");
+            this.orderIDPath = trackingJSON.isNull("order_id_path")?null:trackingJSON.getString("order_id_path");
 
-        this.trackingNumber = trackingJSON.isNull("tracking_number")?null:trackingJSON.getString("tracking_number");
-        this.slug= trackingJSON.isNull("slug")?null:trackingJSON.getString("slug");
-        this.title = trackingJSON.isNull("title")?null:trackingJSON.getString("title");
-        this.customerName = trackingJSON.isNull("customer_name")?null:trackingJSON.getString("customer_name");
-        this.destinationCountryISO3 = trackingJSON.isNull("destination_country_iso3")?
-                null:ISO3Country.valueOf(trackingJSON.getString("destination_country_iso3"));
-        this.orderID = trackingJSON.isNull("order_id")?null:trackingJSON.getString("order_id");
-        this.orderIDPath = trackingJSON.isNull("order_id_path")?null:trackingJSON.getString("order_id_path");
+            this.trackingAccountNumber = trackingJSON.isNull("tracking_account_number")?null:
+                    trackingJSON.getString("tracking_account_number");
+            this.trackingPostalCode = trackingJSON.isNull("tracking_postal_code")?null:
+                    trackingJSON.getString("tracking_postal_code");
+            this.trackingShipDate = trackingJSON.isNull("tracking_ship_date")?null:
+                    trackingJSON.getString("tracking_ship_date");
 
-        this.trackingAccountNumber = trackingJSON.isNull("tracking_account_number")?null:
-                trackingJSON.getString("tracking_account_number");
-        this.trackingPostalCode = trackingJSON.isNull("tracking_postal_code")?null:
-                trackingJSON.getString("tracking_postal_code");
-        this.trackingShipDate = trackingJSON.isNull("tracking_ship_date")?null:
-                trackingJSON.getString("tracking_ship_date");
+            JSONArray smsesArray =trackingJSON.isNull("smses")?null:trackingJSON.getJSONArray("smses");
+            if(smsesArray !=null && smsesArray.length()!=0){
+                this.smses = new ArrayList<String>();
+                for (int i=0;i<smsesArray.length();i++){
+                    this.smses.add(smsesArray.get(i).toString());
+                }
+            }
 
-        JSONArray smsesArray =trackingJSON.isNull("smses")?null:trackingJSON.getJSONArray("smses");
-        if(smsesArray !=null && smsesArray.length()!=0){
-            this.smses = new ArrayList<String>();
-            for (int i=0;i<smsesArray.length();i++){
-                this.smses.add(smsesArray.get(i).toString());
+            JSONArray emailsArray = trackingJSON.isNull("emails")?null: trackingJSON.getJSONArray("emails");
+            if(emailsArray!=null && emailsArray.length()!=0){
+                this.emails = new ArrayList<String>();
+                for (int i=0;i<emailsArray.length();i++){
+                    this.emails.add(emailsArray.get(i).toString());
+                }
+            }
+
+            JSONObject customFieldsJSON =trackingJSON.isNull("custom_fields")?null:trackingJSON.getJSONObject("custom_fields");
+            if(customFieldsJSON!=null){
+                this.customFields = new HashMap<String, String>();
+                Iterator<?> keys = customFieldsJSON.keys();
+                while( keys.hasNext() ) {
+                    String key = (String) keys.next();
+                    this.customFields.put(key,customFieldsJSON.getString(key));
+                }
+            }
+
+            //fields that can't be updated by the user, only retrieve
+
+            this.createdAt = trackingJSON.isNull("created_at")?null:DateMethods.getDate(trackingJSON.getString("created_at"));
+            this.updatedAt = trackingJSON.isNull("updated_at")?null:DateMethods.getDate(trackingJSON.getString("updated_at"));
+            this.expectedDelivery = trackingJSON.isNull("expected_delivery")?null:trackingJSON.getString("expected_delivery");
+
+            this.active = !trackingJSON.isNull("active") && trackingJSON.getBoolean("active");
+            this.originCountryISO3 = trackingJSON.isNull("origin_country_iso3")?null:
+                    ISO3Country.valueOf(trackingJSON.getString("origin_country_iso3"));
+            this.shipmentPackageCount =  trackingJSON.isNull("shipment_package_count")?0:trackingJSON.getInt("shipment_package_count");
+            this.shipmentType = trackingJSON.isNull("shipment_type")?null:trackingJSON.getString("shipment_type");
+            this.signedBy = trackingJSON.isNull("signed_by")?null:trackingJSON.getString("signed_by");
+            this.source = trackingJSON.isNull("source")?null:trackingJSON.getString("source");
+            this.tag = trackingJSON.isNull("tag")?null:StatusTag.valueOf(trackingJSON.getString("tag"));
+            this.trackedCount = trackingJSON.isNull("tracked_count")?0:trackingJSON.getInt("tracked_count");
+            this.uniqueToken = trackingJSON.isNull("unique_token")?null:trackingJSON.getString("unique_token");
+
+           // checkpoints
+            JSONArray checkpointsArray =  trackingJSON.isNull("checkpoints")?null:trackingJSON.getJSONArray("checkpoints");
+            if(checkpointsArray!=null && checkpointsArray.length()!=0){
+                this.checkpoints = new ArrayList<Checkpoint>();
+                for (int i=0;i<checkpointsArray.length();i++){
+                    this.checkpoints.add(new Checkpoint((JSONObject)checkpointsArray.get(i)));
+                }
             }
         }
+    public String getId(){return id;}
 
-        JSONArray emailsArray = trackingJSON.isNull("emails")?null: trackingJSON.getJSONArray("emails");
-        if(emailsArray!=null && emailsArray.length()!=0){
-            this.emails = new ArrayList<String>();
-            for (int i=0;i<emailsArray.length();i++){
-                this.emails.add(emailsArray.get(i).toString());
-            }
-        }
-
-        JSONObject customFieldsJSON =trackingJSON.isNull("custom_fields")?null:trackingJSON.getJSONObject("custom_fields");
-        if(customFieldsJSON!=null){
-            this.customFields = new HashMap<String, String>();
-            Iterator<?> keys = customFieldsJSON.keys();
-            while( keys.hasNext() ) {
-                String key = (String) keys.next();
-                this.customFields.put(key,customFieldsJSON.getString(key));
-            }
-        }
-
-        //fields that can't be updated by the user, only retrieve
-
-        this.createdAt = trackingJSON.isNull("created_at")?null:DateMethods.getDate(trackingJSON.getString("created_at"));
-        this.updatedAt = trackingJSON.isNull("updated_at")?null:DateMethods.getDate(trackingJSON.getString("updated_at"));
-        this.expectedDelivery = trackingJSON.isNull("expected_delivery")?null:trackingJSON.getString("expected_delivery");
-
-        this.active = !trackingJSON.isNull("active") && trackingJSON.getBoolean("active");
-        this.originCountryISO3 = trackingJSON.isNull("origin_country_iso3")?null:
-                ISO3Country.valueOf(trackingJSON.getString("origin_country_iso3"));
-        this.shipmentPackageCount =  trackingJSON.isNull("shipment_package_count")?0:trackingJSON.getInt("shipment_package_count");
-        this.shipmentType = trackingJSON.isNull("shipment_type")?null:trackingJSON.getString("shipment_type");
-        this.signedBy = trackingJSON.isNull("singned_by")?null:trackingJSON.getString("signed_by");
-        this.source = trackingJSON.isNull("source")?null:trackingJSON.getString("source");
-        this.tag = trackingJSON.isNull("tag")?null:StatusTag.valueOf(trackingJSON.getString("tag"));
-        this.trackedCount = trackingJSON.isNull("tracked_count")?0:trackingJSON.getInt("tracked_count");
-        this.uniqueToken = trackingJSON.isNull("unique_token")?null:trackingJSON.getString("unique_token");
-
-       // checkpoints
-        JSONArray checkpointsArray =  trackingJSON.isNull("checkpoints")?null:trackingJSON.getJSONArray("checkpoints");
-        if(checkpointsArray!=null && checkpointsArray.length()!=0){
-            this.checkpoints = new ArrayList<Checkpoint>();
-            for (int i=0;i<checkpointsArray.length();i++){
-                this.checkpoints.add(new Checkpoint((JSONObject)checkpointsArray.get(i)));
-            }
-        }
-    }
+    public void setId(String id){this.id=id;}
 
     public String getTrackingNumber() {
         return trackingNumber;

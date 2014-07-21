@@ -47,10 +47,15 @@ public class ConnectionAPI {
     public Checkpoint getLastCheckpoint(Tracking tracking)
             throws AftershipAPIException,IOException,ParseException,JSONException{
 
-        String paramRequiredFields = tracking.getQueryRequiredFields().replaceFirst("&","?");
+        String parametersExtra="";
+        if(tracking.getId()!=null && !(tracking.getId().compareTo("")==0)){
+            parametersExtra = tracking.getId();
+        }else {
+            String paramRequiredFields = tracking.getQueryRequiredFields().replaceFirst("&", "?");
+            parametersExtra = tracking.getSlug()+"/"+tracking.getTrackingNumber()+paramRequiredFields;
+        }
 
-        JSONObject response = this.request("GET","/last_checkpoint/"+tracking.getSlug()+
-                "/"+tracking.getTrackingNumber()+paramRequiredFields,null);
+        JSONObject response = this.request("GET","/last_checkpoint/"+parametersExtra,null);
 
         JSONObject checkpointJSON = response.getJSONObject("data").getJSONObject("checkpoint");
         Checkpoint checkpoint = null;
@@ -80,14 +85,20 @@ public class ConnectionAPI {
 
         String params;
         QueryString qs = new QueryString();
-        String paramRequiredFields = tracking.getQueryRequiredFields();
 
         if (fields!=null) qs.add("fields", fields);
         if (lang!=null && !lang.equals("")) qs.add("lang",lang);
         params = qs.toString().replaceFirst("&","?");
 
-        JSONObject response = this.request("GET","/last_checkpoint/"+tracking.getSlug()+
-                "/"+tracking.getTrackingNumber()+params+paramRequiredFields,null);
+        String parametersExtra="";
+        if(tracking.getId()!=null && !(tracking.getId().compareTo("")==0)){
+            parametersExtra = tracking.getId()+params;
+        }else {
+            String paramRequiredFields = tracking.getQueryRequiredFields();
+            parametersExtra = tracking.getSlug()+"/"+tracking.getTrackingNumber()+params+paramRequiredFields;
+        }
+
+        JSONObject response = this.request("GET","/last_checkpoint/"+parametersExtra,null);
 
         JSONObject checkpointJSON = response.getJSONObject("data").getJSONObject("checkpoint");
         Checkpoint checkpoint = null;
@@ -96,31 +107,6 @@ public class ConnectionAPI {
         }
 
         return checkpoint;
-    }
-    /**
-     * Reactivate an expired tracking from your account
-     *
-     * @param tracking A Tracking to reactivate, it should have tracking number and slug at least.
-     * @return   A JSONObject with the response. It will contain the status code of the operation, trackingNumber,
-     *           slug and active (to true)
-     * @throws Classes.AftershipAPIException  If the request response an error
-     *           The tracking is not defined in your account
-     * @throws   java.io.IOException If there is a problem with the connection
-     * @throws   java.text.ParseException    If the response can not be parse to JSONObject
-     **/
-    public boolean reactivate(Tracking tracking)
-            throws AftershipAPIException,IOException,ParseException,JSONException{
-
-        String paramRequiredFields = tracking.getQueryRequiredFields().replaceFirst("&","?");
-
-        JSONObject response = this.request("POST","/trackings/"+tracking.getSlug()+
-                "/"+tracking.getTrackingNumber()+"/reactivate"+paramRequiredFields,null);
-
-        if (response.getJSONObject("meta").getInt("code")==200)
-            return true;
-        else
-            return false;
-
     }
 
     /**
@@ -136,11 +122,17 @@ public class ConnectionAPI {
      **/
     public Tracking getTrackingByNumber(Tracking trackingGet)
             throws AftershipAPIException,IOException,ParseException,JSONException{
+        String parametersExtra = "";
 
-        String paramRequiredFields = trackingGet.getQueryRequiredFields().replaceFirst("&","?");
+        if(trackingGet.getId()!=null && !(trackingGet.getId().compareTo("")==0)){
+            parametersExtra = trackingGet.getId();
+        }else {
+            String paramRequiredFields = trackingGet.getQueryRequiredFields().replaceFirst("&", "?");
+            parametersExtra = trackingGet.getSlug() +
+                    "/" + trackingGet.getTrackingNumber() + paramRequiredFields;
+        }
 
-        JSONObject response = this.request("GET","/trackings/"+trackingGet.getSlug()+
-                "/"+trackingGet.getTrackingNumber()+paramRequiredFields,null);
+        JSONObject response = this.request("GET","/trackings/"+parametersExtra,null);
         JSONObject trackingJSON = response.getJSONObject("data").getJSONObject("tracking");
         Tracking tracking = null;
         if(trackingJSON.length()!=0) {
@@ -174,10 +166,16 @@ public class ConnectionAPI {
         if (fields!=null) qs.add("fields", fields);
         if (lang!=null && !lang.equals("")) qs.add("lang",lang);
         params = qs.toString().replaceFirst("&","?");
-        String paramRequiredFields = trackingGet.getQueryRequiredFields();
 
-        JSONObject response = this.request("GET","/trackings/"+trackingGet.getSlug()+
-                "/"+trackingGet.getTrackingNumber()+params+paramRequiredFields,null);
+        String parametersExtra ="";
+        if(trackingGet.getId()!=null && !(trackingGet.getId().compareTo("")==0)){
+            parametersExtra = trackingGet.getId()+params;
+        }else {
+            String paramRequiredFields = trackingGet.getQueryRequiredFields();
+            parametersExtra = trackingGet.getSlug()+ "/"+trackingGet.getTrackingNumber()+params+paramRequiredFields;
+        }
+
+        JSONObject response = this.request("GET","/trackings/"+parametersExtra,null);
         JSONObject trackingJSON = response.getJSONObject("data").getJSONObject("tracking");
         Tracking tracking = null;
         if(trackingJSON.length()!=0) {
@@ -275,8 +273,16 @@ public class ConnectionAPI {
      **/
     public boolean deleteTracking(Tracking tracking)
             throws AftershipAPIException,IOException,ParseException,JSONException{
-        JSONObject response = this.request("DELETE","/trackings/"+tracking.getSlug()+
-                "/"+tracking.getTrackingNumber(),null);
+
+        String parametersExtra = "";
+        if(tracking.getId()!=null && !(tracking.getId().compareTo("")==0)){
+            parametersExtra = tracking.getId();
+        }else {
+            String paramRequiredFields = tracking.getQueryRequiredFields().replaceFirst("&", "?");
+            parametersExtra = tracking.getSlug()+ "/"+tracking.getTrackingNumber()+paramRequiredFields;
+        }
+
+        JSONObject response = this.request("DELETE","/trackings/"+parametersExtra,null);
         if (response.getJSONObject("meta").getInt("code")==200)
             return true;
         else
@@ -286,7 +292,7 @@ public class ConnectionAPI {
     /**
      * Add a new tracking to your account
      *
-     * @param tracking A Tracking object with the information to update
+     * @param tracking A Tracking object with the information to creates
      *                 The field trackingNumber SHOULD be informed, otherwise an exception will be thrown
      *                 The fields an user can add are: slug, smses, emails, title, customerName, orderID, orderIDPath,
      *                 customFields, destinationCountryISO3 (the others are provided by the Server)
@@ -323,8 +329,16 @@ public class ConnectionAPI {
      **/
     public Tracking putTracking(Tracking tracking) throws AftershipAPIException,IOException,ParseException,JSONException{
 
-        JSONObject response = this.request("PUT", "/trackings/"+tracking.getSlug()+
-                "/"+tracking.getTrackingNumber(), tracking.generatePutJSON());
+        String parametersExtra="";
+        if(tracking.getId()!=null && !(tracking.getId().compareTo("")==0)){
+            parametersExtra = tracking.getId();
+        }else {
+            String paramRequiredFields = tracking.getQueryRequiredFields().replaceFirst("&", "?");
+            parametersExtra = tracking.getSlug()+"/"+tracking.getTrackingNumber()+paramRequiredFields;
+        }
+
+
+        JSONObject response = this.request("PUT", "/trackings/"+parametersExtra, tracking.generatePutJSON());
 
         return new Tracking(response.getJSONObject("data").getJSONObject("tracking"));
 
@@ -398,9 +412,12 @@ public class ConnectionAPI {
     public List<Courier> detectCouriers(String trackingNumber)
             throws AftershipAPIException,IOException,ParseException,JSONException{
         JSONObject body = new JSONObject();
+        JSONObject tracking = new JSONObject();
+
         if (trackingNumber == null || trackingNumber.equals(""))
             throw new AftershipAPIException("the tracking number should be always informed for the method detectCouriers");
-        body.put("tracking_number",trackingNumber);
+        tracking.put("tracking_number",trackingNumber);
+        body.put("tracking",tracking);
         JSONObject response = this.request("POST","/couriers/detect",body);
         List<Courier> couriers = new ArrayList<Courier>();
 
@@ -438,22 +455,26 @@ public class ConnectionAPI {
             String trackingAccountNumber, List<String> slugs)
             throws AftershipAPIException,IOException,ParseException,JSONException{
         JSONObject body = new JSONObject();
+        JSONObject tracking = new JSONObject();
 
         if (trackingNumber == null || trackingNumber.equals(""))
             throw new AftershipAPIException("Tracking number should be always informed for the method detectCouriers");
-        body.put("tracking_number",trackingNumber);
+        tracking.put("tracking_number",trackingNumber);
+
         if (trackingPostalCode!= null && !trackingPostalCode.equals(""))
-            body.put("tracking_postal_code",trackingPostalCode);
+            tracking.put("tracking_postal_code",trackingPostalCode);
         if (trackingShipDate!= null && !trackingShipDate.equals(""))
-            body.put("tracking_ship_date",trackingShipDate);
+            tracking.put("tracking_ship_date",trackingShipDate);
         if (trackingAccountNumber!= null && !trackingAccountNumber.equals(""))
-            body.put("tracking_account_number",trackingAccountNumber);
+            tracking.put("tracking_account_number",trackingAccountNumber);
 
         if (slugs != null && slugs.size()!=0) {
 
             JSONArray slugsJSON = new JSONArray(slugs);
-            body.put("slugs", slugsJSON);
+            tracking.put("slug", slugsJSON);
         }
+
+        body.put("tracking",tracking);
 
         JSONObject response = this.request("POST","/couriers/detect",body);
         List<Courier> couriers = new ArrayList<Courier>();

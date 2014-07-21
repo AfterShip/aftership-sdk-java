@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ConnectionAPITest {
-    final static int TOTAL_COURIERS_API = 192;
+    final static int TOTAL_COURIERS_API = 196;
     ConnectionAPI connection = new ConnectionAPI("a61d6204-6477-4f6d-93ec-86c4f872fb6b");
     //getCouriers
     HashMap<String,String> firstCourier= new HashMap<String,String>();
@@ -115,7 +115,7 @@ public class ConnectionAPITest {
 
         List<Courier> couriers = connection.getCouriers();
         //total Couriers returned
-        assertEquals("It should return total couriers", 7, couriers.size());
+        assertEquals("It should return total couriers", 8, couriers.size());
         //check first courier
         Assert.assertEquals("First courier slug", firstCourierAccount.get("slug"), couriers.get(0).getSlug());
         Assert.assertEquals("First courier name", firstCourierAccount.get("name"), couriers.get(0).getName());
@@ -149,9 +149,12 @@ public class ConnectionAPITest {
 
         //if the trackingNumber doesn't match any courier defined, should give an error.
 
-
-        List<Courier> couriers1 = connection.detectCouriers(trackingNumberToDetectError);
-        assertEquals("It should return 0 couriers", 0, couriers1.size());
+        try {
+            List<Courier> couriers1 = connection.detectCouriers(trackingNumberToDetectError);
+            assertEquals("It should return 0 couriers", 0, couriers1.size());
+        }catch (AftershipAPIException e){
+        Assert.assertEquals("{\"meta\":{\"code\":4005,\"message\":\"The value of `tracking_number` is invalid.\",\"type\":\"BadRequest\"},\"data\":{\"tracking\":{\"tracking_number\":\"asdq\"}}}", e.getMessage());
+    }
 
         List<String> slugs = new ArrayList<String>();
         slugs.add("dtdc");
@@ -161,8 +164,6 @@ public class ConnectionAPITest {
         slugs.add("dpd");
         List<Courier> couriers2 = connection.detectCouriers(trackingNumberToDetect,"28046","",null,slugs);
         assertEquals("It should return 1 couriers", 1, couriers2.size());
-
-
     }
 
 
@@ -221,7 +222,7 @@ public class ConnectionAPITest {
             assertTrue("This never should be executed",false);
         }catch (Exception e){
             assertEquals("It should return a exception if the tracking number doesn't matching any courier you have defined"
-                    , "{\"meta\":{\"code\":4012,\"message\":\"Cannot detect courier. Activate courier at https://www.aftership.com/settings/courier.\",\"type\":\"BadRequest\"},\"data\":{\"tracking\":{\"title\":\"asdq\",\"tracking_number\":\"ASDQ\"}}}", e.getMessage());
+                    , "{\"meta\":{\"code\":4005,\"message\":\"The value of `tracking_number` is invalid.\",\"type\":\"BadRequest\"},\"data\":{\"tracking\":{\"title\":\"asdq\",\"tracking_number\":\"asdq\"}}}", e.getMessage());
         }
 
     }
@@ -242,7 +243,7 @@ public class ConnectionAPITest {
              assertTrue("This never should be executed",false);
          }catch (Exception e){
              assertEquals("It should return a exception if the slug is not informed properly"
-                     , "{\"meta\":{\"code\":4004,\"message\":\"Tracking does not exist.\",\"type\":\"NotFound\"},\"data\":{\"tracking\":{\"slug\":\"null\",\"tracking_number\":\"798865638020\"}}}", e.getMessage());
+                     , "{\"meta\":{\"code\":4010,\"message\":\"The value of `slug` is invalid. (003)\",\"type\":\"BadRequest\"},\"data\":{}}", e.getMessage());
          }
         //if the trackingNumber is bad informed
         try{
@@ -253,7 +254,7 @@ public class ConnectionAPITest {
             assertTrue("This never should be executed",false);
         }catch (Exception e){
             assertEquals("It should return a exception if the slug is not informed properly"
-                    , "{\"meta\":{\"code\":4004,\"message\":\"Tracking does not exist.\",\"type\":\"NotFound\"},\"data\":{\"tracking\":{\"slug\":\"fedex\",\"tracking_number\":\"ADFA\"}}}", e.getMessage());
+                    , "{\"meta\":{\"code\":4005,\"message\":\"The value of `tracking_number` is invalid.\",\"type\":\"BadRequest\"},\"data\":{}}", e.getMessage());
         }
     }
 
@@ -287,7 +288,7 @@ public class ConnectionAPITest {
         date = c.getTime();
         param.setCreatedAtMin(date);
         List<Tracking> totalDHL =connection.getTrackings(param);
-//        Assert.assertEquals("Should be 35 trackings", 35, totalDHL.size());
+        Assert.assertEquals("Should be 35 trackings", 2, totalDHL.size());
 
         ParametersTracking param1 = new ParametersTracking();
         param1.addDestination(ISO3Country.ESP);
@@ -299,14 +300,14 @@ public class ConnectionAPITest {
 
 
         ParametersTracking param2 = new ParametersTracking();
-        param2.addTag(StatusTag.OutForDelivery);
+        param2.addTag(StatusTag.Pending);
         List<Tracking> totalOutDelivery=connection.getTrackings(param2);
-//        Assert.assertEquals("Should be 2 trackings", 2, totalOutDelivery.size());
+        Assert.assertEquals("Should be 2 trackings", 1, totalOutDelivery.size());
 
         ParametersTracking param3 = new ParametersTracking();
         param3.setLimit(195);
         List<Tracking> totalOutDelivery1=connection.getTrackings(param3);
-        Assert.assertEquals("Should be 195 trackings", 194, totalOutDelivery1.size());
+        Assert.assertEquals("Should be 195 trackings", 195, totalOutDelivery1.size());
 
         ParametersTracking param4 = new ParametersTracking();
         param4.setKeyword("title");
@@ -366,7 +367,7 @@ public class ConnectionAPITest {
             assertTrue("This never should be executed",false);
         }catch (Exception e){
             assertEquals("It should return a exception if the slug is not informed properly"
-                    , "{\"meta\":{\"code\":4004,\"message\":\"Tracking does not exist.\",\"type\":\"NotFound\"},\"data\":{\"tracking\":{\"slug\":\"null\",\"tracking_number\":\"RC328021065CN\"}}}", e.getMessage());
+                    , "{\"meta\":{\"code\":4010,\"message\":\"The value of `slug` is invalid. (003)\",\"type\":\"BadRequest\"},\"data\":{}}", e.getMessage());
         }
         //if the trackingNumber is bad informed
         try{
@@ -377,7 +378,7 @@ public class ConnectionAPITest {
             assertTrue("This never should be executed",false);
         }catch (Exception e){
             assertEquals("It should return a exception if the slug is not informed properly"
-                    , "{\"meta\":{\"code\":4004,\"message\":\"Tracking does not exist.\",\"type\":\"NotFound\"},\"data\":{\"tracking\":{\"slug\":\"null\",\"tracking_number\":\"ADF\"}}}", e.getMessage());
+                    , "{\"meta\":{\"code\":4005,\"message\":\"The value of `tracking_number` is invalid.\",\"type\":\"BadRequest\"},\"data\":{}}", e.getMessage());
         }
 
     }
@@ -413,63 +414,10 @@ public class ConnectionAPITest {
             assertTrue("This never should be executed",false);
         }catch (Exception e){
             assertEquals("It should return a exception if the tracking number doesn't matching any courier you have defined"
-                    , "{\"meta\":{\"code\":4004,\"message\":\"Tracking does not exist.\",\"type\":\"NotFound\"},\"data\":{\"tracking\":{\"slug\":\"null\",\"tracking_number\":\"ASDQ\"}}}", e.getMessage());
+                    , "{\"meta\":{\"code\":4005,\"message\":\"The value of `tracking_number` is invalid.\",\"type\":\"BadRequest\"},\"data\":{\"tracking\":{\"title\":\"another title\"}}}", e.getMessage());
         }
     }
 
-    @Test
-    public void testReactivate()throws Exception{
-
-        //Assert.assertTrue("TrackingNumber should be true",connection.reactivate("RB996989481HK","hong-kong-post"));
-
-        //try reactivate one already active
-        try{
-            Tracking trackingGet1 = new Tracking("RT224265042HK");
-            trackingGet1.setSlug("hong-kong-post");
-
-            connection.reactivate(trackingGet1);
-            //always should give an exception before this
-            assertTrue("This never should be executed",false);
-        }catch(Exception e){
-            Assert.assertEquals("Should be equals message",
-                    "{\"meta\":{\"code\":4013,\"message\":\"Reactivate is not allowed. You can only reactivate an expired tracking.\",\"type\":\"BadRequest\"},\"data\":{\"tracking\":{\"slug\":\"hong-kong-post\",\"tracking_number\":\"RT224265042HK\"}}}",
-                    e.getMessage());
-        }
-        //tracking
-        try{
-            Tracking trackingGet1 = new Tracking("RT224265042HK");
-            trackingGet1.setSlug("hong-kong-post");
-            connection.reactivate(trackingGet1);
-            //always should give an exception before this
-            assertTrue("This never should be executed",false);
-        }catch(Exception e){
-            Assert.assertEquals("Should be equals message",
-                    "{\"meta\":{\"code\":4013,\"message\":\"Reactivate is not allowed. You can only reactivate an expired tracking.\",\"type\":\"BadRequest\"},\"data\":{\"tracking\":{\"slug\":\"hong-kong-post\",\"tracking_number\":\"RT224265042HK\"}}}",
-                    e.getMessage());
-        }
-        //slug is bad informed
-        try{
-            Tracking trackingGet1 = new Tracking("RT224265042HK");
-
-            connection.reactivate(trackingGet1);
-            //always should give an exception before this
-            assertTrue("This never should be executed",false);
-        }catch (Exception e){
-            assertEquals("It should return a exception if the slug is not informed properly"
-                    , "{\"meta\":{\"code\":4004,\"message\":\"Tracking does not exist.\",\"type\":\"NotFound\"},\"data\":{\"tracking\":{\"slug\":\"null\",\"tracking_number\":\"RT224265042HK\"}}}", e.getMessage());
-        }
-        //if the trackingNumber is bad informed
-        try{
-            Tracking trackingGet1 = new Tracking("adf");
-            trackingGet1.setSlug("fedex");
-            connection.reactivate(trackingGet1);
-            //always should give an exception before this
-            assertTrue("This never should be executed",false);
-        }catch (Exception e){
-            assertEquals("It should return a exception if the slug is not informed properly"
-                    , "{\"meta\":{\"code\":4004,\"message\":\"Tracking does not exist.\",\"type\":\"NotFound\"},\"data\":{\"tracking\":{\"slug\":\"fedex\",\"tracking_number\":\"ADF\"}}}", e.getMessage());
-        }
-    }
 
     @Test
     public void testGetLastCheckpoint()throws Exception{
@@ -488,7 +436,7 @@ public class ConnectionAPITest {
             assertTrue("This never should be executed",false);
         }catch (Exception e){
             assertEquals("It should return a exception if the slug is not informed properly"
-                    , "{\"meta\":{\"code\":4004,\"message\":\"Tracking does not exist.\",\"type\":\"NotFound\"},\"data\":{\"tracking\":{\"slug\":\"dhl--mail\",\"tracking_number\":\"GM605112270084510370\"}}}", e.getMessage());
+                    , "{\"meta\":{\"code\":4010,\"message\":\"The value of `slug` is invalid. (003)\",\"type\":\"BadRequest\"},\"data\":{\"tracking\":{\"tracking_number\":\"GM605112270084510370\",\"slug\":\"dhl--mail\",\"slugs\":[\"dhl--mail\"]}}}", e.getMessage());
         }
         //if the trackingNumber is bad informed
         try{
@@ -499,7 +447,7 @@ public class ConnectionAPITest {
             assertTrue("This never should be executed",false);
         }catch (Exception e){
             assertEquals("It should return a exception if the slug is not informed properly"
-                    , "{\"meta\":{\"code\":4004,\"message\":\"Tracking does not exist.\",\"type\":\"NotFound\"},\"data\":{\"tracking\":{\"slug\":\"dhl--mail\",\"tracking_number\":\"ADS\"}}}", e.getMessage());
+                    , "{\"meta\":{\"code\":4005,\"message\":\"The value of `tracking_number` is invalid.\",\"type\":\"BadRequest\"},\"data\":{\"tracking\":{\"tracking_number\":\"ads\",\"slug\":\"dhl--mail\"}}}", e.getMessage());
         }
     }
 
@@ -530,10 +478,122 @@ public class ConnectionAPITest {
         trackingGet1.setTrackingPostalCode("BB102PN");
 
         Checkpoint newCheckpoint1 = connection.getLastCheckpoint(trackingGet1,fields,"");
-        assertEquals("Should be equals message", "Ready to deliver", newCheckpoint1.getMessage());
+        assertEquals("Should be equals message", "Delivered", newCheckpoint1.getMessage());
 
     }
 
+///Test by ID
 
 
+    @Test
+    public void testDeleteTrackingID() throws Exception{
+        Tracking newTracking = new Tracking("RT406182863DE");
+        newTracking.setSlug("deutsch-post");
+        newTracking.setTrackingShipDate("20140627");
+
+        connection.deleteTracking(newTracking);
+
+        Tracking trackingPosted = connection.postTracking(newTracking);
+
+        Tracking whatever = new Tracking("whatever");
+        whatever.setId(trackingPosted.getId());
+
+
+        Assert.assertTrue("Delete should return true", connection.deleteTracking(whatever));
+
+        connection.postTracking(newTracking);
+        //if the slug is bad informed
+
+    }
+
+    @Test
+    public void testGetTrackingByNumberID()throws Exception{
+        Tracking trackingGet1 = new Tracking("whatever");
+        trackingGet1.setId("539fc1d68a6157923f0a9284");
+
+        Tracking tracking = connection.getTrackingByNumber(trackingGet1);
+        Assert.assertEquals("Should be equals TrackingNumber", "RC328021065CN", tracking.getTrackingNumber());
+        Assert.assertEquals("Should be equals Slug", "canada-post", tracking.getSlug());
+        Assert.assertEquals("Should be equals type", "Lettermail", tracking.getShipmentType());
+
+    }
+    @Test
+    public void testGetTrackingByNumber2ID()throws Exception{
+        List<FieldTracking> fields = new ArrayList<FieldTracking>();
+        fields.add(FieldTracking.tracking_number);
+        Tracking trackingGet1 = new Tracking("whatever");
+        trackingGet1.setId("539fc1d68a6157923f0a9284");
+        Tracking tracking3 = connection.getTrackingByNumber(trackingGet1,fields,"");
+        Assert.assertEquals("Should be equals TrackingNumber", "RC328021065CN", tracking3.getTrackingNumber());
+        Assert.assertEquals("Should be equals title", null, tracking3.getTitle());
+        Assert.assertEquals("Should be equals slug", null, tracking3.getSlug());
+        Assert.assertEquals("Should be equals checkpoint", null, tracking3.getCheckpoints());
+    }
+
+    @Test
+    public void testPutTrackingID()throws Exception{
+        Tracking tracking = new Tracking("whatever");
+        tracking.setId("539fc1d68a6157923f0a9284");
+
+        tracking.setTitle("another title");
+
+        Tracking tracking2 = connection.putTracking(tracking);
+        Assert.assertEquals("Should be equals title", "another title", tracking2.getTitle());
+
+        //test post tracking number doesn't exist
+        Tracking tracking3 = new Tracking(trackingNumberToDetectError);
+        tracking3.setId("111111111111111");
+
+        try{
+            connection.putTracking(tracking3);
+            //always should give an exception before this
+            assertTrue("This never should be executed",false);
+        }catch (Exception e){
+            assertEquals("It should return a exception if the tracking number doesn't matching any courier you have defined"
+                    , "{\"meta\":{\"code\":4010,\"message\":\"The value of `id` is invalid.\",\"type\":\"BadRequest\"},\"data\":{\"tracking\":{\"title\":\"asdq\"}}}", e.getMessage());
+        }
+    }
+
+
+    @Test
+    public void testGetLastCheckpointID()throws Exception{
+        Tracking trackingGet1 = new Tracking("whatever");
+        trackingGet1.setId("539fc1d9f9b60c804a0a0f74");
+        Checkpoint newCheckpoint = connection.getLastCheckpoint(trackingGet1);
+        Assert.assertEquals("Should be equals message", "Delivered", newCheckpoint.getMessage());
+        Assert.assertEquals("Should be equals city name", "BUDERIM QLD, AU", newCheckpoint.getCountryName());
+        Assert.assertEquals("Should be equals tag", "Delivered", newCheckpoint.getTag());
+    }
+
+    @Test
+    public void testGetLastCheckpoint2ID()throws Exception{
+        List<FieldCheckpoint> fields = new ArrayList<FieldCheckpoint>();
+        fields.add(FieldCheckpoint.message);
+        Tracking trackingGet1 = new Tracking("whatever");
+        trackingGet1.setId("539fc1d9f9b60c804a0a0f74");
+
+        Checkpoint newCheckpoint1 = connection.getLastCheckpoint(trackingGet1,fields,"");
+        assertEquals("Should be equals message", "Delivered", newCheckpoint1.getMessage());
+        assertEquals("Should be equals",null,newCheckpoint1.getCreatedAt());
+
+        fields.add(FieldCheckpoint.created_at);
+        System.out.println("list:"+fields.toString());
+        Checkpoint newCheckpoint2 = connection.getLastCheckpoint(trackingGet1,fields,"");
+        assertEquals("Should be equals message", "Delivered", newCheckpoint2.getMessage());
+        assertEquals("Should be equals","2014-06-17T04:19:38+00:00",newCheckpoint2.getCreatedAt());
+    }
+
+    @Test
+    public void testGetLastCheckpoint3ID()throws Exception{
+        List<FieldCheckpoint> fields = new ArrayList<FieldCheckpoint>();
+        fields.add(FieldCheckpoint.message);
+        Tracking trackingGet1 = new Tracking("whatever");
+        trackingGet1.setId("53bb4db6dcebe7242fe3283e");
+//        trackingGet1.setSlug("arrowxl");
+//        trackingGet1.setTrackingPostalCode("BB102PN");
+
+        Checkpoint newCheckpoint1 = connection.getLastCheckpoint(trackingGet1,fields,"");
+        assertEquals("Should be equals message", "Delivered", newCheckpoint1.getMessage());
+
+    }
 }
