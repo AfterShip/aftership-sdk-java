@@ -109,6 +109,41 @@ public class ConnectionAPI {
         return checkpoint;
     }
 
+
+    /**
+     * Retrack an expired tracking once
+     *
+     * @param tracking A Tracking to reactivate, it should have tracking number and slug at least.
+     * @return   A JSONObject with the response. It will contain the status code of the operation, trackingNumber,
+     *           slug and active (to true)
+     * @throws Classes.AftershipAPIException  If the request response an error
+     *           The tracking is not defined in your account
+     * @throws   java.io.IOException If there is a problem with the connection
+     * @throws   java.text.ParseException    If the response can not be parse to JSONObject
+     **/
+    public boolean retrack(Tracking tracking)
+            throws AftershipAPIException,IOException,ParseException,JSONException{
+
+        String paramRequiredFields = tracking.getQueryRequiredFields().replaceFirst("&","?");
+
+        String url =  "/trackings/"+tracking.getSlug()+
+                "/"+tracking.getTrackingNumber()+"/retrack"+paramRequiredFields;
+
+        JSONObject response = this.request("POST","/trackings/"+tracking.getSlug()+
+                "/"+tracking.getTrackingNumber()+"/retrack"+paramRequiredFields,null);
+
+        if (response.getJSONObject("meta").getInt("code")==200) {
+            if (response.getJSONObject("data").getJSONObject("tracking").getBoolean("active")) {
+                return true;
+            }else {
+                return false;
+            }
+        }else {
+            return false;
+        }
+
+    }
+
     /**
      * Get a specific tracking from your account
      *

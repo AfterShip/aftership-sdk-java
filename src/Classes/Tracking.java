@@ -17,6 +17,7 @@ public class Tracking {
 
     /**Identifier of the tracking in the Aftership system*/
     private String id;
+
     /**Tracking number of a shipment. Duplicate tracking numbers, or tracking number with invalid tracking
      * number format will not be accepted. */
     private String trackingNumber;
@@ -374,8 +375,8 @@ public class Tracking {
         return trackingAccountNumber;
     }
 
-    public void setTrackingAccount_Number(String trackingAccount_Number) {
-        this.trackingAccountNumber = trackingAccount_Number;
+    public void setTrackingAccountNumber(String trackingAccountNumber) {
+        this.trackingAccountNumber = trackingAccountNumber;
     }
 
     public String getTrackingPostalCode() {
