@@ -18,6 +18,23 @@ Quick Start
 	//Create a connectionAPI with your API Key (you will link it to your account)
   	ConnectionAPI connection = new ConnectionAPI(“?????-6477-?????-93ec-86c4f872fb6b");
 
+   	List<Courier> couriers = connection.getAllCouriers();
+
+	//Now we can get information of each element
+	couriers.get(0).getSlug();
+	couriers.get(0).getName();
+	couriers.get(0).getWeb_url();
+	//etc
+
+	//If we want to iterate in the list, we can do
+	for(int i=0;i<couriers.size();i++)
+		couriers.get(i).getSlug();//Get slug of each element
+		
+**Get a list of the couriers in your account**
+
+	//Create a connectionAPI with your API Key (you will link it to your account)
+  	ConnectionAPI connection = new ConnectionAPI(“?????-6477-?????-93ec-86c4f872fb6b");
+
    	List<Courier> couriers = connection.getCouriers();
 
 	//Now we can get information of each element
@@ -29,6 +46,7 @@ Quick Start
 	//If we want to iterate in the list, we can do
 	for(int i=0;i<couriers.size();i++)
 		couriers.get(i).getSlug();//Get slug of each element
+		
 
 
 **Detect which couriers defined in your account match a tracking number**
