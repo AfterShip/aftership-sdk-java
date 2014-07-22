@@ -18,6 +18,23 @@ Quick Start
 	//Create a connectionAPI with your API Key (you will link it to your account)
   	ConnectionAPI connection = new ConnectionAPI(“?????-6477-?????-93ec-86c4f872fb6b");
 
+   	List<Courier> couriers = connection.getAllCouriers();
+
+	//Now we can get information of each element
+	couriers.get(0).getSlug();
+	couriers.get(0).getName();
+	couriers.get(0).getWeb_url();
+	//etc
+
+	//If we want to iterate in the list, we can do
+	for(int i=0;i<couriers.size();i++)
+		couriers.get(i).getSlug();//Get slug of each element
+		
+**Get a list of the couriers in your account**
+
+	//Create a connectionAPI with your API Key (you will link it to your account)
+  	ConnectionAPI connection = new ConnectionAPI(“?????-6477-?????-93ec-86c4f872fb6b");
+
    	List<Courier> couriers = connection.getCouriers();
 
 	//Now we can get information of each element
@@ -29,6 +46,7 @@ Quick Start
 	//If we want to iterate in the list, we can do
 	for(int i=0;i<couriers.size();i++)
 		couriers.get(i).getSlug();//Get slug of each element
+		
 
 
 **Detect which couriers defined in your account match a tracking number**
@@ -66,7 +84,10 @@ Quick Start
 **Delete a tracking of your account**
 
 	//Return true if everything is correct, false or exception otherwise
-	connection.deleteTracking(trackingNumberDelete,slugDelete)
+	
+	Tracking trackingDelete = new Tracking("123456789");//tracking number
+	trackingDelete.setSlug("dhl");
+	connection.deleteTracking(trackingDelete);
 
 
 **Get trackings of your account, there is two ways**
@@ -114,7 +135,10 @@ Quick Start
 
 **Get a tracking from your account**
 
-	Tracking tracking = connection.getTrackingByNumber("RC328021065CN","canada-post");
+	Tracking trackingToGet = new Tracking("RC328021065CN");
+	trackingToGet.setSlug("canada-post");
+
+	Tracking tracking = connection.getTrackingByNumber(trackingToGet);
 
 
 **Modify a tracking from your account**
@@ -130,19 +154,35 @@ Quick Start
 	tracking2.getTitle();//Value “another title”
 
 
-**Reactivate a tracking of your account**
+**Retrack a tracking of your account**
 
-	connection.reactivate("RT224265042HK","hong-kong-post");
-	//You can only reactivate an expired tracking
+	Tracking tracking = new Tracking("RT224265042HK");
+    tracking.setSlug("hong-kong-post");
+    
+	connection.retrack(tracking);
+	//You can only retrack an expired tracking and only once
 
 
 **Get the last checkpoint of a tracking of your account**
 
-	Checkpoint newCheckpoint = connection.getLastCheckpoint("GM605112270084510370", "dhl-global-mail");
+	Tracking tracking = new Tracking("GM605112270084510370");
+    tracking.setSlug("dhl-global-mail");
+    
+	Checkpoint newCheckpoint = connection.getLastCheckpoint(tracking);
 	newCheckpoint.getMessage()//"Delivered"
 	newCheckpoint.getCountryName()//"BUDERIM QLD, AU"
 	newCheckpoint.getTag()//"Delivered"
 
 
+**Be careful, all the operations that use tracking use the ID if it is informed**
 
+
+	//Post a tracking in your account
+	Tracking tracking1 = new Tracking("05167019264110");
+    tracking1.setSlug("dpd");
+	Tracking trackingPosted =  connection.postTracking(tracking1);
+	
+	trackingPosted.getId();// this is the ID of the tracking in the Aftership system
+
+	
 
