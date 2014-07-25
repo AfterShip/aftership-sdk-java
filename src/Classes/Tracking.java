@@ -39,6 +39,11 @@ public class Tracking {
     /** Customer name of the tracking. */
     private String customerName;
 
+    /*Total delivery time in days, calculated by the time difference of first checkpoint time and delivered
+    time for delivered shipments, and that and current time for non-delivered shipments. Value as '0' for
+    pending shipments or delivered shipment with only one checkpoint.*/
+    private String deliveryTime;
+
     /** ISO Alpha-3(three letters)to specify the destination of the shipment.
      * If you use postal service to send international shipments, AfterShip will automatically
      * get tracking results at destination courier as well (e.g. USPS for USA). */
@@ -119,6 +124,8 @@ public class Tracking {
             this.slug= trackingJSON.isNull("slug")?null:trackingJSON.getString("slug");
             this.title = trackingJSON.isNull("title")?null:trackingJSON.getString("title");
             this.customerName = trackingJSON.isNull("customer_name")?null:trackingJSON.getString("customer_name");
+            this.deliveryTime = trackingJSON.isNull("delivery_time")?null:trackingJSON.getString("delivery_time");
+
             this.destinationCountryISO3 = trackingJSON.isNull("destination_country_iso3")?
                     null:ISO3Country.valueOf(trackingJSON.getString("destination_country_iso3"));
             this.orderID = trackingJSON.isNull("order_id")?null:trackingJSON.getString("order_id");
@@ -259,6 +266,14 @@ public class Tracking {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public String getDeliveryTime() {
+        return deliveryTime;
+    }
+
+    public void setDeliveryTime(String deliveryTime) {
+        this.deliveryTime = deliveryTime;
     }
 
     public ISO3Country getDestinationCountryISO3() {
