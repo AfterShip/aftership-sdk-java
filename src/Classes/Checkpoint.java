@@ -48,7 +48,7 @@ public class Checkpoint {
         this.createdAt = checkPointJSON.isNull("created_at")?null:checkPointJSON.getString("created_at");
         this.checkpointTime = checkPointJSON.isNull("checkpoint_time")?null:checkPointJSON.getString("checkpoint_time");
         this.city = checkPointJSON.isNull("city")?null:checkPointJSON.getString("city");
-        this.countryISO3 = checkPointJSON.isNull("country_iso_3")?null:
+        this.countryISO3 = checkPointJSON.isNull("country_iso3")?null:
                 ISO3Country.valueOf(checkPointJSON.getString("country_iso3"));
         this.countryName = checkPointJSON.isNull("country_name")?null:checkPointJSON.getString("country_name");
         this.message = checkPointJSON.isNull("message")?null:checkPointJSON.getString("message");

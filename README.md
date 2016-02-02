@@ -184,5 +184,13 @@ Quick Start
 	
 	trackingPosted.getId();// this is the ID of the tracking in the Aftership system
 
+## Release History
+####2016-02-02-v1.1.1
+* Solving issue at Checkpoint.java, typo in ```country_iso3```
+
+## License
+Copyright (c) 2015 Aftership  
+Licensed under the MIT license.
+
 	
 
