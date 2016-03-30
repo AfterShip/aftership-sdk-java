@@ -15,7 +15,9 @@ import static org.junit.Assert.assertTrue;
 
 public class ConnectionAPITest {
     final static int TOTAL_COURIERS_API = 196;
-    ConnectionAPI connection = new ConnectionAPI("a61d6204-6477-4f6d-93ec-86c4f872fb6b");
+    ConnectionAPI connection = new ConnectionAPI("93e21c7b-6ea7-4957-bbcf-cf9a8090e725");
+//    ConnectionAPI connection = new ConnectionAPI("a61d6204-6477-4f6d-93ec-86c4f872fb6b");
+
     //getCouriers
     HashMap<String,String> firstCourier= new HashMap<String,String>();
     HashMap<String,String> firstCourierAccount=  new HashMap<String,String>();
@@ -222,7 +224,7 @@ public class ConnectionAPITest {
             assertTrue("This never should be executed",false);
         }catch (Exception e){
             assertEquals("It should return a exception if the tracking number doesn't matching any courier you have defined"
-                    , "{\"meta\":{\"code\":4005,\"message\":\"The value of `tracking_number` is invalid.\",\"type\":\"BadRequest\"},\"data\":{\"tracking\":{\"title\":\"asdq\",\"tracking_number\":\"asdq\"}}}", e.getMessage());
+                    , "{\"meta\":{\"code\":4005,\"message\":\"The value of `tracking_number` is invalid.\",\"type\":\"BadRequest\"},\"data\":{\"tracking\":{\"tracking_number\":\"asdq\",\"title\":\"asdq\"}}}", e.getMessage());
         }
 
     }
