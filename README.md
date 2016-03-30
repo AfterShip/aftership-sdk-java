@@ -132,6 +132,26 @@ Quick Start
     param2.addTag(StatusTag.OutForDelivery);
     int totalOutDelivery=connection.getTrackings(param2);
 
+**Export trackings of your account**
+```java
+ // setup request
+ ParametersTrackingExport params = new ParametersTrackingExport();
+ params.setCursor("cursor-id"); // OPTIONAL. Pass in the previous response's cursor data to retrieve the next tracking batch
+ ExportTrackingResponse trackings =  api.exportTrackings(params);
+```
+
+Parameters
+
+cursor - [OPTIONAL] - will return the next batch of trackings starting from this offset
+
+See the [API documentation](https://www.aftership.com/docs/api/4/trackings/get-trackings-export) for a complete list of parameters
+
+Response Content(```ExportTrackingResponse```)
+
+```cursor``` - Pass the cursor returned in the previous response for retrieve next page. When the browsing reaches the end of the index, the returned cursor will be an empty string.
+
+```trackings``` - list of trackings
+
 
 **Get a tracking from your account**
 
