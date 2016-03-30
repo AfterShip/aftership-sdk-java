@@ -54,12 +54,6 @@ public abstract class GetTrackingsParameters {
     /** Total of tracking elements from the user that match the ParametersTracking object*/
     private int total;
 
-
-//    public ParametersTracking() {
-//        this.page = 1;
-//        this.limit = 100;
-//    }
-
     public void addSlug(String slug) {
 
         if (this.slugs == null) {
