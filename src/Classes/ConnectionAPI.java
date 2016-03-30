@@ -6,6 +6,7 @@ import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import Classes.query.ExportTrackingResponse;
 import Enums.FieldCheckpoint;
 import Enums.FieldTracking;
 import org.json.*;
@@ -28,9 +29,51 @@ public class ConnectionAPI {
     private static String VERSION_API = "v4";
 
     private String keyAPI;
+    private String apiHost;
+    private String apiVersion;
 
     public ConnectionAPI(String keyAPI) {
         this.keyAPI = keyAPI;
+        this.apiHost = URL_SERVER;
+        this.apiVersion = VERSION_API;
+    }
+
+    public ConnectionAPI(String keyAPI, String apiHost, String apiVersion) {
+        this.keyAPI = keyAPI;
+        this.apiHost = apiHost;
+        this.apiVersion = apiVersion;
+    }
+
+    /**
+     * Export trackings from your account with the ParametersTrackingExport defined in the params
+     *
+     * @param parameters ParametersTrackingExport Object, with the information to get
+     * @return A {@link ExportTrackingResponse} object that holds the tracking list and cursor information
+     * @throws Classes.AftershipAPIException  If the request response an error
+     * @throws  java.io.IOException If there is a problem with the connection
+     * @throws  java.text.ParseException    If the response can not be parse to JSONObject
+     * @see     ParametersTracking
+     * @see     Tracking
+     **/
+    public ExportTrackingResponse exportTrackings(ParametersTrackingExport parameters)
+            throws AftershipAPIException,IOException,ParseException,JSONException{
+        List<Tracking> trackingList = null;
+
+        String requestParams = parameters.generateQueryString();
+        JSONObject response = this.request("GET","/trackings/exports" + requestParams, null);
+
+        String cursor = response.getJSONObject("data").getString("cursor");
+        JSONArray trackingJSON = response.getJSONObject("data").getJSONArray("trackings");
+
+        if(trackingJSON.length() > 0) {
+            trackingList = new ArrayList<Tracking>();
+
+            for (int i = 0; i < trackingJSON.length(); i++) {
+                trackingList.add(new Tracking(trackingJSON.getJSONObject(i)));
+            }
+        }
+
+        return new ExportTrackingResponse(trackingList, cursor);
     }
 
     /**
@@ -545,14 +588,15 @@ public class ConnectionAPI {
         OutputStreamWriter wr;
 
         HttpURLConnection connection;
-        URL serverAddress= new URL(new URL(URL_SERVER),VERSION_API+ url);
-        //System.out.println(serverAddress.getPath());
+        URL serverAddress= new URL(new URL(this.apiHost), this.apiVersion + url);
+
         connection= (HttpURLConnection)serverAddress.openConnection();
         connection.setRequestMethod(method);
         connection.setReadTimeout(10000);
         connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("Content-Type","application/json");
         connection.setRequestProperty("aftership-api-key", keyAPI);
+
         if(body!=null){ connection.setDoOutput(true);}//if there is information in body, doOutput true, to write
 
         connection.connect();
@@ -565,11 +609,13 @@ public class ConnectionAPI {
         this.checkAPIResponse(connection.getResponseCode(),connection);
         rd  = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         sb = new StringBuilder();
+
         String line;
         while ((line = rd.readLine()) != null)
         {
             sb.append(line + '\n');
         }
+
         JSONObject response;
         response  = new JSONObject(sb.toString());
 

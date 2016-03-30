@@ -1,0 +1,31 @@
+package Classes.query;
+
+import Classes.Tracking;
+
+import java.util.List;
+
+/**
+ * Tracking response for the /exports endpoint.
+ */
+public class ExportTrackingResponse implements TrackingResponse {
+    private List<Tracking> trackings;
+    private String cursor;
+
+    /**
+     * @constructor
+     * @param trackings - tracking list
+     * @param cursor - pointer to the last retrieved tracking. This should be passed in subsequent /exports requests
+     */
+    public ExportTrackingResponse(List<Tracking> trackings, String cursor) {
+        this.trackings = trackings;
+        this.cursor = cursor;
+    }
+
+    public List<Tracking> getTrackingData() {
+        return trackings;
+    }
+
+    public String getCursor() {
+        return cursor;
+    }
+}
