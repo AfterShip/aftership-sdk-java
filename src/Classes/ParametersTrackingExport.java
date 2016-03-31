@@ -15,7 +15,7 @@ public final class ParametersTrackingExport extends GetTrackingsParameters {
     }
 
     public String getCursor() {
-        return cursor;
+        return this.cursor;
     }
 
     public void setCursor(String cursor) {

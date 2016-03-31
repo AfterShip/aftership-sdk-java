@@ -26,6 +26,13 @@ public class ExportTrackingResponse implements TrackingResponse {
     }
 
     public String getCursor() {
+        String cursor = null;
+
+        // api returns empty string cursor when there is no data left
+        if(this.cursor != null && !this.cursor.isEmpty()) {
+            cursor = this.cursor;
+        }
+
         return cursor;
     }
 }
