@@ -43,6 +43,9 @@ public class Checkpoint {
     /** Location info (if any) */
     private String zip;
 
+    /** Location info (if any) */
+    private String location;
+
     public Checkpoint(JSONObject checkPointJSON) throws JSONException{
 
         this.createdAt = checkPointJSON.isNull("created_at")?null:checkPointJSON.getString("created_at");
@@ -55,6 +58,7 @@ public class Checkpoint {
         this.state = checkPointJSON.isNull("state")?null:checkPointJSON.getString("state");
         this.tag = checkPointJSON.isNull("tag")?null:checkPointJSON.getString("tag");
         this.zip = checkPointJSON.isNull("zip")?null:checkPointJSON.getString("zip");
+        this.location = checkPointJSON.isNull("location")?null:checkPointJSON.getString("location");
 
     }
 
@@ -70,6 +74,7 @@ public class Checkpoint {
         sb.append((state==null)?"":"\n\t\tstate="+state);
         sb.append((tag==null)?"":"\n\t\ttag="+tag);
         sb.append((zip==null)?"":"\n\t\tzip="+zip);
+        sb.append((location==null)?"":"\n\t\tlocation="+location);
 
         return sb.toString();
     }
@@ -108,6 +113,10 @@ public class Checkpoint {
 
     public String getZip() {
         return zip;
+    }
+
+    public String getLocation() {
+        return location;
     }
 }
 
