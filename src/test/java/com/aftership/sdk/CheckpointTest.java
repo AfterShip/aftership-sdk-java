@@ -1,4 +1,4 @@
-package Tests;
+package com.aftership.sdk;
 
 import org.junit.Test;
 

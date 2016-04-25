@@ -1,11 +1,8 @@
-package Classes;
+package com.afership.sdk;
 
-import Enums.ISO3Country;
+import com.aftership.sdk.enums.ISO3Country;
 import org.json.JSONException;
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.Date;
 
 /**
  * Created by User on 10/6/14.

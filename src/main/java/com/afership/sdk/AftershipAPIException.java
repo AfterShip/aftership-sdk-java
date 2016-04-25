@@ -1,4 +1,4 @@
-package Classes;
+package com.afership.sdk;
 
 /**
  * Created by User on 10/6/14.

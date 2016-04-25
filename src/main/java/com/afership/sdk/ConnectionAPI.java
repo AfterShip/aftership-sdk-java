@@ -1,4 +1,4 @@
-package Classes;
+package com.afership.sdk;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -6,17 +6,15 @@ import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import Classes.query.ExportTrackingResponse;
-import Enums.FieldCheckpoint;
-import Enums.FieldTracking;
+import com.afership.sdk.query.ExportTrackingResponse;
+import com.aftership.sdk.enums.FieldCheckpoint;
+import com.aftership.sdk.enums.FieldTracking;
 import org.json.*;
 import java.io.OutputStreamWriter;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import Enums.*;
 
 /**
  * ConnectionAPI is the class responsible of the iteration with the HTTP API of Aftership, it wrap all the
@@ -49,7 +47,7 @@ public class ConnectionAPI {
      *
      * @param parameters ParametersTrackingExport Object, with the information to get
      * @return A {@link ExportTrackingResponse} object that holds the tracking list and cursor information
-     * @throws Classes.AftershipAPIException  If the request response an error
+     * @throws AftershipAPIException  If the request response an error
      * @throws  java.io.IOException If there is a problem with the connection
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      * @see     ParametersTracking
@@ -81,7 +79,7 @@ public class ConnectionAPI {
      *
      * @param tracking A Tracking to get the last checkpoint of, it should have tracking number and slug at least.
      * @return   The last Checkpoint object
-     * @throws Classes.AftershipAPIException  If the request response an error
+     * @throws AftershipAPIException  If the request response an error
      *           The tracking is not defined in your account
      * @throws   java.io.IOException If there is a problem with the connection
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
@@ -117,7 +115,7 @@ public class ConnectionAPI {
      * @param lang           A String with the language desired. Support Chinese to English translation
      *                       for china-ems and china-post only
      * @return   The last Checkpoint object
-     * @throws Classes.AftershipAPIException  If the request response an error
+     * @throws AftershipAPIException  If the request response an error
      *           The tracking is not defined in your account
      * @throws   java.io.IOException If there is a problem with the connection
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
@@ -159,7 +157,7 @@ public class ConnectionAPI {
      * @param tracking A Tracking to reactivate, it should have tracking number and slug at least.
      * @return   A JSONObject with the response. It will contain the status code of the operation, trackingNumber,
      *           slug and active (to true)
-     * @throws Classes.AftershipAPIException  If the request response an error
+     * @throws AftershipAPIException  If the request response an error
      *           The tracking is not defined in your account
      * @throws   java.io.IOException If there is a problem with the connection
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject
@@ -192,7 +190,7 @@ public class ConnectionAPI {
      *
      * @param trackingGet A Tracking to get, it should have tracking number and slug at least.
      * @return  A Tracking object with the response
-     * @throws Classes.AftershipAPIException  If the request response an error
+     * @throws AftershipAPIException  If the request response an error
      *          The tracking is not defined in your account
      * @throws  java.io.IOException If there is a problem with the connection
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
@@ -229,7 +227,7 @@ public class ConnectionAPI {
      *                       for china-ems and china-post only
     (Example: en)
      * @return  A Tracking object with the response
-     * @throws Classes.AftershipAPIException  If the request response an error
+     * @throws AftershipAPIException  If the request response an error
      *          The tracking is not defined in your account
      * @throws  java.io.IOException If there is a problem with the connection
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
@@ -269,7 +267,7 @@ public class ConnectionAPI {
      * @param parameters ParametersTracking Object, with the information to get
      * @return  A Tracking List with the trackings that match the values of ParametersTracking in param,
      *          accessing the trackings should be made through the ParametersTracking passed as param
-     * @throws Classes.AftershipAPIException  If the request response an error
+     * @throws AftershipAPIException  If the request response an error
      * @throws  java.io.IOException If there is a problem with the connection
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      * @see     ParametersTracking
@@ -298,7 +296,7 @@ public class ConnectionAPI {
      * @param parameters ParametersTracking Object, with the information to get
      * @return  The next page of Tracking List that match then values of ParametersTracking in param,
      *          accessing the trackings should be made through the ParametersTracking passed as param
-     * @throws Classes.AftershipAPIException  If the request response an error
+     * @throws AftershipAPIException  If the request response an error
      * @throws  java.io.IOException If there is a problem with the connection
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      * @see     ParametersTracking
@@ -317,7 +315,7 @@ public class ConnectionAPI {
      * @param page Indicated the page of 100 trackings to return, if page is 1 will return the first 100, if is 2
      *             100-200 etc
      * @return  A List of Tracking Objects from your account. Max 100 trackings
-     * @throws Classes.AftershipAPIException  If the request response an error
+     * @throws AftershipAPIException  If the request response an error
      * @throws  java.io.IOException If there is a problem with the connection
      * @throws  java.text.ParseException    If the response can not be parse to JSONObject
      * @see     Tracking
@@ -344,7 +342,7 @@ public class ConnectionAPI {
      *
      * @param tracking A Tracking to delete
      * @return   A boolean, true if delete correctly, and false otherwise
-     * @throws Classes.AftershipAPIException  If the request response an error
+     * @throws AftershipAPIException  If the request response an error
      *           The tracking is not defined in your account
      * @throws   java.io.IOException If there is a problem with the connection
      * @throws   java.text.ParseException    If the response can not be parse to JSONObject

@@ -1,4 +1,4 @@
-package Classes;
+package com.afership.sdk;
 
 import org.json.JSONException;
 import org.json.JSONArray;

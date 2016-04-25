@@ -1,6 +1,6 @@
-package Classes.query;
+package com.afership.sdk.query;
 
-import Classes.Tracking;
+import com.afership.sdk.Tracking;
 
 import java.util.List;
 

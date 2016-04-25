@@ -1,4 +1,4 @@
-package Classes;
+package com.afership.sdk;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

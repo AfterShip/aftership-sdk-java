@@ -1,4 +1,4 @@
-package Classes;
+package com.afership.sdk;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

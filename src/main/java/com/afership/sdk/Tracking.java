@@ -1,7 +1,7 @@
-package Classes;
+package com.afership.sdk;
 
-import Enums.ISO3Country;
-import Enums.StatusTag;
+import com.aftership.sdk.enums.ISO3Country;
+import com.aftership.sdk.enums.StatusTag;
 import org.json.JSONException;
 import org.json.JSONArray;
 import org.json.JSONObject;

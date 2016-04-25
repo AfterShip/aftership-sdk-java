@@ -1,4 +1,4 @@
-package Enums;
+package com.aftership.sdk.enums;
 
 /**
  * Created by User on 26/6/14.

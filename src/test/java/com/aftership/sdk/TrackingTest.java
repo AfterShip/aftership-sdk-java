@@ -1,22 +1,21 @@
-package Tests;
+package com.aftership.sdk;
 
-import Enums.ISO3Country;
-import Enums.StatusTag;
-import org.json.JSONObject;
+import com.afership.sdk.Tracking;
+import com.aftership.sdk.enums.ISO3Country;
+import com.aftership.sdk.enums.StatusTag;
 import org.json.JSONArray;
-
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.ArrayList;
-
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import Classes.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class TrackingTest {
 
     Tracking tracking;
@@ -86,7 +85,7 @@ public class TrackingTest {
 //          }
 //        }
 //}
-        Tracking  tracking1 = new Tracking("123456789");
+        Tracking tracking1 = new Tracking("123456789");
         tracking1.setSlug("dhl");
         tracking1.setTitle("Title Name");
         tracking1.addSmses("+18555072509");
@@ -95,8 +94,8 @@ public class TrackingTest {
         tracking1.addEmails("another_email@yourdomain.com");
         tracking1.setOrderID("ID 1234");
         tracking1.setOrderIDPath("http://www.aftership.com/order_id=1234");
-        tracking1.addCustomFields("product_name","iPhone Case");
-        tracking1.addCustomFields("product_price","USD19.99");
+        tracking1.addCustomFields("product_name", "iPhone Case");
+        tracking1.addCustomFields("product_price", "USD19.99");
 
         JSONObject tracking1Json = tracking1.generateJSON();
         //System.out.println(tracking1Json);
@@ -105,22 +104,22 @@ public class TrackingTest {
         assertEquals("Slug should be dhl ", "dhl", tracking1Json.getJSONObject("tracking").getString("slug"));
         assertEquals("Title should be Title Name ", "Title Name", tracking1Json.getJSONObject("tracking").getString("title"));
 
-        List<String>  emailsJson = new ArrayList<String>();
+        List<String> emailsJson = new ArrayList<String>();
         JSONArray emailArray = (JSONArray) tracking1Json.getJSONObject("tracking").get("emails");
-        for (int i=0;i<emailArray.length();i++){
+        for (int i = 0; i < emailArray.length(); i++) {
             emailsJson.add(emailArray.get(i).toString());
         }
-        assertTrue("Emails should contain this email",emailsJson.contains("email@yourdomain.com"));
-        assertTrue("Emails should contain this email",emailsJson.contains("another_email@yourdomain.com"));
+        assertTrue("Emails should contain this email", emailsJson.contains("email@yourdomain.com"));
+        assertTrue("Emails should contain this email", emailsJson.contains("another_email@yourdomain.com"));
         assertEquals("Emails should have a size of 2", 2, emailsJson.size());
 
-        List<String>  smsesJson =  new ArrayList<String>();
+        List<String> smsesJson = new ArrayList<String>();
         JSONArray smsesArray = (JSONArray) tracking1Json.getJSONObject("tracking").get("smses");
-        for (int i=0;i<smsesArray.length();i++){
+        for (int i = 0; i < smsesArray.length(); i++) {
             smsesJson.add(smsesArray.get(i).toString());
         }
-        assertTrue("Smses should contain this sms",smsesJson.contains("+18555072509"));
-        assertTrue("Smses should contain this sms",smsesJson.contains("+18555072501"));
+        assertTrue("Smses should contain this sms", smsesJson.contains("+18555072509"));
+        assertTrue("Smses should contain this sms", smsesJson.contains("+18555072501"));
         assertEquals("Smses should have a size of 2", 2, smsesJson.size());
 
         assertEquals("OrderID should be ID 1234", "ID 1234", tracking1Json.getJSONObject("tracking").getString("order_id"));
@@ -130,7 +129,7 @@ public class TrackingTest {
         assertEquals("Product_name should be this value iPhone Case", "iPhone Case", tracking1Json.getJSONObject("tracking").
                 getJSONObject("custom_fields").getString("product_name"));
 
-        assertEquals("Product_price should be this value USD19.99","USD19.99",tracking1Json.getJSONObject("tracking").
+        assertEquals("Product_price should be this value USD19.99", "USD19.99", tracking1Json.getJSONObject("tracking").
                 getJSONObject("custom_fields").getString("product_price"));
 
     }
@@ -139,7 +138,7 @@ public class TrackingTest {
     public void testTracking() throws Exception {
 
         JSONObject responseJSON;
-        responseJSON  = new JSONObject("{\"custom_fields\":{\"product_price\":\"USD19.99\",\"product_name\":\"iPhone Case\"},\"checkpoints\":[],\"signed_by\":null,\"tag\":\"Pending\",\"tracked_count\":0,\"customer_name\":\"Mr Smith\",\"origin_country_iso3\":null,\"emails\":[\"email@yourdomain.com\",\"another_email@yourdomain.com\"],\"order_id\":\"ID 1234\",\"smses\":[\"+85292345678\",\"+85292345679\"],\"title\":\"this title\",\"updated_at\":\"2014-06-12T06:59:27+00:00\",\"source\":\"api\",\"shipment_package_count\":0,\"destination_country_iso3\":\"USA\",\"expected_delivery\":null,\"unique_token\":\"ekHc21knyl\",\"shipment_type\":null,\"created_at\":\"2014-06-12T06:59:27+00:00\",\"tracking_number\":\"05167019264110\",\"active\":true,\"slug\":\"dpd\",\"order_id_path\":\"www.whatever.com\"}\n");
+        responseJSON = new JSONObject("{\"custom_fields\":{\"product_price\":\"USD19.99\",\"product_name\":\"iPhone Case\"},\"checkpoints\":[],\"signed_by\":null,\"tag\":\"Pending\",\"tracked_count\":0,\"customer_name\":\"Mr Smith\",\"origin_country_iso3\":null,\"emails\":[\"email@yourdomain.com\",\"another_email@yourdomain.com\"],\"order_id\":\"ID 1234\",\"smses\":[\"+85292345678\",\"+85292345679\"],\"title\":\"this title\",\"updated_at\":\"2014-06-12T06:59:27+00:00\",\"source\":\"api\",\"shipment_package_count\":0,\"destination_country_iso3\":\"USA\",\"expected_delivery\":null,\"unique_token\":\"ekHc21knyl\",\"shipment_type\":null,\"created_at\":\"2014-06-12T06:59:27+00:00\",\"tracking_number\":\"05167019264110\",\"active\":true,\"slug\":\"dpd\",\"order_id_path\":\"www.whatever.com\"}\n");
 
         Tracking newTracking = new Tracking(responseJSON);
 
@@ -168,28 +167,27 @@ public class TrackingTest {
                 newTracking.getCreatedAtString());
 
         List<String> smsesList = newTracking.getSmses();
-        assertTrue("Smses should contain this +85292345678",smsesList.contains("+85292345678"));
-        assertTrue("Smses should contain this +85292345679",smsesList.contains("+85292345679"));
+        assertTrue("Smses should contain this +85292345678", smsesList.contains("+85292345678"));
+        assertTrue("Smses should contain this +85292345679", smsesList.contains("+85292345679"));
         assertEquals("Smses should have a size of 2", 2, smsesList.size());
 
         List<String> emailsList = newTracking.getEmails();
-        assertTrue("Emails should contain this email@yourdomain.com",emailsList.contains("email@yourdomain.com"));
-        assertTrue("Emails should contain this another_email@yourdomain.com",emailsList.contains("another_email@yourdomain.com"));
+        assertTrue("Emails should contain this email@yourdomain.com", emailsList.contains("email@yourdomain.com"));
+        assertTrue("Emails should contain this another_email@yourdomain.com", emailsList.contains("another_email@yourdomain.com"));
         assertEquals("Emails should have a size of 2", 2, emailsList.size());
-     }
+    }
 
     @Test
-    public void testDates() throws Exception{
+    public void testDates() throws Exception {
 
         SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         String dateReceived = "2014-06-18T06:22:17+00:00";
         StringBuilder sb = new StringBuilder("2014-06-18T06:22:17+00:00");
-        if(dateReceived.length()==25)
-        {
-           sb.deleteCharAt(22);
+        if (dateReceived.length() == 25) {
+            sb.deleteCharAt(22);
             Date newDate = ISO8601DATEFORMAT.parse(sb.toString());
             StringBuilder sb1 = new StringBuilder(ISO8601DATEFORMAT.format(newDate));
-            sb1.insert(22,':');
+            sb1.insert(22, ':');
         }
 //        String parsed = dateReceived.replaceAll("\\+0([0-9]){1}\\:00", "+0$100");
 //
@@ -198,12 +196,12 @@ public class TrackingTest {
 //
 //        System.out.println(ISO8601DATEFORMAT.format(newDate));
 //
-        SimpleDateFormat ISO8601= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat ISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
         Date anotherDate = ISO8601.parse("2014-05-09T13:39:00");
 
         System.out.println(anotherDate);
         System.out.println(ISO8601DATEFORMAT.format(anotherDate));
-       }
+    }
 
 }

@@ -1,8 +1,7 @@
-import Classes.ConnectionAPI;
-import Classes.Tracking;
-import Enums.ISO3Country;
+import com.afership.sdk.ConnectionAPI;
+import com.afership.sdk.Tracking;
+import com.aftership.sdk.enums.ISO3Country;
 import org.json.JSONException;
-import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

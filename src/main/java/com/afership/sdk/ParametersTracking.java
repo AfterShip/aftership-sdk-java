@@ -1,6 +1,6 @@
-package Classes;
+package com.afership.sdk;
 
-import Classes.query.GetTrackingsParameters;
+import com.afership.sdk.query.GetTrackingsParameters;
 
 /**
  * Keep the information for get trackings from the server, and interact with the results

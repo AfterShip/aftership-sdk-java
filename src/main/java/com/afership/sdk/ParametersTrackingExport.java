@@ -1,6 +1,6 @@
-package Classes;
+package com.afership.sdk;
 
-import Classes.query.GetTrackingsParameters;
+import com.afership.sdk.query.GetTrackingsParameters;
 
 /**
  * Request parameters builder for the /exports route

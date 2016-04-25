@@ -1,8 +1,8 @@
-package Classes.query;
+package com.afership.sdk.query;
 
-import Enums.FieldTracking;
-import Enums.ISO3Country;
-import Enums.StatusTag;
+import com.aftership.sdk.enums.FieldTracking;
+import com.aftership.sdk.enums.ISO3Country;
+import com.aftership.sdk.enums.StatusTag;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
