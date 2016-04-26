@@ -205,6 +205,11 @@ Response Content(```ExportTrackingResponse```)
 	trackingPosted.getId();// this is the ID of the tracking in the Aftership system
 
 ## Release History
+####2016-04-26-v1.2.0
+* Properties added in Checkpoint class
+ 1. slug
+ 2. location
+
 ####2016-02-02-v1.1.1
 * Solving issue at Checkpoint.java, typo in ```country_iso3```
 
