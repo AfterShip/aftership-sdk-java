@@ -85,9 +85,8 @@ public class ApiRequestImpl implements ApiRequest {
                 }
 
                 AftershipResponse<R> result = processResponse(jsonBody, responseType);
-                if (result.getMeta() == null) {
-                    return ResponseEntity.makeError(AftershipError.makeRequestError(
-                            ErrorType.HandlerError, ErrorMessage.HandlerInvalidBody, response));
+                if (result.getMeta() == null || result.getMeta().getCode() != Define.ApiSuccessfulCode) {
+                    return ResponseEntity.makeError(AftershipError.makeRequestError(result.getMeta(), response));
                 }
 
                 return ResponseEntity.makeResponse(result);
@@ -120,14 +119,14 @@ public class ApiRequestImpl implements ApiRequest {
 
         // handle meta field
         JsonElement metaJson = jsonObject.get("meta");
-        if(metaJson != null){
+        if (metaJson != null) {
             Meta meta = JsonUtil.create().fromJson(metaJson, Meta.class);
             responseEntity.setMeta(meta);
         }
 
         // handle data field
         JsonElement dataJson = jsonObject.get("data");
-        if(dataJson != null){
+        if (dataJson != null) {
             T body = JsonUtil.create().fromJson(dataJson, responseType);
             responseEntity.setData(body);
         }

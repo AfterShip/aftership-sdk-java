@@ -3,15 +3,17 @@ package com.aftership.sdk.error;
 import com.aftership.sdk.lib.StrUtil;
 import com.aftership.sdk.model.AftershipResponse;
 import com.aftership.sdk.model.Meta;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 public class AftershipError {
     private String type = StrUtil.EMPTY;
     private String message = StrUtil.EMPTY;
-    private String code = StrUtil.EMPTY;
+    //private String code = StrUtil.EMPTY;
+    //private Integer code = 200;
+    private int code;
     private Object data = null;
 
     public AftershipError() {
@@ -41,11 +43,22 @@ public class AftershipError {
         return error;
     }
 
+    public static AftershipError makeRequestError(Meta meta, Object data) {
+        AftershipError error = new AftershipError();
+        if (meta != null) {
+            error.setCode(meta.getCode());
+            error.setType(meta.getType());
+            error.setMessage(meta.getMessage());
+        }
+        error.setData(data);
+        return error;
+    }
+
     public static AftershipError getApiError(AftershipResponse responseBody) {
         if (responseBody == null) {
             AftershipError error = new AftershipError();
             error.setType(ErrorType.InternalError.getName());
-            error.setCode("500");
+            error.setCode(500);
             return error;
         }
 
@@ -55,7 +68,7 @@ public class AftershipError {
         Meta meta = responseBody.getMeta();
         if (meta != null) {
             error.setType(meta.getType());
-            error.setCode(meta.getCode().toString());
+            error.setCode(meta.getCode());
             error.setMessage(meta.getMessage());
         }
 

@@ -1,6 +1,7 @@
 package com.aftership.sdk.rest;
 
 import com.aftership.sdk.error.AftershipError;
+import com.aftership.sdk.lib.Define;
 
 public interface DataEntity<T> {
     T getData();
@@ -8,7 +9,7 @@ public interface DataEntity<T> {
     AftershipError getError();
 
     default boolean hasError() {
-        return getError() != null;
+        return getError() != null && getError().getCode() != Define.ApiSuccessfulCode;
     }
 
 }
