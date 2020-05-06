@@ -1,0 +1,3 @@
+rootProject.name = 'aftership-sdk-java'
+
+include ':aftership-sdk',':aftership-sample'

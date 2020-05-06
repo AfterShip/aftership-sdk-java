@@ -1,0 +1,71 @@
+buildscript {
+    ext {
+        jvmVersion = '1.8'
+        junitVersion = '4.12'
+        mockitoVersion = '3.3.3'
+        okhttpVersion = '4.6.0'
+        gsonVersion = '2.8.6'
+
+        lombokVersion = '1.18.10'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+    }
+}
+
+allprojects {
+    group 'com.aftership'
+    version '2.0.0'
+
+    repositories {
+        mavenCentral()
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        sourceCompatibility = jvmVersion
+        targetCompatibility = jvmVersion
+    }
+}
+
+subprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+
+    dependencies {
+        testCompile "junit:junit:${junitVersion}"
+        testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    }
+}
+
+project(':aftership-sdk') {
+    dependencies {
+        annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+        implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+        implementation "com.google.code.gson:gson:${gsonVersion}"
+    }
+
+    jar {
+        archivesBaseName = "aftership-sdk"
+    }
+}
+
+project(':aftership-sample'){
+    dependencies {
+        compile project(':aftership-sdk')
+
+        annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    }
+
+    jar {
+        archivesBaseName = "aftership-sample"
+    }
+}
+
+
+
