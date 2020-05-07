@@ -6,8 +6,8 @@ import lombok.Getter;
 
 @Getter
 public class ResponseEntity<T> implements DataEntity<T> {
-    private AftershipResponse<T> response;
-    private AftershipError error;
+    private final AftershipResponse<T> response;
+    private final AftershipError error;
 
     private ResponseEntity(AftershipResponse<T> response, AftershipError error) {
         this.response = response;

@@ -9,12 +9,7 @@ public class AftershipResponse<T> {
     private T data;
 
     public AftershipResponse(){
-
     }
-
-//    public AftershipResponse(T data) {
-//        this(data, null);
-//    }
 
     public AftershipResponse(T data, Meta meta) {
         this.data = data;

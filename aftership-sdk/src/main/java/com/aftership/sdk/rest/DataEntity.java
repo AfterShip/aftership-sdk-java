@@ -9,7 +9,7 @@ public interface DataEntity<T> {
     AftershipError getError();
 
     default boolean hasError() {
-        return getError() != null && getError().getCode() != Define.ApiSuccessfulCode;
+        return getError() != null;
     }
 
 }

@@ -38,7 +38,7 @@ public class TestError {
 
         DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
         Assertions.assertTrue(entity.hasError(),"Entity returned with an error.");
-        Assertions.assertEquals(401, entity.getError().getCode(),"Incorrect error code returned.");
+        Assertions.assertEquals(401, entity.getError().getCode().intValue(),"Incorrect error code returned.");
         Assertions.assertEquals("Invalid API Key.", entity.getError().getMessage(), "The message returned is incorrect.");
         Assertions.assertEquals("Unauthorized", entity.getError().getType(), "The type returned is incorrect.");
 

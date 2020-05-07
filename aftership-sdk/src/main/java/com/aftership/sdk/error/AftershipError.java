@@ -1,83 +1,72 @@
 package com.aftership.sdk.error;
 
 import com.aftership.sdk.lib.StrUtil;
-import com.aftership.sdk.model.AftershipResponse;
 import com.aftership.sdk.model.Meta;
+import com.aftership.sdk.rest.BodyParser;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+import okhttp3.ResponseBody;
+
+import java.util.*;
 
 @Data
+@NoArgsConstructor
 public class AftershipError {
     private String type = StrUtil.EMPTY;
     private String message = StrUtil.EMPTY;
-    //private String code = StrUtil.EMPTY;
-    //private Integer code = 200;
-    private int code;
-    private Object data = null;
+    private Integer code = null;
+    private Map<String, Object> data;
 
-    public AftershipError() {
+    @SafeVarargs
+    public static AftershipError make(ResponseBody responseBody, Map.Entry<String, Object>... data) {
+        return make(BodyParser.processMeta(responseBody), data);
     }
 
-    public static AftershipError makeSdkError(ErrorType errorType, String message) {
-        return makeSdkError(errorType, message, null);
-    }
-
-    public static AftershipError makeSdkError(ErrorType errorType, String message, Object data) {
-        AftershipError error = new AftershipError();
-        error.setType(errorType.getName());
-        error.setMessage(message);
-        error.setData(data);
-        return error;
-    }
-
-    public static AftershipError makeRequestError(ErrorType errorType, Throwable t, Object data) {
-        return makeRequestError(errorType, t.getMessage(), data);
-    }
-
-    public static AftershipError makeRequestError(ErrorType errorType, String message, Object data) {
-        AftershipError error = new AftershipError();
-        error.setType(errorType.getName());
-        error.setMessage(message);
-        error.setData(data);
-        return error;
-    }
-
-    public static AftershipError makeRequestError(Meta meta, Object data) {
-        AftershipError error = new AftershipError();
+    @SafeVarargs
+    public static AftershipError make(Meta meta, Map.Entry<String, Object>... data) {
         if (meta != null) {
-            error.setCode(meta.getCode());
-            error.setType(meta.getType());
-            error.setMessage(meta.getMessage());
+            return make(meta.getType(), meta.getMessage(), meta.getCode(), data);
         }
-        error.setData(data);
-        return error;
+        return make(ErrorType.HandlerError, ErrorMessage.HandlerNullMeta);
     }
 
-    public static AftershipError getApiError(AftershipResponse responseBody) {
-        if (responseBody == null) {
-            AftershipError error = new AftershipError();
-            error.setType(ErrorType.InternalError.getName());
-            error.setCode(500);
-            return error;
-        }
+    @SafeVarargs
+    public static AftershipError make(ErrorType errorType, Throwable t, Map.Entry<String, Object>... data) {
+        return make(errorType.getName(), t.getMessage(), data);
+    }
 
+    @SafeVarargs
+    public static AftershipError make(ErrorType errorType, String message, Map.Entry<String, Object>... data) {
+        return make(errorType.getName(), message, data);
+    }
 
+    @SafeVarargs
+    public static AftershipError make(String type, String message, Map.Entry<String, Object>... data) {
+        return make(type, message, null, data);
+    }
+
+    @SafeVarargs
+    public static AftershipError make(String type, String message, Integer code, Map.Entry<String, Object>... data) {
         AftershipError error = new AftershipError();
-
-        Meta meta = responseBody.getMeta();
-        if (meta != null) {
-            error.setType(meta.getType());
-            error.setCode(meta.getCode());
-            error.setMessage(meta.getMessage());
+        if (StrUtil.isNotBlank(type)) {
+            error.setType(type);
+        }
+        if (StrUtil.isNotBlank(message)) {
+            error.setMessage(message);
+        }
+        if (code != null) {
+            error.setCode(code);
         }
 
-        Object data = responseBody.getData();
-        if (data != null) {
-            error.setData(data);
+        if (data != null && data.length > 0) {
+            Map<String, Object> map = new HashMap<>();
+            for (Map.Entry<String, Object> item : data) {
+                if (!map.containsKey(item.getKey())) {
+                    map.put(item.getKey(), item.getValue());
+                }
+            }
+            error.setData(map);
         }
-
         return error;
     }
-
 }
