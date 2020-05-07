@@ -23,10 +23,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ApiRequestImpl implements ApiRequest {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final long TIMEOUT = 50 * 1000L;//TODO: set with config
-    private static final OkHttpClient client = new OkHttpClient.Builder()
-            .callTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
-            .build();
     private final AfterShip app;
 
     public ApiRequestImpl(AfterShip app) {
@@ -75,7 +71,7 @@ public class ApiRequestImpl implements ApiRequest {
                 .headers(Headers.of(requestHeaders))
                 .build();
 
-        Call call = client.newCall(request);
+        Call call = HttpClient.getClient().newCall(request);
         try (Response response = call.execute()) {
 
             if (!response.isSuccessful()) {

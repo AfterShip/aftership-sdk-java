@@ -24,7 +24,7 @@ public class Courier {
     /** Website link of courier */
     private String web_url;
     /** Require fields for this courier */
-    private List<String> requireFields;
+private List<String> requireFields;
 
     /** Default constructor with all the fields of the class */
     public Courier(String web_url, String slug, String name, String phone, String other_name) {

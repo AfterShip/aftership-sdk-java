@@ -17,4 +17,10 @@ public class CourierImpl extends AfterShipEndpoint implements CourierEndpoint  {
                 null, CourierList.class);
     }
 
+    @Override
+    public DataEntity<CourierList> listAllCouriers() {
+        return this.request.makeRequest(new RequestConfig(HttpMethod.GET, EndpointPath.LIST_ALL_COURIERS),
+                null, CourierList.class);
+    }
+
 }

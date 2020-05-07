@@ -5,4 +5,5 @@ import com.aftership.sdk.model.courier.CourierList;
 
 public interface CourierEndpoint {
     DataEntity<CourierList> listCouriers();
+    DataEntity<CourierList> listAllCouriers();
 }
