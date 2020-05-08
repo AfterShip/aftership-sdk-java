@@ -56,7 +56,6 @@ public class AfterShip {
 
         // Endpoints
         this.courierEndpoint = new CourierImpl(request);
-
     }
 
 }

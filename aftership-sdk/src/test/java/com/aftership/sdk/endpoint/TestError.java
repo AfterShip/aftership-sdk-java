@@ -16,7 +16,9 @@ public class TestError {
     @BeforeAll
     static void setUp() throws IOException {
         server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson("Error.json")));
+        server.enqueue(TestUtil.createMockResponse()
+                .setResponseCode(401)
+                .setBody(TestUtil.getJson("Error.json")));
         server.start();
     }
 
@@ -25,12 +27,7 @@ public class TestError {
         server.shutdown();
     }
 
-    @BeforeEach
-    void initialize() {
-    }
-
     @Test
-    @Order(1)
     public void testError() {
         AftershipOption option = new AftershipOption();
         option.setEndpoint(String.format(TestUtil.ENDPOINT_FORMAT, server.getPort()));
@@ -44,5 +41,4 @@ public class TestError {
 
         TestUtil.printResponse(afterShip, entity);
     }
-
 }

@@ -6,7 +6,6 @@ import com.aftership.sdk.rest.*;
 import com.aftership.sdk.model.courier.CourierList;
 
 public class CourierImpl extends AfterShipEndpoint implements CourierEndpoint  {
-
     public CourierImpl(ApiRequest request) {
         super(request);
     }
@@ -22,5 +21,4 @@ public class CourierImpl extends AfterShipEndpoint implements CourierEndpoint  {
         return this.request.makeRequest(new RequestConfig(HttpMethod.GET, EndpointPath.LIST_ALL_COURIERS),
                 null, CourierList.class);
     }
-
 }

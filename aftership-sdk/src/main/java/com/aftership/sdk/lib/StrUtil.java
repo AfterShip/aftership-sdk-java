@@ -10,6 +10,11 @@ public class StrUtil {
         return !isBlank(cs);
     }
 
+    /**
+     * Determine whether the string is empty or not.
+     * @param cs CharSequence
+     * @return true/false
+     */
     public static boolean isBlank(final CharSequence cs) {
         int strLen;
         if (cs == null || (strLen = cs.length()) == 0) {

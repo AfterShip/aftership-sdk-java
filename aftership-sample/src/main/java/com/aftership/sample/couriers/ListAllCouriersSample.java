@@ -1,19 +1,19 @@
-package com.aftership.sample;
+package com.aftership.sample.couriers;
 
+import com.aftership.sample.SampleUtil;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.impl.EndpointPath;
-import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.courier.CourierList;
 import com.aftership.sdk.rest.DataEntity;
 
 public class ListAllCouriersSample {
 
     public static void main(String[] args) {
-        AftershipOption option = new AftershipOption();
-        option.setEndpoint("http://localhost:8080");
+        AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
+        listAllCouriers(afterShip);
+    }
 
-        AfterShip afterShip = new AfterShip("YOUR_API_KEY", option);
-
+    public static void listAllCouriers(AfterShip afterShip) {
         System.out.println(EndpointPath.LIST_ALL_COURIERS);
         DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listAllCouriers();
         if (entity.hasError()) {

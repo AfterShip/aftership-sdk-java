@@ -1,7 +1,8 @@
 buildscript {
     ext {
         jvmVersion = '1.8'
-        junitVersion = '5.5.2'
+        junitPlatformVersion = '1.6.2'
+        junitEngineVersion = '5.6.2'
         mockitoVersion = '3.3.3'
         okhttpVersion = '4.6.0'
         gsonVersion = '2.8.6'
@@ -35,21 +36,26 @@ subprojects {
     apply plugin: 'java'
 
     dependencies {
-//        testCompile "junit:junit:${junitVersion}"
-        testCompile("org.junit.platform:junit-platform-launcher:1.6.2")
-        testCompile("org.junit.jupiter:junit-jupiter-engine:5.6.2")
-        testCompile("org.junit.vintage:junit-vintage-engine:5.6.2")
+        testCompile "org.junit.platform:junit-platform-launcher:${junitPlatformVersion}"
+        testCompile "org.junit.jupiter:junit-jupiter-engine:${junitEngineVersion}"
+        testCompile "org.junit.vintage:junit-vintage-engine:${junitEngineVersion}"
 
         testImplementation "org.mockito:mockito-core:${mockitoVersion}"
         testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
+
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    }
+
+    javadoc {
+        options.encoding = "UTF-8"
     }
 }
 
 project(':aftership-sdk') {
     dependencies {
-        annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
-        compileOnly "org.projectlombok:lombok:${lombokVersion}"
-
         implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
         implementation "com.google.code.gson:gson:${gsonVersion}"
     }
@@ -62,15 +68,11 @@ project(':aftership-sdk') {
 project(':aftership-sample'){
     dependencies {
         compile project(':aftership-sdk')
-
-        annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
-        compileOnly "org.projectlombok:lombok:${lombokVersion}"
     }
 
     jar {
         archivesBaseName = "aftership-sample"
     }
 }
-
 
 

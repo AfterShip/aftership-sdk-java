@@ -19,7 +19,6 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class ApiRequestImpl implements ApiRequest {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -75,11 +74,13 @@ public class ApiRequestImpl implements ApiRequest {
         try (Response response = call.execute()) {
 
             if (!response.isSuccessful()) {
-                return ResponseEntity.makeError(AftershipError.make(response.body(),
+                setRateLimiting(this.app, response);
+                return ResponseEntity.makeError(AftershipError.make(response.body().string(),
                         entryRequestConfig(requestConfig),
                         entryRequestHeaders(requestHeaders),
                         entryRequestData(requestData),
-                        entryResponseBody(response)));
+                        entryResponseBody(response))
+                );
             }
 
             setRateLimiting(this.app, response);
@@ -168,12 +169,16 @@ public class ApiRequestImpl implements ApiRequest {
     }
 
     private AbstractMap.SimpleEntry<String, Object> entryResponseBody(Response response) {
+        String tag = "responseBody";
         try {
-            String body = Objects.requireNonNull(response.body()).string();
-            return new AbstractMap.SimpleEntry<>("responseBody", body);
+            if(StrUtil.isNotBlank(response.message())){
+                return new AbstractMap.SimpleEntry<>(tag, null);
+            }
+            String jsonBody = Objects.requireNonNull(response.body()).string();
+            return new AbstractMap.SimpleEntry<>(tag, jsonBody);
         } catch (IOException e) {
             e.printStackTrace();
-            return new AbstractMap.SimpleEntry<>("responseBody", e.getMessage());
+            return new AbstractMap.SimpleEntry<>(tag, null);
         }
     }
 }

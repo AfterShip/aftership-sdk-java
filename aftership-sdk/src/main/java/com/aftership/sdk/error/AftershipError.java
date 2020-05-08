@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import okhttp3.ResponseBody;
 
+import java.io.IOException;
 import java.util.*;
 
 @Data
@@ -18,8 +19,8 @@ public class AftershipError {
     private Map<String, Object> data;
 
     @SafeVarargs
-    public static AftershipError make(ResponseBody responseBody, Map.Entry<String, Object>... data) {
-        return make(BodyParser.processMeta(responseBody), data);
+    public static AftershipError make(String jsonBody, Map.Entry<String, Object>... data) {
+        return make(BodyParser.processMeta(jsonBody), data);
     }
 
     @SafeVarargs

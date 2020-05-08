@@ -12,15 +12,8 @@ import java.io.IOException;
 
 public class BodyParser {
 
-    public static Meta processMeta(ResponseBody responseBody) {
-        String jsonBody;
-        try {
-            jsonBody = StrUtil.isNotBlank(responseBody.string()) ? responseBody.string() : "{}";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return processMeta(JsonParser.parseString(jsonBody).getAsJsonObject());
+    public static Meta processMeta(String jsonBody) {
+        return processMeta(JsonParser.parseString(StrUtil.isNotBlank(jsonBody) ? jsonBody : "{}").getAsJsonObject());
     }
 
     public static Meta processMeta(JsonObject jsonObject){

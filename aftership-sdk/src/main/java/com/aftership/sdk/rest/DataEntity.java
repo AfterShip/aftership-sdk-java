@@ -1,8 +1,11 @@
 package com.aftership.sdk.rest;
 
 import com.aftership.sdk.error.AftershipError;
-import com.aftership.sdk.lib.Define;
 
+/**
+ * Data Entity's wrapper.
+ * @param <T> Object
+ */
 public interface DataEntity<T> {
     T getData();
 

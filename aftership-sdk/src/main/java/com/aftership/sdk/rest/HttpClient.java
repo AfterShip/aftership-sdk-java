@@ -12,6 +12,9 @@ public class HttpClient {
     static {
         client = new OkHttpClient.Builder()
                 .callTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+                .connectTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+                .readTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+                .writeTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
                 .build();
     }
 
