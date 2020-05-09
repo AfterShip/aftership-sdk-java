@@ -1,0 +1,13 @@
+{
+  "tracking": {
+    "tracking_number": "906587618687",
+    "tracking_postal_code": "DA15BU",
+    "tracking_ship_date": "20131231",
+    "tracking_account_number": "1234567890",
+    "slug": [
+      "dhl",
+      "ups",
+      "fedex"
+    ]
+  }
+}
