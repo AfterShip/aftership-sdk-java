@@ -1,7 +1,6 @@
 package com.aftership.sdk.model.courier;
 
 import java.util.List;
-import com.aftership.sdk.model.annotation.IndefiniteString;
 import lombok.Data;
 
 /**
@@ -45,6 +44,5 @@ public class CourierDetectTracking {
      * Use array or comma separated to input a list of couriers for auto detect.
      * <p><b>Array or String</b></p>
      */
-    @IndefiniteString
     private List<String> slug;
 }

@@ -27,7 +27,7 @@ public class ResponseEntity<T> implements DataEntity<T> {
         return this.response.getData();
     }
 
-    static <T> ResponseEntity<T> makeError(AftershipError error) {
+    public static <T> ResponseEntity<T> makeError(AftershipError error) {
         return new ResponseEntity<>(null, error);
     }
 

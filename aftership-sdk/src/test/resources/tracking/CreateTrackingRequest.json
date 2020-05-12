@@ -1,0 +1,26 @@
+{
+  "tracking": {
+    "slug": ["dhl"],
+    "tracking_number": "123456789",
+    "title": "Title Name",
+    "smses": [
+      "+18555072509",
+      "+18555072501"
+    ],
+    "emails": [
+      "email@yourdomain.com",
+      "another_email@yourdomain.com"
+    ],
+    "order_id": "ID 1234",
+    "order_id_path": "http://www.aftership.com/order_id=1234",
+    "custom_fields": {
+      "product_name": "iPhone Case",
+      "product_price": "USD19.99"
+    },
+    "language": "en",
+    "order_promised_delivery_date": "2019-05-20",
+    "delivery_type": "pickup_at_store",
+    "pickup_location": "Flagship Store",
+    "pickup_note": "Reach out to our staffs when you arrive our stores for shipment pickup"
+  }
+}

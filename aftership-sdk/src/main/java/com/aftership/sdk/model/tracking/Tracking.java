@@ -3,7 +3,6 @@ package com.aftership.sdk.model.tracking;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import com.aftership.sdk.model.annotation.IndefiniteString;
 import com.aftership.sdk.model.checkpoint.Checkpoint;
 import lombok.Data;
 
@@ -80,7 +79,6 @@ public class Tracking {
      * Accept either array or comma separated as input.
      * <p><b>Array or String</b></p>
      */
-    @IndefiniteString()
     private List<String> android;
     /**
      * Custom fields of the tracking.
@@ -134,7 +132,6 @@ public class Tracking {
      * Accept either array or comma separated as input.
      * <p><b>Array or String</b></p>
      */
-    @IndefiniteString
     private List<String> ios;
     /**
      * Text field for order ID

@@ -3,10 +3,31 @@ package com.aftership.sdk.endpoint;
 import com.aftership.sdk.model.tracking.*;
 import com.aftership.sdk.rest.DataEntity;
 
+/**
+ * Endpoint provides the interface for all trackings API calls
+ */
 public interface TrackingEndpoint {
 
+    /**
+     * Create a tracking.
+     * @param request CreateTrackingRequest
+     * @return DataEntity<SingleTracking>
+     */
+    DataEntity<SingleTracking> createTracking(CreateTrackingRequest request);
+
+    /**
+     * Get tracking results of multiple trackings.
+     * @param param SingleTrackingParam
+     * @param optionalParams GetTrackingParams
+     * @return DataEntity<SingleTracking>
+     */
     DataEntity<SingleTracking> getTracking(SingleTrackingParam param, GetTrackingParams optionalParams);
 
+    /**
+     * GetTrackings Gets tracking results of multiple trackings.
+     * @param optionalParams MultiTrackingsParams
+     * @return DataEntity<MultiTrackingsData>
+     */
     DataEntity<MultiTrackingsData> getTrackings(MultiTrackingsParams optionalParams);
 
 }

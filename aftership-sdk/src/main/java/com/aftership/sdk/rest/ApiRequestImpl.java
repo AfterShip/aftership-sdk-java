@@ -32,6 +32,15 @@ public class ApiRequestImpl implements ApiRequest {
         return app.getEndpoint() + path;
     }
 
+    private static boolean isSuccessful(int code) {
+        for (int i : Define.SUCCESSFUL_CODE_RANGE) {
+            if (i == code) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public <T, R> ResponseEntity<R> makeRequest(RequestConfig requestConfig, T requestData, Class<R> responseType) {
         if (requestConfig == null || StrUtil.isBlank(requestConfig.getPath())) {
@@ -71,7 +80,7 @@ public class ApiRequestImpl implements ApiRequest {
 
         Call call = HttpClient.getClient().newCall(request);
         try (Response response = call.execute()) {
-
+            //System.out.println("isSuccessful: "+ response.isSuccessful());
             if (!response.isSuccessful()) {
                 setRateLimiting(this.app, response);
                 return ResponseEntity.makeError(AftershipError.make(response.body().string(),
@@ -85,6 +94,7 @@ public class ApiRequestImpl implements ApiRequest {
             setRateLimiting(this.app, response);
 
             String jsonBody = response.body() != null ? Objects.requireNonNull(response.body()).string() : "{}";
+            //System.out.println("jsonBody: " + jsonBody);
             if (StrUtil.isBlank(jsonBody) || "{}".equals(jsonBody)) {
                 return ResponseEntity.makeError(AftershipError.make(ErrorType.HandlerError,
                         ErrorMessage.HANDLER_EMPTY_BODY,
@@ -107,7 +117,7 @@ public class ApiRequestImpl implements ApiRequest {
             }
 
             AftershipResponse<R> result = processResponse(jsonElement, responseType);
-            if (result.getMeta() == null || !result.getMeta().getCode().equals(Define.API_SUCCESSFUL_CODE)) {
+            if (result.getMeta() == null || !isSuccessful(result.getMeta().getCode())) {
                 return ResponseEntity.makeError(AftershipError.make(result.getMeta(),
                         entryRequestConfig(requestConfig),
                         entryRequestHeaders(requestHeaders),
