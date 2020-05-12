@@ -1,5 +1,10 @@
 package com.aftership.sdk.model.tracking;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import com.aftership.sdk.lib.DateUtil;
+import com.aftership.sdk.lib.StrUtil;
 import lombok.Data;
 
 /**
@@ -55,12 +60,12 @@ public class MultiTrackingsParams {
      * Start date and time of trackings created. AfterShip only stores data of 90 days.
      * (Defaults: 30 days ago, Example: 2013-03-15T16:41:56+08:00)
      */
-    private String createdAtMin;
+    private Date createdAtMin;
     /**
      * End date and time of trackings created.
      * (Defaults: now, Example: 2013-04-15T16:41:56+08:00)
      */
-    private String createdAtMax;
+    private Date createdAtMax;
     /**
      * List of fields to include in the response.
      * Use comma for multiple values. Fields to include:
@@ -73,4 +78,28 @@ public class MultiTrackingsParams {
      * Support Chinese to English translation for  china-ems  and  china-post  only
      */
     private String lang;
+
+    /**
+     * Generate a Map dictionary.
+     *
+     * @return Map<String, String>
+     */
+    public Map<String, String> toMap() {
+        Map<String, String> map = new HashMap<>();
+        map.put("page", this.getPage() != null ? this.getPage().toString() : StrUtil.EMPTY);
+        map.put("limit", this.getLimit() != null ? this.getLimit().toString() : StrUtil.EMPTY);
+        map.put("keyword", this.getKeyword());
+        map.put("slug", this.getSlug());
+        map.put("delivery_time", this.getDeliveryTime() != null ? this.getDeliveryTime().toString() : StrUtil.EMPTY);
+        map.put("origin", this.getOrigin());
+        map.put("destination", this.getDestination());
+        map.put("tag", this.getTag());
+        //Example: 2013-03-15T16:41:56+08:00
+        map.put("created_at_min", DateUtil.format(DateUtil.FORMAT_WITH_X, this.getCreatedAtMin()));
+        //Example: 2013-04-15T16:41:56+08:00
+        map.put("created_at_max", DateUtil.format(DateUtil.FORMAT_WITH_X, this.getCreatedAtMax()));
+        map.put("fields", this.getFields());
+        map.put("lang", this.getLang());
+        return map;
+    }
 }

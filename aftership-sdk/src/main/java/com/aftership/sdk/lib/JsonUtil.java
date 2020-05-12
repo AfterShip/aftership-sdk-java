@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 public final class JsonUtil {
 
@@ -30,31 +31,27 @@ public final class JsonUtil {
     }
 
     public static class GsonDateDeSerializer implements JsonDeserializer<Date> {
-        private final SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        private final SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
         @Override
-        public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-                throws JsonParseException {
-            try {
-                String j = json.getAsJsonPrimitive().getAsString();
-                return parseDate(j);
-            } catch (ParseException e) {
-                throw new JsonParseException(e.getMessage(), e);
-            }
+        public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+            String dateString = json.getAsJsonPrimitive().getAsString();
+            return parseDate(dateString);
         }
 
-        private Date parseDate(String dateString) throws ParseException {
-            if (dateString != null && dateString.trim().length() > 0) {
-                try {
-                    return format1.parse(dateString);
-                } catch (ParseException ex) {
-                    //ex.printStackTrace();//test:
-                    return format2.parse(dateString);
-                }
-            } else {
+        private Date parseDate(String dateString) {
+            if (StrUtil.isBlank(dateString)) {
                 return null;
             }
+
+            String[] formats = new String[]{DateUtil.FORMAT_WITH_T, DateUtil.FORMAT_WITHOUT_T, DateUtil.FORMAT_WITH_Z,
+                    DateUtil.FORMAT_WITH_X};
+            for (String item : formats) {
+                Optional<Date> optionalDate = DateUtil.parse(item, dateString);
+                if (optionalDate.isPresent()) {
+                    return optionalDate.get();
+                }
+            }
+
+            return null;
         }
     }
 }

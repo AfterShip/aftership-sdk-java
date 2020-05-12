@@ -36,6 +36,10 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     @Override
     public DataEntity<MultiTrackingsData> getTrackings(MultiTrackingsParams optionalParams) {
-        return null;
+        Map<String, String> query = optionalParams != null ? optionalParams.toMap() : new HashMap<>();
+        String path = UrlUtil.fillPathWithQuery(EndpointPath.GET_TRACKINGS, query);
+
+        return this.request.makeRequest(new RequestConfig(HttpMethod.GET, path),
+                null, MultiTrackingsData.class);
     }
 }

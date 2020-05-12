@@ -52,13 +52,13 @@ public final class UrlUtil {
         }
 
         if (query != null && query.size() > 0) {
-            trackingUrl = fillWithQueryString(trackingUrl, query);
+            trackingUrl = fillPathWithQuery(trackingUrl, query);
         }
 
         return trackingUrl;
     }
 
-    private static String fillWithQueryString(String path, Map<String, String> query) {
+    public static String fillPathWithQuery(String path, Map<String, String> query) {
         StringBuilder builder = new StringBuilder(path);
         if (query != null && query.size() > 0) {
             if (!path.endsWith("?")) {
