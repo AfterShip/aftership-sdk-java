@@ -16,6 +16,13 @@ public interface TrackingEndpoint {
     DataEntity<SingleTracking> createTracking(CreateTrackingRequest request);
 
     /**
+     * Delete a tracking.
+     * @param param SingleTrackingParam
+     * @return DataEntity<SingleTracking>
+     */
+    DataEntity<SingleTracking> deleteTracking(SingleTrackingParam param);
+
+    /**
      * Get tracking results of multiple trackings.
      * @param param SingleTrackingParam
      * @param optionalParams GetTrackingParams

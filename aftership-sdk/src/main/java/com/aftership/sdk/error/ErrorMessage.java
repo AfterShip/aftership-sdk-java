@@ -9,6 +9,7 @@ public class ErrorMessage {
     public static final String CONSTRUCTOR_INVALID_TRACKING_NUMBER = "ConstructorError: tracking_number";
     public static final String CONSTRUCTOR_PATH_IS_EMPTY = "ConstructorError: The path is empty";
     public static final String CONSTRUCTOR_REQUIRED_TRACKING_NUMBER = "ConstructorError: Required tracking number";
+    public static final String CONSTRUCTOR_REQUIRED_TRACKING_ID = "ConstructorError: Required tracking id";
 
     public static final String HANDLER_EMPTY_BODY = "HandlerError: Body is empty";
     public static final String HANDLER_NULL_META = "HandlerError: Meta is Null";

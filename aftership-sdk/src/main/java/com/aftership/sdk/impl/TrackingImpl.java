@@ -30,6 +30,22 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     }
 
     @Override
+    public DataEntity<SingleTracking> deleteTracking(SingleTrackingParam param) {
+        if (param == null || (StrUtil.isBlank(param.getId())
+                && StrUtil.isBlank(param.getSlug())
+                && StrUtil.isBlank(param.getTrackingNumber()))) {
+            return ResponseEntity.makeError(AftershipError.make(
+                    ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_REQUIRED_TRACKING_ID));
+        }
+
+        String path = UrlUtil.buildTrackingPath(param.getId(), param.getSlug(), param.getTrackingNumber(),
+                null, EndpointPath.DELETE_TRACKING, null);
+
+        return this.request.makeRequest(new RequestConfig(HttpMethod.DELETE, path),
+                null, SingleTracking.class);
+    }
+
+    @Override
     public DataEntity<SingleTracking> getTracking(SingleTrackingParam param, GetTrackingParams optionalParams) {
         Map<String, String> query = null;
         if (param.getOptionalParams() != null) {
