@@ -1,4 +1,4 @@
-package com.aftership.sdk.endpoint;
+package com.aftership.sdk.endpoint.courier;
 
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;

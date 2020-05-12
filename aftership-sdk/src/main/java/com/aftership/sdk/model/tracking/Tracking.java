@@ -2,6 +2,7 @@ package com.aftership.sdk.model.tracking;
 
 import com.aftership.sdk.model.annotation.IndefiniteString;
 import com.aftership.sdk.model.checkpoint.Checkpoint;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Date;

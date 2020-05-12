@@ -1,9 +1,12 @@
 package com.aftership.sdk;
 
+import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.CourierEndpoint;
+import com.aftership.sdk.endpoint.TrackingEndpoint;
 import com.aftership.sdk.error.AftershipException;
 import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.impl.CourierImpl;
+import com.aftership.sdk.impl.TrackingImpl;
 import com.aftership.sdk.lib.StrUtil;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.RateLimit;
@@ -25,6 +28,7 @@ public class AfterShip {
     private RateLimit rateLimit;
 
     private CourierEndpoint courierEndpoint;
+    private TrackingEndpoint trackingEndpoint;
 
     public AfterShip(String apiKey) {
         this(apiKey, null);
@@ -56,6 +60,7 @@ public class AfterShip {
 
         // Endpoints
         this.courierEndpoint = new CourierImpl(request);
+        this.trackingEndpoint = new TrackingImpl(request);
     }
 
 }

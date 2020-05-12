@@ -2,7 +2,7 @@ package com.aftership.sdk.lib;
 
 import java.util.UUID;
 
-public class StrUtil {
+public final class StrUtil {
 
     public static final String EMPTY = "";
 

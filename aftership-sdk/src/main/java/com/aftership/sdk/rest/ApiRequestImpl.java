@@ -86,12 +86,15 @@ public class ApiRequestImpl implements ApiRequest {
             setRateLimiting(this.app, response);
 
             String jsonBody = response.body() != null ? Objects.requireNonNull(response.body()).string() : "{}";
-            if (StrUtil.isBlank(jsonBody)) {
+            if (StrUtil.isBlank(jsonBody) || "{}".equals(jsonBody)) {
                 return ResponseEntity.makeError(AftershipError.make(ErrorType.HandlerError, ErrorMessage.HandlerEmptyBody,
                         entryRequestConfig(requestConfig),
                         entryRequestHeaders(requestHeaders),
                         entryRequestData(requestData)));
             }
+
+            //test:
+            //System.out.println("test: jsonBody:" + jsonBody);
 
             JsonElement jsonElement = JsonParser.parseString(jsonBody);
             if (!jsonElement.isJsonObject()) {
