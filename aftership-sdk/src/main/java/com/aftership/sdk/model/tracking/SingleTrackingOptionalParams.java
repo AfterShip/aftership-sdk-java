@@ -1,9 +1,8 @@
 package com.aftership.sdk.model.tracking;
 
-import lombok.Data;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Data;
 
 /**
  * SingleTrackingOptionalParams is the optional parameters in single tracking query

@@ -12,6 +12,7 @@ public final class StrUtil {
 
     /**
      * Determine whether the string is empty or not.
+     *
      * @param cs CharSequence
      * @return true/false
      */
@@ -28,7 +29,7 @@ public final class StrUtil {
         return true;
     }
 
-    public static String uuid4(){
+    public static String uuid4() {
         return UUID.randomUUID().toString();
     }
 

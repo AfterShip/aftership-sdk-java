@@ -1,16 +1,16 @@
 package com.aftership.sdk;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicInteger;
 import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.rest.ResponseEntity;
 import okhttp3.mockwebserver.MockResponse;
 import okio.BufferedSource;
 import okio.Okio;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestUtil {
     private static final long ResetValue = System.currentTimeMillis();

@@ -1,5 +1,10 @@
 package com.aftership.sdk.endpoint.courier;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.lib.JsonUtil;
@@ -8,12 +13,7 @@ import com.aftership.sdk.model.courier.CourierDetectList;
 import com.aftership.sdk.model.courier.CourierDetectRequest;
 import com.aftership.sdk.rest.DataEntity;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 
 public class TestDetectCouriers {
     public static MockWebServer server;
@@ -48,8 +48,8 @@ public class TestDetectCouriers {
                 "Incorrect TRACKING_POSTAL_CODE field for the response");
 
         Assertions.assertTrue(JsonUtil.create().
-                fromJson(server.takeRequest().getBody().readUtf8(), CourierDetectRequest.class).
-                equals(courierDetectRequest),
+                        fromJson(server.takeRequest().getBody().readUtf8(), CourierDetectRequest.class).
+                        equals(courierDetectRequest),
                 "Request's Body is inconsistent.");
     }
 

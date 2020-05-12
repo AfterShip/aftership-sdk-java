@@ -21,7 +21,7 @@ public class CourierDetectRequest {
      */
     public CourierDetectRequest(CourierDetectTracking tracking) {
         if (tracking == null || StrUtil.isBlank(tracking.getTrackingNumber())) {
-            throw new AftershipException(ErrorMessage.ConstructorInvalidTrackingNumber);
+            throw new AftershipException(ErrorMessage.CONSTRUCTOR_INVALID_TRACKING_NUMBER);
         }
         this.tracking = tracking;
     }

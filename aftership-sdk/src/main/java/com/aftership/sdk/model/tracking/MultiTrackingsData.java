@@ -1,8 +1,7 @@
 package com.aftership.sdk.model.tracking;
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 /**
  * MultiTrackingsData is a model for data part of the multiple trackings API responses

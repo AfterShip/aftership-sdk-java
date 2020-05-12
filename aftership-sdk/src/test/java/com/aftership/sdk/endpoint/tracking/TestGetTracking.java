@@ -1,5 +1,7 @@
 package com.aftership.sdk.endpoint.tracking;
 
+import org.junit.jupiter.api.*;
+import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.lib.JsonUtil;
@@ -7,9 +9,6 @@ import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.tracking.*;
 import com.aftership.sdk.rest.DataEntity;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.*;
-
-import java.io.IOException;
 
 public class TestGetTracking {
     public static MockWebServer server;
@@ -45,7 +44,8 @@ public class TestGetTracking {
         Assertions.assertNotNull(entity.getData().getTracking(), "Response data cannot be empty.");
 
         Assertions.assertEquals("fedex", entity.getData().getTracking().getSlug(), "Slug mismatch.");
-        Assertions.assertTrue(entity.getData().getTracking().getCheckpoints().size()>0, "Checkpoints need to be greater than 0");
+        Assertions.assertTrue(entity.getData().getTracking().getCheckpoints().size() > 0, "Checkpoints need to be " +
+                "greater than 0");
         Assertions.assertEquals("InfoReceived", entity.getData().getTracking()
                 .getCheckpoints().get(0).getTag(), "tag mismatch.");
 

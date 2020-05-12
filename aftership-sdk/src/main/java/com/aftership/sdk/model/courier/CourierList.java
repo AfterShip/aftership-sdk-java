@@ -1,8 +1,7 @@
 package com.aftership.sdk.model.courier;
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 /**
  * The response of courier list

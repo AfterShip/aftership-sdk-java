@@ -1,11 +1,10 @@
 package com.aftership.sdk.lib;
 
+import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 
-import java.util.concurrent.TimeUnit;
-
 public final class HttpUtil {
-    private static final long TIMEOUT = 50 * 1000L;//TODO: config with env
+    private static final long TIMEOUT = 50 * 1000L; //TODO(config with env)
 
     private static HttpUtil util;
     private static OkHttpClient client;

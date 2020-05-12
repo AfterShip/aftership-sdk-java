@@ -1,12 +1,12 @@
 package com.aftership.sdk.model.checkpoint;
 
-import lombok.Data;
-
 import java.util.Date;
 import java.util.List;
+import lombok.Data;
 
 /**
  * checkpoint information.
+ *
  * @link https://docs.aftership.com/api/4/trackings/post-trackings
  */
 @Data
@@ -18,6 +18,7 @@ public class Checkpoint {
     private Date createdAt;
     /**
      * The unique code of courier for this checkpoint message. Get courier slug here
+     *
      * @link https://docs.aftership.com/api/4/couriers
      * <p>String</p>
      */
@@ -56,13 +57,13 @@ public class Checkpoint {
      */
     private String countryIso3;
     /**
-     * 	Country name of the checkpoint, may also contain other location info.
-     * 	<p>String</p>
+     * Country name of the checkpoint, may also contain other location info.
+     * <p>String</p>
      */
     private String countryName;
     /**
-     * 	Checkpoint message
-     * 	<p>String</p>
+     * Checkpoint message
+     * <p>String</p>
      */
     private String message;
     /**
@@ -77,25 +78,28 @@ public class Checkpoint {
      * Exception
      * Expired
      * (See tag definition)
+     *
      * @link https://docs.aftership.com/api/4/delivery-status
      * <p>String</p>
      */
     private String tag;
     /**
      * Current subtag of checkpoint. (See subtag definition)
+     *
      * @link https://help.aftership.com/hc/en-us/articles/360007823253
      * <p>String</p>
      */
     private String subtag;
     /**
      * Normalized checkpoint message. (See subtag message definition)
+     *
      * @link https://help.aftership.com/hc/en-us/articles/360007823253
      * <p>String</p>
      */
     private String subtagMessage;
     /**
-     * 	Location info (if any)
-     * 	<p>String</p>
+     * Location info (if any)
+     * <p>String</p>
      */
     private String zip;
     /**

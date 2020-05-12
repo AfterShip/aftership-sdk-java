@@ -27,7 +27,7 @@ public class MultiTrackingsParams {
      */
     private String slug;
     /**
-     * 	Total delivery time in days.
+     * Total delivery time in days.
      * - Difference of 1st checkpoint time and delivered time for delivered shipments
      * - Difference of 1st checkpoint time and current time for non-delivered shipments
      * Value as 0 for pending shipments or delivered shipment with only one checkpoint.
@@ -62,9 +62,9 @@ public class MultiTrackingsParams {
      */
     private String createdAtMax;
     /**
-     * 	List of fields to include in the response.
-     * 	Use comma for multiple values. Fields to include:
-     * 	title,  order_id,  tag,  checkpoints,  checkpoint_time,  message,  country_name
+     * List of fields to include in the response.
+     * Use comma for multiple values. Fields to include:
+     * title,  order_id,  tag,  checkpoints,  checkpoint_time,  message,  country_name
      * Defaults: none, Example: title,order_id
      */
     private String fields;

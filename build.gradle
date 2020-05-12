@@ -34,6 +34,13 @@ allprojects {
 subprojects {
     apply plugin: 'idea'
     apply plugin: 'java'
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        toolVersion = "8.8"
+        ignoreFailures = false
+        showViolations = true
+    }
 
     dependencies {
         testCompile "org.junit.platform:junit-platform-launcher:${junitPlatformVersion}"

@@ -1,7 +1,6 @@
 package com.aftership.sdk.lib;
 
 import com.google.gson.*;
-
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,21 +8,21 @@ import java.util.Date;
 
 public final class JsonUtil {
 
-    public static <T> T parseJson(String json, Class<T> tClass){
-        if (StrUtil.isBlank(json)){
+    public static <T> T parseJson(String json, Class<T> tClass) {
+        if (StrUtil.isBlank(json)) {
             return null;
         }
-        return create().fromJson(json,tClass);
+        return create().fromJson(json, tClass);
     }
 
-    public static Gson create(){
+    public static Gson create() {
         return create(false);
     }
 
-    public static Gson create(boolean pretty){
+    public static Gson create(boolean pretty) {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Date.class, new GsonDateDeSerializer());
-        if(pretty) {
+        if (pretty) {
             builder.setPrettyPrinting();
         }
         builder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
@@ -35,7 +34,8 @@ public final class JsonUtil {
         private final SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         @Override
-        public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
             try {
                 String j = json.getAsJsonPrimitive().getAsString();
                 return parseDate(j);

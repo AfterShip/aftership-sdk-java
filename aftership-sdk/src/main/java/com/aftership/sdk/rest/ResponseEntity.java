@@ -21,7 +21,7 @@ public class ResponseEntity<T> implements DataEntity<T> {
 
     @Override
     public T getData() {
-        if(this.response == null){
+        if (this.response == null) {
             return null;
         }
         return this.response.getData();

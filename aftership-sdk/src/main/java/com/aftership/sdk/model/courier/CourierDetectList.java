@@ -1,9 +1,8 @@
 package com.aftership.sdk.model.courier;
 
+import java.util.List;
 import com.aftership.sdk.model.tracking.Tracking;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * The response of couriers detect request

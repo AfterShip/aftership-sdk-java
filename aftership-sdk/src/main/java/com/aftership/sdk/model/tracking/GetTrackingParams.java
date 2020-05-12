@@ -1,9 +1,8 @@
 package com.aftership.sdk.model.tracking;
 
-import lombok.Data;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Data;
 
 /**
  * GetTrackingParams is the additional parameters in single tracking query
@@ -29,6 +28,7 @@ public class GetTrackingParams {
 
     /**
      * Generate a Map dictionary.
+     *
      * @return Map<String, String>
      */
     public Map<String, String> toMap() {

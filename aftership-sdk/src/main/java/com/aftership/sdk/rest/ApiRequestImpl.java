@@ -1,5 +1,12 @@
 package com.aftership.sdk.rest;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.error.AftershipError;
 import com.aftership.sdk.error.ErrorMessage;
@@ -10,15 +17,7 @@ import com.aftership.sdk.lib.StrUtil;
 import com.aftership.sdk.model.AftershipResponse;
 import com.aftership.sdk.model.Meta;
 import com.aftership.sdk.model.RateLimit;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import okhttp3.*;
-
-import java.io.IOException;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 public class ApiRequestImpl implements ApiRequest {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -28,7 +27,7 @@ public class ApiRequestImpl implements ApiRequest {
         this.app = app;
     }
 
-    //TODO: optimize
+    //TODO(optimize)
     private String buildUrl(String path) {
         return app.getEndpoint() + path;
     }
@@ -37,15 +36,15 @@ public class ApiRequestImpl implements ApiRequest {
     public <T, R> ResponseEntity<R> makeRequest(RequestConfig requestConfig, T requestData, Class<R> responseType) {
         if (requestConfig == null || StrUtil.isBlank(requestConfig.getPath())) {
             return ResponseEntity.makeError(AftershipError.make(
-                    ErrorType.ConstructorError, ErrorMessage.ConstructorInvalidRequestConfig));
+                    ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_INVALID_REQUEST_CONFIG));
         }
         if (StrUtil.isBlank(app.getApiKey())) {
             return ResponseEntity.makeError(AftershipError.make(
-                    ErrorType.ConstructorError, ErrorMessage.ConstructorInvalidApiKey));
+                    ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_INVALID_API_KEY));
         }
         if (responseType == null) {
             return ResponseEntity.makeError(AftershipError.make(
-                    ErrorType.ConstructorError, ErrorMessage.ConstructorInvalidResponseType));
+                    ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_INVALID_RESPONSE_TYPE));
         }
 
         //build headers
@@ -87,7 +86,8 @@ public class ApiRequestImpl implements ApiRequest {
 
             String jsonBody = response.body() != null ? Objects.requireNonNull(response.body()).string() : "{}";
             if (StrUtil.isBlank(jsonBody) || "{}".equals(jsonBody)) {
-                return ResponseEntity.makeError(AftershipError.make(ErrorType.HandlerError, ErrorMessage.HandlerEmptyBody,
+                return ResponseEntity.makeError(AftershipError.make(ErrorType.HandlerError,
+                        ErrorMessage.HANDLER_EMPTY_BODY,
                         entryRequestConfig(requestConfig),
                         entryRequestHeaders(requestHeaders),
                         entryRequestData(requestData)));
@@ -98,7 +98,8 @@ public class ApiRequestImpl implements ApiRequest {
 
             JsonElement jsonElement = JsonParser.parseString(jsonBody);
             if (!jsonElement.isJsonObject()) {
-                return ResponseEntity.makeError(AftershipError.make(ErrorType.HandlerError, ErrorMessage.HandlerBodyNotJsonObject,
+                return ResponseEntity.makeError(AftershipError.make(ErrorType.HandlerError,
+                        ErrorMessage.HANDLER_BODY_NOT_JSON_OBJECT,
                         entryRequestConfig(requestConfig),
                         entryRequestHeaders(requestHeaders),
                         entryRequestData(requestData),
@@ -106,7 +107,7 @@ public class ApiRequestImpl implements ApiRequest {
             }
 
             AftershipResponse<R> result = processResponse(jsonElement, responseType);
-            if (result.getMeta() == null || !result.getMeta().getCode().equals(Define.ApiSuccessfulCode)) {
+            if (result.getMeta() == null || !result.getMeta().getCode().equals(Define.API_SUCCESSFUL_CODE)) {
                 return ResponseEntity.makeError(AftershipError.make(result.getMeta(),
                         entryRequestConfig(requestConfig),
                         entryRequestHeaders(requestHeaders),
@@ -174,7 +175,7 @@ public class ApiRequestImpl implements ApiRequest {
     private AbstractMap.SimpleEntry<String, Object> entryResponseBody(Response response) {
         String tag = "responseBody";
         try {
-            if(StrUtil.isNotBlank(response.message())){
+            if (StrUtil.isNotBlank(response.message())) {
                 return new AbstractMap.SimpleEntry<>(tag, null);
             }
             String jsonBody = Objects.requireNonNull(response.body()).string();

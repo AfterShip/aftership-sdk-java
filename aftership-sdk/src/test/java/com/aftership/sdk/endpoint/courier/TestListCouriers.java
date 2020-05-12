@@ -1,22 +1,18 @@
 package com.aftership.sdk.endpoint.courier;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.*;
+import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.impl.EndpointPath;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.courier.CourierList;
-
 import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.rest.HttpMethod;
 import com.aftership.sdk.rest.ResponseEntity;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-
-import org.junit.jupiter.api.*;
-
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestListCouriers {
     public static MockWebServer server;
@@ -60,7 +56,8 @@ public class TestListCouriers {
 
         RecordedRequest recordedRequest = server.takeRequest();
         assertEquals(HttpMethod.GET.getName(), recordedRequest.getMethod(), "HttpMethod is GET.");
-        assertEquals(TestUtil.getRequestPath(EndpointPath.LIST_COURIERS), recordedRequest.getPath(), "The requested Path doesn't match.");
+        assertEquals(TestUtil.getRequestPath(EndpointPath.LIST_COURIERS), recordedRequest.getPath(), "The requested " +
+                "Path doesn't match.");
     }
 
 }

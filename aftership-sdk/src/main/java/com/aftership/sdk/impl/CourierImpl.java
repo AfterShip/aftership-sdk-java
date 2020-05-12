@@ -4,8 +4,8 @@ import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.CourierEndpoint;
 import com.aftership.sdk.model.courier.CourierDetectList;
 import com.aftership.sdk.model.courier.CourierDetectRequest;
-import com.aftership.sdk.rest.*;
 import com.aftership.sdk.model.courier.CourierList;
+import com.aftership.sdk.rest.*;
 
 public class CourierImpl extends AfterShipEndpoint implements CourierEndpoint {
     public CourierImpl(ApiRequest request) {

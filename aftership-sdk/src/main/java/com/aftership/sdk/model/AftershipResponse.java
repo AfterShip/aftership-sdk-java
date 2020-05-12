@@ -2,7 +2,6 @@ package com.aftership.sdk.model;
 
 import lombok.Data;
 
-
 @Data
 public class AftershipResponse<T> {
     private Meta meta;

@@ -1,16 +1,15 @@
 package com.aftership.sdk.model.tracking;
 
-import com.aftership.sdk.model.annotation.IndefiniteString;
-import com.aftership.sdk.model.checkpoint.Checkpoint;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import com.aftership.sdk.model.annotation.IndefiniteString;
+import com.aftership.sdk.model.checkpoint.Checkpoint;
+import lombok.Data;
 
 /**
  * Tracking Object
+ *
  * @link https://docs.aftership.com/api/4/trackings/post-trackings
  */
 @Data
@@ -71,7 +70,8 @@ public class Tracking {
      */
     private String slug;
     /**
-     * Whether or not AfterShip will continue tracking the shipments. Value is false when tag (status) is Delivered, Expired, or further updates for 30 days since last update.
+     * Whether or not AfterShip will continue tracking the shipments. Value is false when tag (status) is Delivered,
+     * Expired, or further updates for 30 days since last update.
      * <p>Boolean</p>
      */
     private boolean active;
@@ -195,8 +195,8 @@ public class Tracking {
      */
     private Date shipmentDeliveryDate;
     /**
-     * 	Phone number(s) subscribed to receive sms notifications. Comma separated for multiple values
-     * 	<p>Array</p>
+     * Phone number(s) subscribed to receive sms notifications. Comma separated for multiple values
+     * <p>Array</p>
      */
     private List<String> subscribedSmses;
     /**
@@ -239,12 +239,14 @@ public class Tracking {
     private String tag;
     /**
      * Current subtag of tracking. (See subtag definition)
+     *
      * @link https://help.aftership.com/hc/en-us/articles/360007823253
      * <p>String</p>
      */
     private String subtag;
     /**
-     * 	Normalized tracking message. (See subtag definition)
+     * Normalized tracking message. (See subtag definition)
+     *
      * @link https://help.aftership.com/hc/en-us/articles/360007823253
      * <p>String</p>
      */
@@ -270,13 +272,15 @@ public class Tracking {
     private Boolean lastMileTrackingSupported;
     /**
      * Store, customer, or order language of the tracking. ISO 639-1 Language Code .
+     *
      * @link https://help.aftership.com/hc/en-us/articles/360001623287-Supported-Language-Parameters
      * <p>String or Null</p>
      */
     private String language;
     /**
      * Whether or not the shipment is returned to sender.
-     * Value is true when any of its checkpoints has subtagException_010(returning to sender) orException_011(returned to sender).
+     * Value is true when any of its checkpoints has subtagException_010(returning to sender) orException_011
+     * (returned to sender).
      * Otherwise value is false
      * <p><font color="red">Boolean</font></p>
      */
@@ -293,7 +297,7 @@ public class Tracking {
      * door_to_door
      * <p>String</p>
      */
-    private String delivery_type;
+    private String deliveryType;
     /**
      * Shipment pickup location for receiver
      * <p>String</p>

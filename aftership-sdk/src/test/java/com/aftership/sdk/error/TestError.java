@@ -1,14 +1,13 @@
 package com.aftership.sdk.error;
 
+import org.junit.jupiter.api.*;
+import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.courier.CourierList;
 import com.aftership.sdk.rest.DataEntity;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.*;
-
-import java.io.IOException;
 
 public class TestError {
     public static MockWebServer server;
@@ -34,9 +33,10 @@ public class TestError {
         AfterShip afterShip = new AfterShip(TestUtil.YOUR_API_KEY, option);
 
         DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
-        Assertions.assertTrue(entity.hasError(),"Entity returned with an error.");
-        Assertions.assertEquals(401, entity.getError().getCode().intValue(),"Incorrect error code returned.");
-        Assertions.assertEquals("Invalid API Key.", entity.getError().getMessage(), "The message returned is incorrect.");
+        Assertions.assertTrue(entity.hasError(), "Entity returned with an error.");
+        Assertions.assertEquals(401, entity.getError().getCode().intValue(), "Incorrect error code returned.");
+        Assertions.assertEquals("Invalid API Key.", entity.getError().getMessage(), "The message returned is " +
+                "incorrect.");
         Assertions.assertEquals("Unauthorized", entity.getError().getType(), "The type returned is incorrect.");
 
         TestUtil.printResponse(afterShip, entity);

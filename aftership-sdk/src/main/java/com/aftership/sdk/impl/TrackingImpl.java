@@ -1,14 +1,12 @@
 package com.aftership.sdk.impl;
 
+import java.util.HashMap;
+import java.util.Map;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.TrackingEndpoint;
-
 import com.aftership.sdk.lib.UrlUtil;
 import com.aftership.sdk.model.tracking.*;
 import com.aftership.sdk.rest.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint {
 

@@ -1,8 +1,7 @@
 package com.aftership.sdk.model.courier;
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 /**
  * Courier Object
@@ -36,13 +35,13 @@ public class Courier {
 
     /**
      * The extra fields need for tracking, such as `tracking_account_number`, `tracking_postal_code`,
-     *  `tracking_ship_date`, `tracking_key`, `tracking_destination_country`
+     * `tracking_ship_date`, `tracking_key`, `tracking_destination_country`
      */
     private List<String> requiredFields;
 
     /**
      * the extra fields which are optional for tracking. Basically it's the same as required_fields,
-     *  but the difference is that only some of the tracking numbers require these fields.
+     * but the difference is that only some of the tracking numbers require these fields.
      */
     private List<String> optionalFields;
 

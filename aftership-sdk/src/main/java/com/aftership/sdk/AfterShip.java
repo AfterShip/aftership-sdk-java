@@ -1,6 +1,5 @@
 package com.aftership.sdk;
 
-import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.CourierEndpoint;
 import com.aftership.sdk.endpoint.TrackingEndpoint;
 import com.aftership.sdk.error.AftershipException;
@@ -36,7 +35,7 @@ public class AfterShip {
 
     public AfterShip(String apiKey, AftershipOption options) {
         if (StrUtil.isBlank(apiKey)) {
-            throw new AftershipException(ErrorMessage.ConstructorInvalidApiKey);
+            throw new AftershipException(ErrorMessage.CONSTRUCTOR_INVALID_API_KEY);
         }
 
         this.apiKey = apiKey;

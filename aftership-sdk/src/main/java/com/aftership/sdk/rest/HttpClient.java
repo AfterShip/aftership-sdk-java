@@ -1,11 +1,10 @@
 package com.aftership.sdk.rest;
 
+import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 
-import java.util.concurrent.TimeUnit;
-
 public class HttpClient {
-    private static final long TIMEOUT = 50 * 1000L;//TODO: set with config
+    private static final long TIMEOUT = 50 * 1000L; //TODO(set with config)
 
     private static final OkHttpClient client;
 
@@ -18,10 +17,10 @@ public class HttpClient {
                 .build();
     }
 
-    private HttpClient(){
+    private HttpClient() {
     }
 
-    public static OkHttpClient getClient(){
+    public static OkHttpClient getClient() {
         return client;
     }
 

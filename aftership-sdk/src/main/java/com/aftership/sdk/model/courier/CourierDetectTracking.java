@@ -1,9 +1,8 @@
 package com.aftership.sdk.model.courier;
 
+import java.util.List;
 import com.aftership.sdk.model.annotation.IndefiniteString;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * The tracking object in couriers detect request
@@ -41,7 +40,8 @@ public class CourierDetectTracking {
      */
     private String trackingDestinationCountry;
     /**
-     * If not specified, Aftership will automatically detect the courier based on the tracking number format and your selected couriers.
+     * If not specified, Aftership will automatically detect the courier based on the tracking number format and your
+     * selected couriers.
      * Use array or comma separated to input a list of couriers for auto detect.
      * <p><b>Array or String</b></p>
      */

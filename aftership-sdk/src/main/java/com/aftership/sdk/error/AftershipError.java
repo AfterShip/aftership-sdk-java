@@ -1,14 +1,11 @@
 package com.aftership.sdk.error;
 
+import java.util.*;
 import com.aftership.sdk.lib.StrUtil;
 import com.aftership.sdk.model.Meta;
 import com.aftership.sdk.rest.BodyParser;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import okhttp3.ResponseBody;
-
-import java.io.IOException;
-import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -28,7 +25,7 @@ public class AftershipError {
         if (meta != null) {
             return make(meta.getType(), meta.getMessage(), meta.getCode(), data);
         }
-        return make(ErrorType.HandlerError, ErrorMessage.HandlerNullMeta);
+        return make(ErrorType.HandlerError, ErrorMessage.HANDLER_NULL_META);
     }
 
     @SafeVarargs
