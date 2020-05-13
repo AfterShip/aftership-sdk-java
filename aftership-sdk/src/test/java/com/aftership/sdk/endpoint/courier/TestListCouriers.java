@@ -1,11 +1,11 @@
 package com.aftership.sdk.endpoint.courier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.*;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.impl.EndpointPath;
+import com.aftership.sdk.lib.UrlUtil;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.courier.CourierList;
 import com.aftership.sdk.rest.DataEntity;
@@ -20,7 +20,8 @@ public class TestListCouriers {
     @BeforeAll
     static void setUp() throws IOException {
         server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson("courier/ListCouriersResult.json")));
+        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson(
+                "endpoint/courier/ListCouriersResult.json")));
         server.start();
     }
 
@@ -55,9 +56,16 @@ public class TestListCouriers {
         TestUtil.printResponse(afterShip, entity);
 
         RecordedRequest recordedRequest = server.takeRequest();
-        assertEquals(HttpMethod.GET.getName(), recordedRequest.getMethod(), "HttpMethod is GET.");
-        assertEquals(TestUtil.getRequestPath(EndpointPath.LIST_COURIERS), recordedRequest.getPath(), "The requested " +
-                "Path doesn't match.");
+        Assertions.assertEquals(HttpMethod.GET.getName(), recordedRequest.getMethod(), "HttpMethod is GET.");
+        Assertions.assertEquals(TestUtil.getRequestPath(EndpointPath.LIST_COURIERS), recordedRequest.getPath(),
+                "The requested Path doesn't match.");
+
+        Assertions.assertEquals("GET", recordedRequest.getMethod(), "Method mismatch.");
+
+        //output
+        TestUtil.printResponse(afterShip, entity);
+        System.out.println("Path: " + UrlUtil.decode(recordedRequest.getPath()));
+        System.out.println("RequestBody: " + recordedRequest.getBody().readUtf8());
     }
 
 }

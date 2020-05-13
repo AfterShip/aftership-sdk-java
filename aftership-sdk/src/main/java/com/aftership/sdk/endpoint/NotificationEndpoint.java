@@ -1,6 +1,7 @@
 package com.aftership.sdk.endpoint;
 
 import com.aftership.sdk.model.notification.SingleNotification;
+import com.aftership.sdk.model.tracking.SingleTracking;
 import com.aftership.sdk.model.tracking.SingleTrackingParam;
 import com.aftership.sdk.rest.DataEntity;
 
@@ -16,4 +17,12 @@ public interface NotificationEndpoint {
      * @return DataEntity<SingleNotification>
      */
     DataEntity<SingleNotification> getNotification(SingleTrackingParam param);
+
+    /**
+     * Add notification receivers to a tracking number.
+     * @param param SingleTrackingParam
+     * @param singleNotification SingleNotification
+     * @return DataEntity<SingleNotification>
+     */
+    DataEntity<SingleNotification> addNotification(SingleTrackingParam param, SingleNotification singleNotification);
 }

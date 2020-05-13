@@ -21,8 +21,8 @@ public class TestGetLastCheckpoint {
     @BeforeAll
     static void setUp() throws IOException {
         server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse().setBody(
-                TestUtil.getJson("checkpoint/GetLastCheckpointResult.json")));
+        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson(
+                "endpoint/checkpoint/GetLastCheckpointResult.json")));
         server.start();
     }
 

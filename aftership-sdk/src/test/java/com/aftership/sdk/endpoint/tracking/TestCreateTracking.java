@@ -20,7 +20,8 @@ public class TestCreateTracking {
     @BeforeAll
     static void setUp() throws IOException {
         server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson("tracking/CreateTrackingResult.json")));
+        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson(
+                "endpoint/tracking/CreateTrackingResult.json")));
         server.start();
     }
 
@@ -34,7 +35,7 @@ public class TestCreateTracking {
         AfterShip afterShip = TestUtil.createAfterShip(server);
 
         //request
-        String requestBody = TestUtil.getJson("tracking/CreateTrackingRequest.json");
+        String requestBody = TestUtil.getJson("endpoint/tracking/CreateTrackingRequest.json");
         CreateTrackingRequest request = JsonUtil.create().fromJson(requestBody, CreateTrackingRequest.class);
 
         DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().createTracking(request);

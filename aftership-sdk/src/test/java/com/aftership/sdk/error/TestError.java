@@ -17,7 +17,7 @@ public class TestError {
         server = new MockWebServer();
         server.enqueue(TestUtil.createMockResponse()
                 .setResponseCode(401)
-                .setBody(TestUtil.getJson("Error.json")));
+                .setBody(TestUtil.getJson("error/Error.json")));
         server.start();
     }
 

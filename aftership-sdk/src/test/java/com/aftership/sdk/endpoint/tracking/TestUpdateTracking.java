@@ -21,7 +21,8 @@ public class TestUpdateTracking {
     @BeforeAll
     static void setUp() throws IOException {
         server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson("tracking/UpdateTrackingResult.json")));
+        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson(
+                "endpoint/tracking/UpdateTrackingResult.json")));
         server.start();
     }
 
@@ -35,7 +36,7 @@ public class TestUpdateTracking {
         AfterShip afterShip = TestUtil.createAfterShip(server);
 
         //request
-        String requestBody = TestUtil.getJson("tracking/UpdateTrackingRequest.json");
+        String requestBody = TestUtil.getJson("endpoint/tracking/UpdateTrackingRequest.json");
         UpdateTrackingRequest request = JsonUtil.create().fromJson(requestBody, UpdateTrackingRequest.class);
 
         SingleTrackingParam param = new SingleTrackingParam();

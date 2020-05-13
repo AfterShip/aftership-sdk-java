@@ -19,7 +19,8 @@ public class TestListAllCouriers {
     @BeforeAll
     static void setUp() throws IOException {
         server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson("courier/ListAllCouriersResult.json")));
+        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson(
+                "endpoint/courier/ListAllCouriersResult.json")));
         server.start();
     }
 

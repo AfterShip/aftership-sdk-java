@@ -1,0 +1,6 @@
+{
+  "notification": {
+    "emails": ["user1@gmail.com","user2@gmail.com","invalid EMail @ Gmail. com"],
+    "smses": ["+85291239123", "+85261236123", "Invalid Mobile Phone Number"]
+  }
+}

@@ -13,11 +13,13 @@ public class EndpointPath {
     public static final String GET_TRACKINGS = TRACKING;
     public static final String UPDATE_TRACKING = TRACKING;
     public static final String UPDATE_RETRACK = TRACKING;
-    public static final String UPDATE_RETRACK_ACTION = "/retrack";
+    public static final String UPDATE_RETRACK_ACTION = "retrack";
 
     public static final String GET_LAST_CHECKPOINT = "/last_checkpoint";
 
     public static final String NOTIFICATION = "/notifications";
     public static final String GET_NOTIFICATION = NOTIFICATION;
+    public static final String ADD_NOTIFICATION = NOTIFICATION;
+    public static final String ADD_NOTIFICATION_ACTION = "add";
 
 }

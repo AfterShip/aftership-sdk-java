@@ -19,7 +19,8 @@ public class TestDeleteTracking {
     @BeforeAll
     static void setUp() throws IOException {
         server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson("tracking/DeleteTrackingResult.json")));
+        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson(
+                "endpoint/tracking/DeleteTrackingResult.json")));
         server.start();
     }
 

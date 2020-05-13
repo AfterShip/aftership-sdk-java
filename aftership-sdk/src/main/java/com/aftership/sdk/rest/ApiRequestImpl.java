@@ -131,6 +131,11 @@ public class ApiRequestImpl implements ApiRequest {
                     entryRequestHeaders(requestHeaders),
                     entryRequestData(requestData)));
         }
+//        finally {
+//            if(!call.isCanceled()){
+//                call.cancel();
+//            }
+//        }
     }
 
     private <T> AftershipResponse<T> processResponse(JsonElement jsonElement, Class<T> responseType) {

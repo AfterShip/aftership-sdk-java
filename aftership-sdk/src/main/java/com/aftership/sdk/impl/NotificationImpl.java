@@ -34,4 +34,19 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
                 null, SingleNotification.class);
     }
 
+    @Override
+    public DataEntity<SingleNotification> addNotification(SingleTrackingParam param,
+                                                          SingleNotification singleNotification) {
+        Map.Entry<Boolean, DataEntity<SingleNotification>> error = errorOfSingleTrackingParam(param);
+        if (error.getKey()) {
+            return error.getValue();
+        }
+
+        String path = UrlUtil.buildTrackingPath(param.getId(), param.getSlug(), param.getTrackingNumber(),
+                null, EndpointPath.ADD_NOTIFICATION, EndpointPath.ADD_NOTIFICATION_ACTION);
+
+        return this.request.makeRequest(new RequestConfig(HttpMethod.POST, path),
+                singleNotification, SingleNotification.class);
+    }
+
 }
