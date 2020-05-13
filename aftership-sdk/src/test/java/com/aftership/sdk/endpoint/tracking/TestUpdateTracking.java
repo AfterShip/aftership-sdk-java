@@ -8,19 +8,20 @@ import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.lib.JsonUtil;
-import com.aftership.sdk.model.tracking.CreateTrackingRequest;
 import com.aftership.sdk.model.tracking.SingleTracking;
+import com.aftership.sdk.model.tracking.SingleTrackingParam;
+import com.aftership.sdk.model.tracking.UpdateTrackingRequest;
 import com.aftership.sdk.rest.DataEntity;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-public class TestCreateTracking {
+public class TestUpdateTracking {
     public static MockWebServer server;
 
     @BeforeAll
     static void setUp() throws IOException {
         server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson("tracking/CreateTrackingResult.json")));
+        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson("tracking/UpdateTrackingResult.json")));
         server.start();
     }
 
@@ -30,26 +31,26 @@ public class TestCreateTracking {
     }
 
     @Test
-    public void testCreateTracking() throws IOException, InterruptedException {
+    public void testTestUpdateTracking() throws IOException, InterruptedException {
         AfterShip afterShip = TestUtil.createAfterShip(server);
 
         //request
-        String requestBody = TestUtil.getJson("tracking/CreateTrackingRequest.json");
-        CreateTrackingRequest request = JsonUtil.create().fromJson(requestBody, CreateTrackingRequest.class);
+        String requestBody = TestUtil.getJson("tracking/UpdateTrackingRequest.json");
+        UpdateTrackingRequest request = JsonUtil.create().fromJson(requestBody, UpdateTrackingRequest.class);
 
-        DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().createTracking(request);
+        SingleTrackingParam param = new SingleTrackingParam();
+        param.setId("100");
+        DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().updateTracking(param, request);
 
         //assert
         Assertions.assertFalse(entity.hasError(), "No errors in response.");
         Assertions.assertNotNull(entity.getData().getTracking(), "Response data cannot be empty.");
         Assertions.assertEquals("fedex", entity.getData().getTracking().getSlug(), "Slug mismatch.");
-        Assertions.assertEquals("2019-05-20", entity.getData().getTracking().getOrderPromisedDeliveryDate(),
-                "order_promised_delivery_date mismatch.");
-        Assertions.assertEquals(0, entity.getData().getTracking().getSmses().size(),
-                "Smses size mismatch.");
+        Assertions.assertEquals("InfoReceived", entity.getData().getTracking().getCheckpoints().get(0).getTag(),
+                "checkpoints::tag mismatch.");
 
         RecordedRequest recordedRequest = server.takeRequest();
-        Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
+        Assertions.assertEquals("PUT", recordedRequest.getMethod(), "Method mismatch.");
 
         //output
         TestUtil.printResponse(afterShip, entity);

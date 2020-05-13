@@ -37,4 +37,11 @@ public interface TrackingEndpoint {
      */
     DataEntity<MultiTrackingsData> getTrackings(MultiTrackingsParams optionalParams);
 
+    /**
+     * UpdateTracking Updates a tracking.
+     * @param param SingleTrackingParam
+     * @param update UpdateTrackingRequest
+     * @return DataEntity<SingleTracking>
+     */
+    DataEntity<SingleTracking> updateTracking(SingleTrackingParam param, UpdateTrackingRequest update);
 }

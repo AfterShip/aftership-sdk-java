@@ -5,7 +5,6 @@ import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.lib.JsonUtil;
-import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.tracking.*;
 import com.aftership.sdk.rest.DataEntity;
 import okhttp3.mockwebserver.MockWebServer;
@@ -27,9 +26,7 @@ public class TestGetTracking {
 
     @Test
     public void testGetTracking() throws IOException, InterruptedException {
-        AftershipOption option = new AftershipOption();
-        option.setEndpoint(String.format(TestUtil.ENDPOINT_FORMAT, server.getPort()));
-        AfterShip afterShip = new AfterShip(TestUtil.YOUR_API_KEY, option);
+        AfterShip afterShip = TestUtil.createAfterShip(server);
 
         //request
         String getTrackingParams = TestUtil.getJson("tracking/GetTrackingParams.json");

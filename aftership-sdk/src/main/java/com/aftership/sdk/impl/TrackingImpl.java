@@ -5,7 +5,6 @@ import java.util.Map;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.TrackingEndpoint;
 import com.aftership.sdk.error.AftershipError;
-import com.aftership.sdk.error.AftershipException;
 import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.error.ErrorType;
 import com.aftership.sdk.lib.StrUtil;
@@ -13,6 +12,9 @@ import com.aftership.sdk.lib.UrlUtil;
 import com.aftership.sdk.model.tracking.*;
 import com.aftership.sdk.rest.*;
 
+/**
+ * TrackingEndpoint's implementation class
+ */
 public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint {
 
     public TrackingImpl(ApiRequest request) {
@@ -72,5 +74,21 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
         return this.request.makeRequest(new RequestConfig(HttpMethod.GET, path),
                 null, MultiTrackingsData.class);
+    }
+
+    @Override
+    public DataEntity<SingleTracking> updateTracking(SingleTrackingParam param, UpdateTrackingRequest update) {
+        if (param == null || (StrUtil.isBlank(param.getId())
+                && StrUtil.isBlank(param.getSlug())
+                && StrUtil.isBlank(param.getTrackingNumber()))) {
+            return ResponseEntity.makeError(AftershipError.make(
+                    ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_REQUIRED_TRACKING_ID));
+        }
+
+        String path = UrlUtil.buildTrackingPath(param.getId(), param.getSlug(), param.getTrackingNumber(),
+                null, EndpointPath.UPDATE_TRACKING, null);
+
+        return this.request.makeRequest(new RequestConfig(HttpMethod.PUT, path),
+                update, SingleTracking.class);
     }
 }

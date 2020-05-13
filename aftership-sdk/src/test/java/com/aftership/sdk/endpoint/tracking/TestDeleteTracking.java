@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.tracking.SingleTracking;
 import com.aftership.sdk.model.tracking.SingleTrackingParam;
 import com.aftership.sdk.rest.DataEntity;
@@ -31,9 +30,7 @@ public class TestDeleteTracking {
 
     @Test
     public void testDeleteTracking() throws IOException, InterruptedException {
-        AftershipOption option = new AftershipOption();
-        option.setEndpoint(String.format(TestUtil.ENDPOINT_FORMAT, server.getPort()));
-        AfterShip afterShip = new AfterShip(TestUtil.YOUR_API_KEY, option);
+        AfterShip afterShip = TestUtil.createAfterShip(server);
 
         //request
         SingleTrackingParam param = new SingleTrackingParam();

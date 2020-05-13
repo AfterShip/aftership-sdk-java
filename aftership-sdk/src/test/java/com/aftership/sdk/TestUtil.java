@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicInteger;
+import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.rest.ResponseEntity;
 import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import okio.BufferedSource;
 import okio.Okio;
 
@@ -60,6 +62,12 @@ public class TestUtil {
             System.out.println(((ResponseEntity<T>) entity).getResponse().getMeta());
         }
         System.out.println(afterShip.getRateLimit().toString());
+    }
+
+    public static AfterShip createAfterShip(MockWebServer server){
+        AftershipOption option = new AftershipOption();
+        option.setEndpoint(String.format(TestUtil.ENDPOINT_FORMAT, server.getPort()));
+        return new AfterShip(TestUtil.YOUR_API_KEY, option);
     }
 
 }
