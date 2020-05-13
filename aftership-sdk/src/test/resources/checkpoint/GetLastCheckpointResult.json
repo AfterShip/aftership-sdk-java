@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "data": {
+    "id": "5b74f4958776db0e00b6f5ed",
+    "tracking_number": "111111111111",
+    "slug": "fedex",
+    "tag": "Delivered",
+    "subtag": "Delivered_001",
+    "subtag_message": "Delivered",
+    "checkpoint": {
+      "slug": "fedex",
+      "created_at": "2018-08-16T03:50:47+00:00",
+      "checkpoint_time": "2018-08-01T13:19:47-04:00",
+      "city": "Deal",
+      "coordinates": [],
+      "country_iso3": null,
+      "country_name": null,
+      "message": "Delivered - Left at front door. Signature Service not requested.",
+      "state": "NJ",
+      "tag": "Delivered",
+      "subtag": "Delivered_001",
+      "subtag_message": "Delivered",
+      "zip": null,
+      "raw_tag": "FPX_L_RPIF"
+    }
+  }
+}

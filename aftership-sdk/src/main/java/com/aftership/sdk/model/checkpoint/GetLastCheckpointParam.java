@@ -1,4 +1,4 @@
-package com.aftership.sdk.model.tracking;
+package com.aftership.sdk.model.checkpoint;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,19 +6,15 @@ import com.aftership.sdk.endpoint.StringMap;
 import lombok.Data;
 
 /**
- * GetTrackingParams is the additional parameters in single tracking query
+ * GetLastCheckpointParam is the additional parameters in getLastCheckpoint
  */
 @Data
-public class GetTrackingParams implements StringMap {
+public class GetLastCheckpointParam implements StringMap {
     /**
-     * List of fields to include in the response.
-     * Use comma for multiple values. Fields to include:
-     * tracking_postal_code,tracking_ship_date,
-     * tracking_account_number,tracking_key,
-     * tracking_origin_country,tracking_destination_country,
-     * tracking_state,title,order_id,tag,checkpoints,
-     * checkpoint_time, message, country_name
-     * Defaults: none, Example: title,order_id
+     * List of fields to include in the response. Use comma for multiple values. Fields to include:slug,created_at,
+     * checkpoint_time,city,coordinates,country_iso3,
+     * country_name,message,state,tag,zip
+     * Default: none, Example: city,tag
      */
     private String fields;
     /**

@@ -1,9 +1,11 @@
 package com.aftership.sdk;
 
+import com.aftership.sdk.endpoint.CheckpointEndpoint;
 import com.aftership.sdk.endpoint.CourierEndpoint;
 import com.aftership.sdk.endpoint.TrackingEndpoint;
 import com.aftership.sdk.error.AftershipException;
 import com.aftership.sdk.error.ErrorMessage;
+import com.aftership.sdk.impl.CheckpointImpl;
 import com.aftership.sdk.impl.CourierImpl;
 import com.aftership.sdk.impl.TrackingImpl;
 import com.aftership.sdk.lib.StrUtil;
@@ -19,15 +21,16 @@ public class AfterShip {
     public static final String DEFAULT_ENDPOINT = "https://api.aftership.com/v4";
     public static final String DEFAULT_USER_AGENT = "aftership-sdk-java";
 
-    private String apiKey;
-    private String endpoint;
-    private String userAgentPrefix;
+    private final String apiKey;
+    private final String endpoint;
+    private final String userAgentPrefix;
 
     @Setter
     private RateLimit rateLimit;
 
-    private CourierEndpoint courierEndpoint;
-    private TrackingEndpoint trackingEndpoint;
+    private final CourierEndpoint courierEndpoint;
+    private final TrackingEndpoint trackingEndpoint;
+    private final CheckpointEndpoint checkpointEndpoint;
 
     public AfterShip(String apiKey) {
         this(apiKey, null);
@@ -60,6 +63,7 @@ public class AfterShip {
         // Endpoints
         this.courierEndpoint = new CourierImpl(request);
         this.trackingEndpoint = new TrackingImpl(request);
+        this.checkpointEndpoint = new CheckpointImpl(request);
     }
 
 }

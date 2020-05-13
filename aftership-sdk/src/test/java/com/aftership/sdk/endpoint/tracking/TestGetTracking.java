@@ -8,6 +8,7 @@ import com.aftership.sdk.lib.JsonUtil;
 import com.aftership.sdk.model.tracking.*;
 import com.aftership.sdk.rest.DataEntity;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 
 public class TestGetTracking {
     public static MockWebServer server;
@@ -46,8 +47,13 @@ public class TestGetTracking {
         Assertions.assertEquals("InfoReceived", entity.getData().getTracking()
                 .getCheckpoints().get(0).getTag(), "tag mismatch.");
 
+        RecordedRequest recordedRequest = server.takeRequest();
+        Assertions.assertEquals("GET", recordedRequest.getMethod(), "Method mismatch.");
+
+        //output
         TestUtil.printResponse(afterShip, entity);
-        System.out.println(server.takeRequest().getPath());
+        System.out.println("Path: " + recordedRequest.getPath());
+        System.out.println("RequestBody: " + recordedRequest.getBody().readUtf8());
     }
 
 }

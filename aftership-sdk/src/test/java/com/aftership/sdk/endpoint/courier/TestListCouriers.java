@@ -20,7 +20,7 @@ public class TestListCouriers {
     @BeforeAll
     static void setUp() throws IOException {
         server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson("ListCouriers.json")));
+        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson("courier/ListCouriersResult.json")));
         server.start();
     }
 

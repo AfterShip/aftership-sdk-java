@@ -21,7 +21,7 @@ public class TestDetectCouriers {
     @BeforeAll
     static void setUp() throws IOException {
         server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson("DetectCouriers.json")));
+        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson("courier/DetectCouriersResult.json")));
         server.start();
     }
 
@@ -36,7 +36,7 @@ public class TestDetectCouriers {
         option.setEndpoint(String.format(TestUtil.ENDPOINT_FORMAT, server.getPort()));
         AfterShip afterShip = new AfterShip(TestUtil.YOUR_API_KEY, option);
 
-        String requestBody = TestUtil.getJson("CourierDetectRequest.json");
+        String requestBody = TestUtil.getJson("courier/CourierDetectRequest.json");
         CourierDetectRequest courierDetectRequest = JsonUtil.create().fromJson(requestBody, CourierDetectRequest.class);
         DataEntity<CourierDetectList> entity = afterShip.getCourierEndpoint().detectCouriers(courierDetectRequest);
 

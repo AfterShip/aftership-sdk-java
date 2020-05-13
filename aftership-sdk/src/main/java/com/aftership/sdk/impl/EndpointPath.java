@@ -15,4 +15,6 @@ public class EndpointPath {
     public static final String UPDATE_RETRACK = TRACKING;
     public static final String UPDATE_RETRACK_ACTION = "/retrack";
 
+    public static final String GET_LAST_CHECKPOINT = "/last_checkpoint";
+
 }

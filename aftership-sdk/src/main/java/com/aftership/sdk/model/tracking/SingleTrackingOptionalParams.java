@@ -2,13 +2,14 @@ package com.aftership.sdk.model.tracking;
 
 import java.util.HashMap;
 import java.util.Map;
+import com.aftership.sdk.endpoint.StringMap;
 import lombok.Data;
 
 /**
  * SingleTrackingOptionalParams is the optional parameters in single tracking query
  */
 @Data
-public class SingleTrackingOptionalParams {
+public class SingleTrackingOptionalParams implements StringMap {
     /**
      * The postal code of receiver's address. Required by some couriers, such asdeutsch-post
      */
@@ -46,6 +47,7 @@ public class SingleTrackingOptionalParams {
 
     /**
      * Generate a Map dictionary.
+     *
      * @return Map<String, String>
      */
     public Map<String, String> toMap() {

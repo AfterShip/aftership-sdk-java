@@ -1,6 +1,5 @@
 package com.aftership.sdk.impl;
 
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
@@ -53,16 +52,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             return errorOfSingleTrackingParam.getValue();
         }
 
-        Map<String, String> query = null;
-        if (param.getOptionalParams() != null) {
-            query = param.getOptionalParams().toMap();
-        }
-        if (optionalParams != null) {
-            if (query == null) {
-                query = new HashMap<>();
-            }
-            query.putAll(optionalParams.toMap());
-        }
+        Map<String, String> query = this.merge(param.getOptionalParams(), optionalParams);
 
         String path = UrlUtil.buildTrackingPath(param.getId(), param.getSlug(), param.getTrackingNumber(),
                 query, EndpointPath.GET_TRACKING, null);
@@ -107,16 +97,6 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         // 'new Object()' for error of 'method POST must have a request body'
         return this.request.makeRequest(new RequestConfig(HttpMethod.POST, path),
                 new Object(), SingleTracking.class);
-    }
-
-    private Map.Entry<Boolean, DataEntity<SingleTracking>> errorOfSingleTrackingParam(SingleTrackingParam param) {
-        if (param == null || (StrUtil.isBlank(param.getId())
-                && StrUtil.isBlank(param.getSlug())
-                && StrUtil.isBlank(param.getTrackingNumber()))) {
-            return new AbstractMap.SimpleEntry<>(true, ResponseEntity.makeError(AftershipError.make(
-                    ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_REQUIRED_TRACKING_ID)));
-        }
-        return new AbstractMap.SimpleEntry<>(false, null);
     }
 
 }

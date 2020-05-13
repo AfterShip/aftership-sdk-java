@@ -1,6 +1,7 @@
 package com.aftership.sdk.lib;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.Map;
@@ -23,6 +24,24 @@ public final class UrlUtil {
         }
         try {
             return URLEncoder.encode(value, charset);
+        } catch (UnsupportedEncodingException e) {
+            return StrUtil.EMPTY;
+        }
+    }
+
+    public static String decode(String value) {
+        return decode(value, UTF8);
+    }
+
+    public static String decode(String value, String charset) {
+        if (StrUtil.isBlank(value)) {
+            return StrUtil.EMPTY;
+        }
+        if (StrUtil.isBlank(charset)) {
+            charset = UTF8;
+        }
+        try {
+            return URLDecoder.decode(value, charset);
         } catch (UnsupportedEncodingException e) {
             return StrUtil.EMPTY;
         }
