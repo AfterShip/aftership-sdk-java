@@ -3,7 +3,7 @@ package com.aftership.sdk.model.notification;
 import lombok.Data;
 
 @Data
-public class SingleNotification {
+public class NotificationWrapper {
     /**
      * Hash describes the notification information.
      */

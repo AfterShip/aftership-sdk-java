@@ -1,7 +1,6 @@
 package com.aftership.sdk.model.tracking;
 
 import java.util.Map;
-import com.aftership.sdk.model.annotation.RequiredField;
 import lombok.Data;
 
 /**
@@ -26,7 +25,6 @@ public class NewTracking {
      * _ (Underscore)
      * / (Slash)
      */
-    @RequiredField
     private String trackingNumber;
     /**
      * Unique code of each courier. Provide a single courier or array for a list of couriers. If you do not specify a

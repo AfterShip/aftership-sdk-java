@@ -8,7 +8,7 @@ import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.lib.UrlUtil;
-import com.aftership.sdk.model.notification.SingleNotification;
+import com.aftership.sdk.model.notification.NotificationWrapper;
 import com.aftership.sdk.model.tracking.SingleTrackingParam;
 import com.aftership.sdk.rest.DataEntity;
 import okhttp3.mockwebserver.MockWebServer;
@@ -37,7 +37,7 @@ public class TestGetNotification {
         SingleTrackingParam param = new SingleTrackingParam();
         param.setId("100");
 
-        DataEntity<SingleNotification> entity = afterShip.getNotificationEndpoint().getNotification(param);
+        DataEntity<NotificationWrapper> entity = afterShip.getNotificationEndpoint().getNotification(param);
 
         //assert
         Assertions.assertFalse(entity.hasError(), "No errors in response.");

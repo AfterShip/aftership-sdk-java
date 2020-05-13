@@ -21,5 +21,7 @@ public class EndpointPath {
     public static final String GET_NOTIFICATION = NOTIFICATION;
     public static final String ADD_NOTIFICATION = NOTIFICATION;
     public static final String ADD_NOTIFICATION_ACTION = "add";
+    public static final String REMOVE_NOTIFICATION = NOTIFICATION;
+    public static final String REMOVE_NOTIFICATION_ACTION = "remove";
 
 }
