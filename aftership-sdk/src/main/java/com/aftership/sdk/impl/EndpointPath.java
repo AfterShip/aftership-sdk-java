@@ -17,4 +17,7 @@ public class EndpointPath {
 
     public static final String GET_LAST_CHECKPOINT = "/last_checkpoint";
 
+    public static final String NOTIFICATION = "/notifications";
+    public static final String GET_NOTIFICATION = NOTIFICATION;
+
 }

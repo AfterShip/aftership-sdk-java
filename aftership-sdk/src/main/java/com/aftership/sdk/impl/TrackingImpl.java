@@ -33,9 +33,9 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     @Override
     public DataEntity<SingleTracking> deleteTracking(SingleTrackingParam param) {
-        Map.Entry<Boolean, DataEntity<SingleTracking>> errorOfSingleTrackingParam = errorOfSingleTrackingParam(param);
-        if (errorOfSingleTrackingParam.getKey()) {
-            return errorOfSingleTrackingParam.getValue();
+        Map.Entry<Boolean, DataEntity<SingleTracking>> error = errorOfSingleTrackingParam(param);
+        if (error.getKey()) {
+            return error.getValue();
         }
 
         String path = UrlUtil.buildTrackingPath(param.getId(), param.getSlug(), param.getTrackingNumber(),
@@ -47,9 +47,9 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     @Override
     public DataEntity<SingleTracking> getTracking(SingleTrackingParam param, GetTrackingParams optionalParams) {
-        Map.Entry<Boolean, DataEntity<SingleTracking>> errorOfSingleTrackingParam = errorOfSingleTrackingParam(param);
-        if (errorOfSingleTrackingParam.getKey()) {
-            return errorOfSingleTrackingParam.getValue();
+        Map.Entry<Boolean, DataEntity<SingleTracking>> error = errorOfSingleTrackingParam(param);
+        if (error.getKey()) {
+            return error.getValue();
         }
 
         Map<String, String> query = this.merge(param.getOptionalParams(), optionalParams);
@@ -72,9 +72,9 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     @Override
     public DataEntity<SingleTracking> updateTracking(SingleTrackingParam param, UpdateTrackingRequest update) {
-        Map.Entry<Boolean, DataEntity<SingleTracking>> errorOfSingleTrackingParam = errorOfSingleTrackingParam(param);
-        if (errorOfSingleTrackingParam.getKey()) {
-            return errorOfSingleTrackingParam.getValue();
+        Map.Entry<Boolean, DataEntity<SingleTracking>> error = errorOfSingleTrackingParam(param);
+        if (error.getKey()) {
+            return error.getValue();
         }
 
         String path = UrlUtil.buildTrackingPath(param.getId(), param.getSlug(), param.getTrackingNumber(),
@@ -86,9 +86,9 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     @Override
     public DataEntity<SingleTracking> reTrack(SingleTrackingParam param) {
-        Map.Entry<Boolean, DataEntity<SingleTracking>> errorOfSingleTrackingParam = errorOfSingleTrackingParam(param);
-        if (errorOfSingleTrackingParam.getKey()) {
-            return errorOfSingleTrackingParam.getValue();
+        Map.Entry<Boolean, DataEntity<SingleTracking>> error = errorOfSingleTrackingParam(param);
+        if (error.getKey()) {
+            return error.getValue();
         }
 
         String path = UrlUtil.buildTrackingPath(param.getId(), param.getSlug(), param.getTrackingNumber(),

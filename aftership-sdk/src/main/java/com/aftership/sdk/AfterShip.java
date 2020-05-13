@@ -2,11 +2,13 @@ package com.aftership.sdk;
 
 import com.aftership.sdk.endpoint.CheckpointEndpoint;
 import com.aftership.sdk.endpoint.CourierEndpoint;
+import com.aftership.sdk.endpoint.NotificationEndpoint;
 import com.aftership.sdk.endpoint.TrackingEndpoint;
 import com.aftership.sdk.error.AftershipException;
 import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.impl.CheckpointImpl;
 import com.aftership.sdk.impl.CourierImpl;
+import com.aftership.sdk.impl.NotificationImpl;
 import com.aftership.sdk.impl.TrackingImpl;
 import com.aftership.sdk.lib.StrUtil;
 import com.aftership.sdk.model.AftershipOption;
@@ -31,6 +33,7 @@ public class AfterShip {
     private final CourierEndpoint courierEndpoint;
     private final TrackingEndpoint trackingEndpoint;
     private final CheckpointEndpoint checkpointEndpoint;
+    private final NotificationEndpoint notificationEndpoint;
 
     public AfterShip(String apiKey) {
         this(apiKey, null);
@@ -64,6 +67,7 @@ public class AfterShip {
         this.courierEndpoint = new CourierImpl(request);
         this.trackingEndpoint = new TrackingImpl(request);
         this.checkpointEndpoint = new CheckpointImpl(request);
+        this.notificationEndpoint = new NotificationImpl(request);
     }
 
 }

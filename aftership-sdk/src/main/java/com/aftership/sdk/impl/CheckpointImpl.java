@@ -1,6 +1,5 @@
 package com.aftership.sdk.impl;
 
-import java.util.HashMap;
 import java.util.Map;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.CheckpointEndpoint;
@@ -25,9 +24,9 @@ public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpo
     @Override
     public DataEntity<LastCheckpoint> getLastCheckpoint(SingleTrackingParam param,
                                                         GetLastCheckpointParam optionalParams) {
-        Map.Entry<Boolean, DataEntity<LastCheckpoint>> errorOfSingleTrackingParam = errorOfSingleTrackingParam(param);
-        if (errorOfSingleTrackingParam.getKey()) {
-            return errorOfSingleTrackingParam.getValue();
+        Map.Entry<Boolean, DataEntity<LastCheckpoint>> error = errorOfSingleTrackingParam(param);
+        if (error.getKey()) {
+            return error.getValue();
         }
 
         Map<String, String> query = this.merge(param.getOptionalParams(), optionalParams);
