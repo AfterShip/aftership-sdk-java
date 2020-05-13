@@ -44,4 +44,12 @@ public interface TrackingEndpoint {
      * @return DataEntity<SingleTracking>
      */
     DataEntity<SingleTracking> updateTracking(SingleTrackingParam param, UpdateTrackingRequest update);
+
+    /**
+     * ReTrack an expired tracking once. Max. 3 times per tracking.
+     * @param param SingleTrackingParam
+     * @return DataEntity<SingleTracking>
+     */
+    DataEntity<SingleTracking> reTrack(SingleTrackingParam param);
+
 }

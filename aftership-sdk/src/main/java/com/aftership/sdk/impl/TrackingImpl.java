@@ -1,5 +1,6 @@
 package com.aftership.sdk.impl;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
@@ -33,11 +34,9 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     @Override
     public DataEntity<SingleTracking> deleteTracking(SingleTrackingParam param) {
-        if (param == null || (StrUtil.isBlank(param.getId())
-                && StrUtil.isBlank(param.getSlug())
-                && StrUtil.isBlank(param.getTrackingNumber()))) {
-            return ResponseEntity.makeError(AftershipError.make(
-                    ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_REQUIRED_TRACKING_ID));
+        Map.Entry<Boolean, DataEntity<SingleTracking>> errorOfSingleTrackingParam = errorOfSingleTrackingParam(param);
+        if (errorOfSingleTrackingParam.getKey()) {
+            return errorOfSingleTrackingParam.getValue();
         }
 
         String path = UrlUtil.buildTrackingPath(param.getId(), param.getSlug(), param.getTrackingNumber(),
@@ -49,6 +48,11 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     @Override
     public DataEntity<SingleTracking> getTracking(SingleTrackingParam param, GetTrackingParams optionalParams) {
+        Map.Entry<Boolean, DataEntity<SingleTracking>> errorOfSingleTrackingParam = errorOfSingleTrackingParam(param);
+        if (errorOfSingleTrackingParam.getKey()) {
+            return errorOfSingleTrackingParam.getValue();
+        }
+
         Map<String, String> query = null;
         if (param.getOptionalParams() != null) {
             query = param.getOptionalParams().toMap();
@@ -78,11 +82,9 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     @Override
     public DataEntity<SingleTracking> updateTracking(SingleTrackingParam param, UpdateTrackingRequest update) {
-        if (param == null || (StrUtil.isBlank(param.getId())
-                && StrUtil.isBlank(param.getSlug())
-                && StrUtil.isBlank(param.getTrackingNumber()))) {
-            return ResponseEntity.makeError(AftershipError.make(
-                    ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_REQUIRED_TRACKING_ID));
+        Map.Entry<Boolean, DataEntity<SingleTracking>> errorOfSingleTrackingParam = errorOfSingleTrackingParam(param);
+        if (errorOfSingleTrackingParam.getKey()) {
+            return errorOfSingleTrackingParam.getValue();
         }
 
         String path = UrlUtil.buildTrackingPath(param.getId(), param.getSlug(), param.getTrackingNumber(),
@@ -91,4 +93,30 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         return this.request.makeRequest(new RequestConfig(HttpMethod.PUT, path),
                 update, SingleTracking.class);
     }
+
+    @Override
+    public DataEntity<SingleTracking> reTrack(SingleTrackingParam param) {
+        Map.Entry<Boolean, DataEntity<SingleTracking>> errorOfSingleTrackingParam = errorOfSingleTrackingParam(param);
+        if (errorOfSingleTrackingParam.getKey()) {
+            return errorOfSingleTrackingParam.getValue();
+        }
+
+        String path = UrlUtil.buildTrackingPath(param.getId(), param.getSlug(), param.getTrackingNumber(),
+                null, EndpointPath.UPDATE_RETRACK, EndpointPath.UPDATE_RETRACK_ACTION);
+
+        // 'new Object()' for error of 'method POST must have a request body'
+        return this.request.makeRequest(new RequestConfig(HttpMethod.POST, path),
+                new Object(), SingleTracking.class);
+    }
+
+    private Map.Entry<Boolean, DataEntity<SingleTracking>> errorOfSingleTrackingParam(SingleTrackingParam param) {
+        if (param == null || (StrUtil.isBlank(param.getId())
+                && StrUtil.isBlank(param.getSlug())
+                && StrUtil.isBlank(param.getTrackingNumber()))) {
+            return new AbstractMap.SimpleEntry<>(true, ResponseEntity.makeError(AftershipError.make(
+                    ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_REQUIRED_TRACKING_ID)));
+        }
+        return new AbstractMap.SimpleEntry<>(false, null);
+    }
+
 }

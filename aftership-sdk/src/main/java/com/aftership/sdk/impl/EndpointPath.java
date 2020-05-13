@@ -12,5 +12,7 @@ public class EndpointPath {
     public static final String GET_TRACKING = TRACKING;
     public static final String GET_TRACKINGS = TRACKING;
     public static final String UPDATE_TRACKING = TRACKING;
+    public static final String UPDATE_RETRACK = TRACKING;
+    public static final String UPDATE_RETRACK_ACTION = "/retrack";
 
 }
