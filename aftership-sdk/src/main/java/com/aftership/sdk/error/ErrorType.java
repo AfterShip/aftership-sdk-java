@@ -1,18 +1,36 @@
 package com.aftership.sdk.error;
 
+/**
+ * Types of errors
+ *
+ * @author chenjunbiao
+ */
 public enum ErrorType {
-    ConstructorError("ConstructorError"),
-    HandlerError("HandlerError"),
-    InternalError("InternalError");
+  /** Constructor Error */
+  ConstructorError("ConstructorError"),
+  /** Handler Error */
+  HandlerError("HandlerError"),
+  /** Internal Error */
+  InternalError("InternalError");
 
-    private String name;
+  /** name of ErrorType */
+  private String name;
 
-    ErrorType(String name) {
-        this.name = name;
-    }
+  /**
+   * Constructor
+   *
+   * @param name get name of ErrorType
+   */
+  ErrorType(String name) {
+    this.name = name;
+  }
 
-    public String getName() {
-        return name;
-    }
-
+  /**
+   * get name of ErrorType
+   *
+   * @return name
+   */
+  public String getName() {
+    return name;
+  }
 }

@@ -5,6 +5,8 @@ import lombok.Data;
 
 /**
  * NewTracking provides parameters for new Tracking API request
+ *
+ * @author chenjunbiao
  */
 @Data
 public class NewTracking {

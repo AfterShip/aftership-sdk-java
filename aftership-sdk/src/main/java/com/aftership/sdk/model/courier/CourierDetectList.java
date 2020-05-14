@@ -6,21 +6,23 @@ import lombok.Data;
 
 /**
  * The response of couriers detect request
+ *
+ * @author chenjunbiao
  */
 @Data
 public class CourierDetectList {
-    /**
-     * Total number of matched couriers
-     */
-    private Integer total;
-    /**
-     * Hash describes the tracking information.
-     * <p>Hash of Tracking Object</p>
-     */
-    private Tracking tracking;
-    /**
-     * A list of matched couriers based on tracking number format.
-     * <p>Array of Courier Object</p>
-     */
-    private List<Courier> couriers;
+  /** Total number of matched couriers */
+  private Integer total;
+  /**
+   * Hash describes the tracking information.
+   *
+   * <p>Hash of Tracking Object
+   */
+  private Tracking tracking;
+  /**
+   * A list of matched couriers based on tracking number format.
+   *
+   * <p>Array of Courier Object
+   */
+  private List<Courier> couriers;
 }

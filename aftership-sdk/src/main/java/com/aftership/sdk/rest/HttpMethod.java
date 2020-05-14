@@ -1,19 +1,39 @@
 package com.aftership.sdk.rest;
 
+/**
+ * Method of http request
+ *
+ * @author chenjunbiao
+ */
 public enum HttpMethod {
-    POST("POST"),
-    PUT("PUT"),
-    PATCH("PATCH"),
-    GET("GET"),
-    DELETE("DELETE");
+  /** POST Method of http request */
+  POST("POST"),
+  /** PUT Method of http request */
+  PUT("PUT"),
+  /** PATCH Method of http request */
+  PATCH("PATCH"),
+  /** GET Method of http request */
+  GET("GET"),
+  /** DELETE Method of http request */
+  DELETE("DELETE");
 
-    private String name;
+  private String name;
 
-    HttpMethod(String name) {
-        this.name = name;
-    }
+  /**
+   * Constructor
+   *
+   * @param name of method
+   */
+  HttpMethod(String name) {
+    this.name = name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  /**
+   * Name of Method
+   *
+   * @return name
+   */
+  public String getName() {
+    return name;
+  }
 }

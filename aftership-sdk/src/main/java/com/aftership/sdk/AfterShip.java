@@ -18,56 +18,74 @@ import com.aftership.sdk.rest.ApiRequestImpl;
 import lombok.Getter;
 import lombok.Setter;
 
+/** Entry class Of API function */
 @Getter
 public class AfterShip {
-    public static final String DEFAULT_ENDPOINT = "https://api.aftership.com/v4";
-    public static final String DEFAULT_USER_AGENT = "aftership-sdk-java";
+  private static final String DEFAULT_ENDPOINT = "https://api.aftership.com/v4";
+  private static final String DEFAULT_USER_AGENT = "aftership-sdk-java";
 
-    private final String apiKey;
-    private final String endpoint;
-    private final String userAgentPrefix;
+  /** apiKey parameter in API request */
+  private final String apiKey;
+  /** endpoint parameter in API request */
+  private final String endpoint;
+  /** userAgentPrefix parameter in API request */
+  private final String userAgentPrefix;
 
-    @Setter
-    private RateLimit rateLimit;
+  /** Status of Rate Limit */
+  @Setter private RateLimit rateLimit;
 
-    private final CourierEndpoint courierEndpoint;
-    private final TrackingEndpoint trackingEndpoint;
-    private final CheckpointEndpoint checkpointEndpoint;
-    private final NotificationEndpoint notificationEndpoint;
+  /** Endpoint of Courier */
+  private final CourierEndpoint courierEndpoint;
+  /** Endpoint of Tracking */
+  private final TrackingEndpoint trackingEndpoint;
+  /** Endpoint of Checkpoint */
+  private final CheckpointEndpoint checkpointEndpoint;
+  /** Endpoint of Notification */
+  private final NotificationEndpoint notificationEndpoint;
 
-    public AfterShip(String apiKey) {
-        this(apiKey, null);
+  /**
+   * Constructor
+   *
+   * @param apiKey apiKey parameter in API request
+   */
+  public AfterShip(String apiKey) {
+    this(apiKey, null);
+  }
+
+  /**
+   * Constructor
+   *
+   * @param apiKey apiKey parameter in API request
+   * @param options Optional parameters for API request
+   */
+  public AfterShip(String apiKey, AftershipOption options) {
+    if (StrUtil.isBlank(apiKey)) {
+      throw new AftershipException(ErrorMessage.CONSTRUCTOR_INVALID_API_KEY);
     }
 
-    public AfterShip(String apiKey, AftershipOption options) {
-        if (StrUtil.isBlank(apiKey)) {
-            throw new AftershipException(ErrorMessage.CONSTRUCTOR_INVALID_API_KEY);
-        }
+    this.apiKey = apiKey;
 
-        this.apiKey = apiKey;
-
-        // Setup
-        if (options != null) {
-            this.endpoint = StrUtil.isNotBlank(options.getEndpoint())
-                    ? options.getEndpoint()
-                    : DEFAULT_ENDPOINT;
-            this.userAgentPrefix = StrUtil.isNotBlank(options.getUserAgentPrefix())
-                    ? options.getUserAgentPrefix()
-                    : DEFAULT_USER_AGENT;
-        } else {
-            this.endpoint = DEFAULT_ENDPOINT;
-            this.userAgentPrefix = DEFAULT_USER_AGENT;
-        }
-
-        this.rateLimit = new RateLimit(null, null, null);
-
-        final ApiRequest request = new ApiRequestImpl(this);
-
-        // Endpoints
-        this.courierEndpoint = new CourierImpl(request);
-        this.trackingEndpoint = new TrackingImpl(request);
-        this.checkpointEndpoint = new CheckpointImpl(request);
-        this.notificationEndpoint = new NotificationImpl(request);
+    // Setup
+    if (options != null) {
+      this.endpoint =
+          StrUtil.isNotBlank(options.getEndpoint()) ? options.getEndpoint() : DEFAULT_ENDPOINT;
+      this.userAgentPrefix =
+          StrUtil.isNotBlank(options.getUserAgentPrefix())
+              ? options.getUserAgentPrefix()
+              : DEFAULT_USER_AGENT;
+    } else {
+      this.endpoint = DEFAULT_ENDPOINT;
+      this.userAgentPrefix = DEFAULT_USER_AGENT;
     }
 
+    this.rateLimit = new RateLimit(null, null, null);
+
+    final ApiRequest request = new ApiRequestImpl(this);
+
+    // Endpoints
+    this.courierEndpoint = new CourierImpl(request);
+    this.trackingEndpoint = new TrackingImpl(request);
+    this.checkpointEndpoint = new CheckpointImpl(request);
+    this.notificationEndpoint = new NotificationImpl(request);
+  }
 }

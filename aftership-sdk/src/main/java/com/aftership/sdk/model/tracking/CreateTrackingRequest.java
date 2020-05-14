@@ -4,11 +4,11 @@ import lombok.Data;
 
 /**
  * Request body for CreateTracking
+ *
+ * @author chenjunbiao
  */
 @Data
 public class CreateTrackingRequest {
-    /**
-     * NewTracking Object
-     */
-    private NewTracking tracking;
+  /** NewTracking Object */
+  private NewTracking tracking;
 }

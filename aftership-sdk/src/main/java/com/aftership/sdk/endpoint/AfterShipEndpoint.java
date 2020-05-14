@@ -14,40 +14,62 @@ import com.aftership.sdk.rest.ResponseEntity;
 
 /**
  * AfterShip Endpoint's base class
+ *
+ * @author chenjunbiao
  */
 public abstract class AfterShipEndpoint {
-    /**
-     * ApiRequest object
-     */
-    protected final ApiRequest request;
+  /** ApiRequest object */
+  protected final ApiRequest request;
 
-    public AfterShipEndpoint(ApiRequest request) {
-        this.request = request;
+  /**
+   * constructor
+   *
+   * @param request ApiRequest Object
+   */
+  public AfterShipEndpoint(ApiRequest request) {
+    this.request = request;
+  }
+
+  /**
+   * SingleTrackingParam Error Checking
+   *
+   * @param param SingleTrackingParam object
+   * @param <T> Entity class
+   * @return checking result
+   */
+  protected <T> Map.Entry<Boolean, DataEntity<T>> errorOfSingleTrackingParam(
+      SingleTrackingParam param) {
+    if (param == null
+        || (StrUtil.isBlank(param.getId())
+            && StrUtil.isBlank(param.getSlug())
+            && StrUtil.isBlank(param.getTrackingNumber()))) {
+      return new AbstractMap.SimpleEntry<>(
+          true,
+          ResponseEntity.makeError(
+              AftershipError.make(
+                  ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_REQUIRED_TRACKING_ID)));
+    }
+    return new AbstractMap.SimpleEntry<>(false, null);
+  }
+
+  /**
+   * Merge multiple StringMap interfaces into a HashMap
+   *
+   * @param items Merge multiple StringMap interfaces
+   * @return Map
+   */
+  protected Map<String, String> merge(StringMap... items) {
+    if (items == null || items.length == 0) {
+      return new HashMap<>();
     }
 
-    protected <T> Map.Entry<Boolean, DataEntity<T>> errorOfSingleTrackingParam(SingleTrackingParam param) {
-        if (param == null || (StrUtil.isBlank(param.getId())
-                && StrUtil.isBlank(param.getSlug())
-                && StrUtil.isBlank(param.getTrackingNumber()))) {
-            return new AbstractMap.SimpleEntry<>(true, ResponseEntity.makeError(AftershipError.make(
-                    ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_REQUIRED_TRACKING_ID)));
-        }
-        return new AbstractMap.SimpleEntry<>(false, null);
+    Map<String, String> query = new HashMap<>();
+    for (StringMap item : items) {
+      if (item != null) {
+        query.putAll(item.toMap());
+      }
     }
 
-    protected Map<String, String> merge(StringMap... items) {
-        if (items == null || items.length == 0) {
-            return new HashMap<>();
-        }
-
-        Map<String, String> query = new HashMap<>();
-        for (StringMap item : items) {
-            if (item != null) {
-                query.putAll(item.toMap());
-            }
-        }
-
-        return query;
-    }
-
+    return query;
+  }
 }

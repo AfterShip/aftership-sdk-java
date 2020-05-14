@@ -14,27 +14,47 @@ import com.aftership.sdk.rest.RequestConfig;
 
 /**
  * CheckpointEndpoint's implementation class
+ *
+ * @author chenjunbiao
  */
 public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpoint {
 
-    public CheckpointImpl(ApiRequest request) {
-        super(request);
+  /**
+   * Constructor
+   *
+   * @param request ApiRequest object
+   */
+  public CheckpointImpl(ApiRequest request) {
+    super(request);
+  }
+
+  /**
+   * getLastCheckpoint Return the tracking information of the last checkpoint of a single tracking.
+   *
+   * @param param SingleTrackingParam
+   * @param optionalParams GetLastCheckpointParam
+   * @return DataEntity<LastCheckpoint>
+   */
+  @Override
+  public DataEntity<LastCheckpoint> getLastCheckpoint(
+      SingleTrackingParam param, GetLastCheckpointParam optionalParams) {
+    Map.Entry<Boolean, DataEntity<LastCheckpoint>> error = errorOfSingleTrackingParam(param);
+    if (error.getKey()) {
+      return error.getValue();
     }
 
-    @Override
-    public DataEntity<LastCheckpoint> getLastCheckpoint(SingleTrackingParam param,
-                                                        GetLastCheckpointParam optionalParams) {
-        Map.Entry<Boolean, DataEntity<LastCheckpoint>> error = errorOfSingleTrackingParam(param);
-        if (error.getKey()) {
-            return error.getValue();
-        }
+    Map<String, String> query = this.merge(param.getOptionalParams(), optionalParams);
 
-        Map<String, String> query = this.merge(param.getOptionalParams(), optionalParams);
+    String path =
+        UrlUtil.buildTrackingPath(
+            param.getId(),
+            param.getSlug(),
+            param.getTrackingNumber(),
+            query,
+            EndpointPath.GET_LAST_CHECKPOINT,
+            null);
 
-        String path = UrlUtil.buildTrackingPath(param.getId(), param.getSlug(), param.getTrackingNumber(),
-                query, EndpointPath.GET_LAST_CHECKPOINT, null);
-
-        return this.request.makeRequest(new RequestConfig(HttpMethod.GET, path),
-                null, LastCheckpoint.class);
-    }
+    return this.request.makeRequest(
+        new RequestConfig(HttpMethod.GET, path), null, LastCheckpoint.class);
+  }
 }

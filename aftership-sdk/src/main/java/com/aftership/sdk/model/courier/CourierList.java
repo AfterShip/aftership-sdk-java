@@ -5,16 +5,14 @@ import lombok.Data;
 
 /**
  * The response of courier list
+ *
+ * @author chenjunbiao
  */
 @Data
 public class CourierList {
-    /**
-     * Total number of couriers supported by AfterShip.
-     */
-    private Integer total;
+  /** Total number of couriers supported by AfterShip. */
+  private Integer total;
 
-    /**
-     * Array of Hash describes the couriers information.
-     */
-    private List<Courier> couriers;
+  /** Array of Hash describes the couriers information. */
+  private List<Courier> couriers;
 }

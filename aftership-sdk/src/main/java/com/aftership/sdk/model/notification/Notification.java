@@ -4,15 +4,13 @@ import lombok.Data;
 
 /**
  * Hash describes the notification information.
+ *
+ * @author chenjunbiao
  */
 @Data
 public class Notification {
-    /**
-     * Email address(es) to receive email notifications.
-     */
-    private String[] emails;
-    /**
-     * Phone number(s) to receive sms notifications.
-     */
-    private String[] smses;
+  /** Email address(es) to receive email notifications. */
+  private String[] emails;
+  /** Phone number(s) to receive sms notifications. */
+  private String[] smses;
 }

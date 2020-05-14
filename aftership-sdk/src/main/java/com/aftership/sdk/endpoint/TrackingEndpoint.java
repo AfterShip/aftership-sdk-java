@@ -5,51 +5,60 @@ import com.aftership.sdk.rest.DataEntity;
 
 /**
  * Endpoint provides the interface for all trackings API calls
+ *
+ * @author chenjunbiao
  */
 public interface TrackingEndpoint {
 
-    /**
-     * Create a tracking.
-     * @param request CreateTrackingRequest
-     * @return DataEntity<SingleTracking>
-     */
-    DataEntity<SingleTracking> createTracking(CreateTrackingRequest request);
+  /**
+   * Create a tracking.
+   *
+   * @param request CreateTrackingRequest
+   * @return DataEntity<SingleTracking>
+   */
+  DataEntity<SingleTracking> createTracking(CreateTrackingRequest request);
 
-    /**
-     * Delete a tracking.
-     * @param param SingleTrackingParam
-     * @return DataEntity<SingleTracking>
-     */
-    DataEntity<SingleTracking> deleteTracking(SingleTrackingParam param);
+  /**
+   * Delete a tracking.
+   *
+   * @param param SingleTrackingParam
+   * @return DataEntity<SingleTracking>
+   */
+  DataEntity<SingleTracking> deleteTracking(SingleTrackingParam param);
 
-    /**
-     * Get tracking results of multiple trackings.
-     * @param param SingleTrackingParam
-     * @param optionalParams GetTrackingParams
-     * @return DataEntity<SingleTracking>
-     */
-    DataEntity<SingleTracking> getTracking(SingleTrackingParam param, GetTrackingParams optionalParams);
+  /**
+   * Get tracking results of multiple trackings.
+   *
+   * @param param SingleTrackingParam
+   * @param optionalParams GetTrackingParams
+   * @return DataEntity<SingleTracking>
+   */
+  DataEntity<SingleTracking> getTracking(
+      SingleTrackingParam param, GetTrackingParams optionalParams);
 
-    /**
-     * GetTrackings Gets tracking results of multiple trackings.
-     * @param optionalParams MultiTrackingsParams
-     * @return DataEntity<MultiTrackingsData>
-     */
-    DataEntity<MultiTrackingsData> getTrackings(MultiTrackingsParams optionalParams);
+  /**
+   * GetTrackings Gets tracking results of multiple trackings.
+   *
+   * @param optionalParams MultiTrackingsParams
+   * @return DataEntity<MultiTrackingsData>
+   */
+  DataEntity<MultiTrackingsData> getTrackings(MultiTrackingsParams optionalParams);
 
-    /**
-     * UpdateTracking Updates a tracking.
-     * @param param SingleTrackingParam
-     * @param update UpdateTrackingRequest
-     * @return DataEntity<SingleTracking>
-     */
-    DataEntity<SingleTracking> updateTracking(SingleTrackingParam param, UpdateTrackingRequest update);
+  /**
+   * UpdateTracking Updates a tracking.
+   *
+   * @param param SingleTrackingParam
+   * @param update UpdateTrackingRequest
+   * @return DataEntity<SingleTracking>
+   */
+  DataEntity<SingleTracking> updateTracking(
+      SingleTrackingParam param, UpdateTrackingRequest update);
 
-    /**
-     * ReTrack an expired tracking once. Max. 3 times per tracking.
-     * @param param SingleTrackingParam
-     * @return DataEntity<SingleTracking>
-     */
-    DataEntity<SingleTracking> reTrack(SingleTrackingParam param);
-
+  /**
+   * ReTrack an expired tracking once. Max. 3 times per tracking.
+   *
+   * @param param SingleTrackingParam
+   * @return DataEntity<SingleTracking>
+   */
+  DataEntity<SingleTracking> reTrack(SingleTrackingParam param);
 }
