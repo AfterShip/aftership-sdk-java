@@ -2,11 +2,7 @@ package com.aftership.sdk.model.checkpoint;
 
 import lombok.Data;
 
-/**
- * LastCheckpoint is the last checkpoint API response
- *
- * @author chenjunbiao
- */
+/** LastCheckpoint is the last checkpoint API response */
 @Data
 public class LastCheckpoint {
   /** id of tracking */

@@ -5,11 +5,7 @@ import java.util.Map;
 import com.aftership.sdk.endpoint.StringMap;
 import lombok.Data;
 
-/**
- * GetTrackingParams is the additional parameters in single tracking query
- *
- * @author chenjunbiao
- */
+/** GetTrackingParams is the additional parameters in single tracking query */
 @Data
 public class GetTrackingParams implements StringMap {
   /**
@@ -26,7 +22,7 @@ public class GetTrackingParams implements StringMap {
   /**
    * Generate a Map dictionary.
    *
-   * @return Map<String, String>
+   * @return StringStringMap
    */
   @Override
   public Map<String, String> toMap() {

@@ -2,11 +2,7 @@ package com.aftership.sdk.lib;
 
 import java.util.UUID;
 
-/**
- * String's assistant method.
- *
- * @author chenjunbiao
- */
+/** String's assistant method. */
 public final class StrUtil {
 
   /** Empty String */

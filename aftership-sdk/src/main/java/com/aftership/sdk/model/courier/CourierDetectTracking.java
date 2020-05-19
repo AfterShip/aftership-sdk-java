@@ -3,11 +3,7 @@ package com.aftership.sdk.model.courier;
 import java.util.List;
 import lombok.Data;
 
-/**
- * The tracking object in couriers detect request
- *
- * @author chenjunbiao
- */
+/** The tracking object in couriers detect request */
 @Data
 public class CourierDetectTracking {
   /**

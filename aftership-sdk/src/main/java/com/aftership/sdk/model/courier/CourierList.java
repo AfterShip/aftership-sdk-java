@@ -3,11 +3,7 @@ package com.aftership.sdk.model.courier;
 import java.util.List;
 import lombok.Data;
 
-/**
- * The response of courier list
- *
- * @author chenjunbiao
- */
+/** The response of courier list */
 @Data
 public class CourierList {
   /** Total number of couriers supported by AfterShip. */

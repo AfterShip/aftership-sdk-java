@@ -6,11 +6,7 @@ import java.util.Map;
 import com.aftership.sdk.model.checkpoint.Checkpoint;
 import lombok.Data;
 
-/**
- * Tracking Object
- *
- * @author chenjunbiao
- */
+/** Tracking Object */
 @Data
 public class Tracking {
   /**
@@ -82,6 +78,10 @@ public class Tracking {
    * <p>String
    */
   private String slug;
+  /**
+   * Tracking number of a shipment.
+   */
+  private String trackingNumber;
   /**
    * Whether or not AfterShip will continue tracking the shipments. Value is false when tag (status)
    * is Delivered, Expired, or further updates for 30 days since last update.

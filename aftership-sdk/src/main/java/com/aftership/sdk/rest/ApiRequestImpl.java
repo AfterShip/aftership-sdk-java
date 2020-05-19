@@ -19,11 +19,7 @@ import com.aftership.sdk.model.Meta;
 import com.aftership.sdk.model.RateLimit;
 import okhttp3.*;
 
-/**
- * ApiRequest implementation class
- *
- * @author chenjunbiao
- */
+/** ApiRequest implementation class */
 public class ApiRequestImpl implements ApiRequest {
   private static final String RATE_LIMIT_RESET = "x-ratelimit-reset";
   private static final String RATE_LIMIT_LIMIT = "x-ratelimit-limit";
@@ -113,7 +109,11 @@ public class ApiRequestImpl implements ApiRequest {
 
       if (response.body() == null) {
         return ResponseEntity.makeError(
-            AftershipError.makeInternalError(entryRequestConfig(requestConfig)));
+            AftershipError.make(
+                ErrorType.HandlerError,
+                ErrorMessage.HANDLER_BODY_IS_NULL,
+                entryRequestConfig(requestConfig),
+                entryRequestHeaders(requestHeaders)));
       }
 
       String jsonBody =

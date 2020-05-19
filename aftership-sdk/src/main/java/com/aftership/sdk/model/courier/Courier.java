@@ -3,11 +3,7 @@ package com.aftership.sdk.model.courier;
 import java.util.List;
 import lombok.Data;
 
-/**
- * Courier Object
- *
- * @author chenjunbiao
- */
+/** Courier Object */
 @Data
 public class Courier {
   /** Unique code of courier */

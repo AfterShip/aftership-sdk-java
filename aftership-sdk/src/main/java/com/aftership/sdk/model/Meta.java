@@ -2,11 +2,7 @@ package com.aftership.sdk.model;
 
 import lombok.Data;
 
-/**
- * The meta key is used to communicate extra information about the response to the developer.
- *
- * @author chenjunbiao
- */
+/** The meta key is used to communicate extra information about the response to the developer. */
 @Data
 public class Meta {
   /** Coding of error */

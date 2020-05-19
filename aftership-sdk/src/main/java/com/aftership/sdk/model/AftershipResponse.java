@@ -5,7 +5,6 @@ import lombok.Data;
 /**
  * Encapsulation of the response after requesting Aftership's API interface
  *
- * @author chenjunbiao
  * @param <T> Some Class
  */
 @Data

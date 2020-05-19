@@ -3,10 +3,7 @@ package com.aftership.sdk.config;
 import java.util.Map;
 import com.aftership.sdk.lib.StrUtil;
 
-/**
- * Get configuration through environment variables
- * @author chenjunbiao
- */
+/** Get configuration through environment variables */
 public final class EnvGetter {
 
   /**

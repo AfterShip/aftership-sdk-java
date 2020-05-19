@@ -5,23 +5,19 @@ import com.aftership.sdk.model.courier.CourierDetectRequest;
 import com.aftership.sdk.model.courier.CourierList;
 import com.aftership.sdk.rest.DataEntity;
 
-/**
- * Endpoint provides the interface for all Courier API calls
- *
- * @author chenjunbiao
- */
+/** Endpoint provides the interface for all Courier API calls */
 public interface CourierEndpoint {
   /**
    * Return a list of couriers activated at your AfterShip account.
    *
-   * @return DataEntity<CourierList>
+   * @return DataEntity of CourierList
    */
   DataEntity<CourierList> listCouriers();
 
   /**
    * Return a list of all couriers.
    *
-   * @return DataEntity<CourierList>
+   * @return DataEntity of CourierList
    */
   DataEntity<CourierList> listAllCouriers();
 
@@ -30,7 +26,7 @@ public interface CourierEndpoint {
    * list of couriers.
    *
    * @param requestData CourierDetectRequest
-   * @return DataEntity<CourierDetectList>
+   * @return DataEntity of CourierDetectList
    */
   DataEntity<CourierDetectList> detectCouriers(CourierDetectRequest requestData);
 }

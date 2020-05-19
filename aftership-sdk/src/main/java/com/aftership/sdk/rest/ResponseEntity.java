@@ -7,7 +7,6 @@ import lombok.Getter;
 /**
  * Response Entity of API Request
  *
- * @author chenjunbiao
  * @param <T> Class of Response
  */
 @Getter

@@ -12,11 +12,7 @@ import com.aftership.sdk.rest.ApiRequest;
 import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.rest.ResponseEntity;
 
-/**
- * AfterShip Endpoint's base class
- *
- * @author chenjunbiao
- */
+/** AfterShip Endpoint's base class */
 public abstract class AfterShipEndpoint {
   /** ApiRequest object */
   protected final ApiRequest request;

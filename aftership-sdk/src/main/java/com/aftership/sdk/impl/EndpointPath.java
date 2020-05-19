@@ -1,10 +1,6 @@
 package com.aftership.sdk.impl;
 
-/**
- * Definition of Endpoint Path
- *
- * @author chenjunbiao
- */
+/** Definition of Endpoint Path */
 public class EndpointPath {
   public static final String COURIERS = "/couriers";
   public static final String LIST_COURIERS = COURIERS;
@@ -19,6 +15,8 @@ public class EndpointPath {
   public static final String UPDATE_TRACKING = TRACKING;
   public static final String UPDATE_RETRACK = TRACKING;
   public static final String UPDATE_RETRACK_ACTION = "retrack";
+  public static final String COMPLETE_TRACKING = TRACKING;
+  public static final String COMPLETE_TRACKING_ACTION = "mark-as-completed";
 
   public static final String GET_LAST_CHECKPOINT = "/last_checkpoint";
 

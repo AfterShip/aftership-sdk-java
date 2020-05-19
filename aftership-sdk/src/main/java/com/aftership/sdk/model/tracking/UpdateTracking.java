@@ -3,11 +3,7 @@ package com.aftership.sdk.model.tracking;
 import java.util.Map;
 import lombok.Data;
 
-/**
- * UpdateTracking represents an update to Tracking details
- *
- * @author chenjunbiao
- */
+/** UpdateTracking represents an update to Tracking details */
 @Data
 public class UpdateTracking {
   /**

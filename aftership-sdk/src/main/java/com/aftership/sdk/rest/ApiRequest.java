@@ -1,10 +1,6 @@
 package com.aftership.sdk.rest;
 
-/**
- * Request for Aftership's API interface
- *
- * @author chenjunbiao
- */
+/** Request for Aftership's API interface */
 public interface ApiRequest {
   /**
    * make a request of api

@@ -11,11 +11,7 @@ import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.rest.HttpMethod;
 import com.aftership.sdk.rest.RequestConfig;
 
-/**
- * NotificationEndpoint's implementation class
- *
- * @author chenjunbiao
- */
+/** NotificationEndpoint's implementation class */
 public class NotificationImpl extends AfterShipEndpoint implements NotificationEndpoint {
 
   /**
@@ -33,7 +29,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
    * will not be returned.
    *
    * @param param SingleTrackingParam
-   * @return DataEntity<NotificationWrapper>
+   * @return DataEntity of NotificationWrapper
    */
   @Override
   public DataEntity<NotificationWrapper> getNotification(SingleTrackingParam param) {
@@ -59,12 +55,12 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
    * Add notification receivers to a tracking number.
    *
    * @param param SingleTrackingParam
-   * @param notificationWrapper NotificationWrapper
-   * @return DataEntity<NotificationWrapper>
+   * @param addedNotification Will be created NotificationWrapper
+   * @return DataEntity of NotificationWrapper
    */
   @Override
   public DataEntity<NotificationWrapper> addNotification(
-      SingleTrackingParam param, NotificationWrapper notificationWrapper) {
+      SingleTrackingParam param, NotificationWrapper addedNotification) {
     Map.Entry<Boolean, DataEntity<NotificationWrapper>> error = errorOfSingleTrackingParam(param);
     if (error.getKey()) {
       return error.getValue();
@@ -80,17 +76,19 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
             EndpointPath.ADD_NOTIFICATION_ACTION);
 
     return this.request.makeRequest(
-        new RequestConfig(HttpMethod.POST, path), notificationWrapper, NotificationWrapper.class);
+        new RequestConfig(HttpMethod.POST, path), addedNotification, NotificationWrapper.class);
   }
 
   /**
    * Remove notification receivers from a tracking number.
    *
    * @param param SingleTrackingParam
-   * @return DataEntity<NotificationWrapper>
+   * @param removedNotification Will be removed NotificationWrapper
+   * @return DataEntity of NotificationWrapper
    */
   @Override
-  public DataEntity<NotificationWrapper> removeNotification(SingleTrackingParam param) {
+  public DataEntity<NotificationWrapper> removeNotification(
+      SingleTrackingParam param, NotificationWrapper removedNotification) {
     Map.Entry<Boolean, DataEntity<NotificationWrapper>> error = errorOfSingleTrackingParam(param);
     if (error.getKey()) {
       return error.getValue();
@@ -105,8 +103,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
             EndpointPath.REMOVE_NOTIFICATION,
             EndpointPath.REMOVE_NOTIFICATION_ACTION);
 
-    // new Object(), fix for 'method POST must have a request body'
     return this.request.makeRequest(
-        new RequestConfig(HttpMethod.POST, path), new Object(), NotificationWrapper.class);
+        new RequestConfig(HttpMethod.POST, path), removedNotification, NotificationWrapper.class);
   }
 }

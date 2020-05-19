@@ -4,11 +4,7 @@ import java.util.List;
 import com.aftership.sdk.model.tracking.Tracking;
 import lombok.Data;
 
-/**
- * The response of couriers detect request
- *
- * @author chenjunbiao
- */
+/** The response of couriers detect request */
 @Data
 public class CourierDetectList {
   /** Total number of matched couriers */

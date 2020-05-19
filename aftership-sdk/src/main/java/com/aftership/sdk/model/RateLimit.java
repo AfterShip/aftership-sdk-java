@@ -2,11 +2,7 @@ package com.aftership.sdk.model;
 
 import lombok.*;
 
-/**
- * Status of Rate Limit
- *
- * @author chenjunbiao
- */
+/** Status of Rate Limit */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

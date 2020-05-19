@@ -1,7 +1,9 @@
 package com.aftership.sample;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.impl.EndpointPath;
@@ -9,6 +11,7 @@ import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.courier.CourierList;
 import com.aftership.sdk.rest.DataEntity;
 
+/** Examples of concurrent requests */
 public class Concurrency {
 
   public static void main(String[] args) throws InterruptedException {
@@ -18,7 +21,17 @@ public class Concurrency {
 
     int nums = 50;
     AtomicInteger count = new AtomicInteger(0);
-    ExecutorService executor = Executors.newFixedThreadPool(10);
+
+    int size = 5;
+    ExecutorService executor =
+        new ThreadPoolExecutor(
+            size,
+            size,
+            60L,
+            TimeUnit.SECONDS,
+            new LinkedBlockingQueue<Runnable>(),
+            new ThreadPoolExecutor.DiscardOldestPolicy());
+
     for (int i = 0; i < nums; i++) {
       int cur = i;
       executor.execute(

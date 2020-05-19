@@ -28,7 +28,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
    * Create a tracking.
    *
    * @param request CreateTrackingRequest
-   * @return DataEntity<SingleTracking>
+   * @return DataEntity of SingleTracking
    */
   @Override
   public DataEntity<SingleTracking> createTracking(CreateTrackingRequest request) {
@@ -47,7 +47,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
    * Delete a tracking.
    *
    * @param param SingleTrackingParam
-   * @return DataEntity<SingleTracking>
+   * @return DataEntity of SingleTracking
    */
   @Override
   public DataEntity<SingleTracking> deleteTracking(SingleTrackingParam param) {
@@ -74,7 +74,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
    *
    * @param param SingleTrackingParam
    * @param optionalParams GetTrackingParams
-   * @return DataEntity<SingleTracking>
+   * @return DataEntity of SingleTracking
    */
   @Override
   public DataEntity<SingleTracking> getTracking(
@@ -103,7 +103,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
    * GetTrackings Gets tracking results of multiple trackings.
    *
    * @param optionalParams MultiTrackingsParams
-   * @return DataEntity<MultiTrackingsData>
+   * @return DataEntity of MultiTrackingsData
    */
   @Override
   public DataEntity<MultiTrackingsData> getTrackings(MultiTrackingsParams optionalParams) {
@@ -119,7 +119,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
    *
    * @param param SingleTrackingParam
    * @param update UpdateTrackingRequest
-   * @return DataEntity<SingleTracking>
+   * @return DataEntity of SingleTracking
    */
   @Override
   public DataEntity<SingleTracking> updateTracking(
@@ -146,7 +146,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
    * ReTrack an expired tracking once. Max. 3 times per tracking.
    *
    * @param param SingleTrackingParam
-   * @return DataEntity<SingleTracking>
+   * @return DataEntity of SingleTracking
    */
   @Override
   public DataEntity<SingleTracking> reTrack(SingleTrackingParam param) {
@@ -167,5 +167,33 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     // 'new Object()' for error of 'method POST must have a request body'
     return this.request.makeRequest(
         new RequestConfig(HttpMethod.POST, path), new Object(), SingleTracking.class);
+  }
+
+  /**
+   * Mark a tracking as completed. The tracking won't auto update until retrack it.
+   *
+   * @param param SingleTrackingParam
+   * @param request CompleteTrackingRequest
+   * @return DataEntity of SingleTracking
+   */
+  @Override
+  public DataEntity<SingleTracking> completeTracking(
+      SingleTrackingParam param, CompleteTrackingRequest request) {
+    Map.Entry<Boolean, DataEntity<SingleTracking>> error = errorOfSingleTrackingParam(param);
+    if (error.getKey()) {
+      return error.getValue();
+    }
+
+    String path =
+        UrlUtil.buildTrackingPath(
+            param.getId(),
+            param.getSlug(),
+            param.getTrackingNumber(),
+            null,
+            EndpointPath.COMPLETE_TRACKING,
+            EndpointPath.COMPLETE_TRACKING_ACTION);
+
+    return this.request.makeRequest(
+        new RequestConfig(HttpMethod.POST, path), request, SingleTracking.class);
   }
 }

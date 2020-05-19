@@ -2,11 +2,7 @@ package com.aftership.sdk.model.notification;
 
 import lombok.Data;
 
-/**
- * Hash describes the notification information.
- *
- * @author chenjunbiao
- */
+/** Hash describes the notification information. */
 @Data
 public class Notification {
   /** Email address(es) to receive email notifications. */

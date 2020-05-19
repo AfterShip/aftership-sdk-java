@@ -17,7 +17,7 @@ buildscript {
 
 allprojects {
     group 'com.aftership'
-    version '2.0.0'
+    version '2.0.1'
 
     repositories {
         mavenCentral()
@@ -55,13 +55,13 @@ subprojects {
         testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     }
-
-    javadoc {
-        options.encoding = "UTF-8"
-    }
 }
 
 project(':aftership-sdk') {
+    apply from: rootDir.canonicalPath + '/.gradle/publish.gradle'
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
+
     dependencies {
         implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
         implementation "com.google.code.gson:gson:${gsonVersion}"
@@ -70,11 +70,76 @@ project(':aftership-sdk') {
     jar {
         archivesBaseName = "aftership-sdk"
     }
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        classifier = 'sources'
+    }
+
+    task javadocJar(type: Jar) {
+        from javadoc
+        classifier = 'javadoc'
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                groupId = 'com.github.chenjunbiao'
+                artifactId = 'aftership-sdk'
+                version = project.version
+
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+                pom {
+                    name = 'aftership-sdk'
+                    description = 'aftership-sdk library'
+                    url = 'https://docs.aftership.com/api/4/overview'
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'https://opensource.org/licenses/MIT'
+                        }
+                    }
+                    developers {
+                        developer {
+                            name = 'chenjunbiao'
+                            email = 'chenjunbiao@gmail.com'
+                        }
+                    }
+                    scm {
+                        url = 'https://github.com/chenjunbiao/aftership-sdk-java'
+                        connection = 'scm:git:git@github.com:chenjunbiao/aftership-sdk-java.git'
+                        developerConnection = 'scm:git:ssh://git@github.com:chenjunbiao/aftership-sdk-java.git'
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                credentials {
+                    username sonatypeUsername
+                    password sonatypePassword
+                }
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
+    }
+
+    javadoc {
+        options.encoding = "UTF-8"
+    }
 }
 
 project(':aftership-sample'){
     dependencies {
-        compile project(':aftership-sdk')
+        //compile project(':aftership-sdk')
+        implementation "com.github.chenjunbiao:aftership-sdk:2.0.1"
     }
 
     jar {

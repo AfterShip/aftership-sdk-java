@@ -7,18 +7,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
-/**
- * Json's assistant method.
- *
- * @author chenjunbiao
- */
+/** Json's assistant method. */
 public final class JsonUtil {
 
   /**
    * Parsing a string as an object
    *
    * @param json json string
-   * @param tClass Class<T>
+   * @param tClass T.Class
    * @param <T> Class
    * @return Object
    */

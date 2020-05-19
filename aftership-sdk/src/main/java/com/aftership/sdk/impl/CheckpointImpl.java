@@ -12,11 +12,7 @@ import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.rest.HttpMethod;
 import com.aftership.sdk.rest.RequestConfig;
 
-/**
- * CheckpointEndpoint's implementation class
- *
- * @author chenjunbiao
- */
+/** CheckpointEndpoint's implementation class */
 public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpoint {
 
   /**
@@ -33,7 +29,7 @@ public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpo
    *
    * @param param SingleTrackingParam
    * @param optionalParams GetLastCheckpointParam
-   * @return DataEntity<LastCheckpoint>
+   * @return DataEntity of LastCheckpoint
    */
   @Override
   public DataEntity<LastCheckpoint> getLastCheckpoint(

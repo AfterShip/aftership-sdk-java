@@ -5,11 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
-/**
- * Date's assistant method.
- *
- * @author chenjunbiao
- */
+/** Date's assistant method. */
 public class DateUtil {
   public static final String FORMAT_WITH_T = "yyyy-MM-dd'T'HH:mm:ss";
   public static final String FORMAT_WITH_Z = "yyyy-MM-dd'T'HH:mm:ssZ";
@@ -21,7 +17,7 @@ public class DateUtil {
    *
    * @param dateFormat date format
    * @param dateString date string
-   * @return Optional<Date>
+   * @return Optional of Date
    */
   public static Optional<Date> parse(String dateFormat, String dateString) {
     SimpleDateFormat format = new SimpleDateFormat(dateFormat);

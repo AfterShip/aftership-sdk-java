@@ -5,11 +5,7 @@ import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.lib.StrUtil;
 import lombok.Value;
 
-/**
- * The request object of couriers detect
- *
- * @author chenjunbiao
- */
+/** The request object of couriers detect */
 @Value
 public class CourierDetectRequest {
   /** Tracking Object. */

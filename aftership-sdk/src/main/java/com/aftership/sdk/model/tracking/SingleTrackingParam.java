@@ -5,8 +5,6 @@ import lombok.Data;
 /**
  * The param to identify the single tracking. Either id or (slug + tracking_number) should be *
  * specified.
- *
- * @author chenjunbiao
  */
 @Data
 public class SingleTrackingParam {

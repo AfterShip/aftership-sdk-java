@@ -7,11 +7,7 @@ import com.aftership.sdk.model.courier.CourierDetectRequest;
 import com.aftership.sdk.model.courier.CourierList;
 import com.aftership.sdk.rest.*;
 
-/**
- * CourierEndpoint's implementation class
- *
- * @author chenjunbiao
- */
+/** CourierEndpoint's implementation class */
 public class CourierImpl extends AfterShipEndpoint implements CourierEndpoint {
 
   /**
@@ -26,7 +22,7 @@ public class CourierImpl extends AfterShipEndpoint implements CourierEndpoint {
   /**
    * Return a list of couriers activated at your AfterShip account.
    *
-   * @return DataEntity<CourierList>
+   * @return DataEntity of CourierList
    */
   @Override
   public DataEntity<CourierList> listCouriers() {
@@ -37,7 +33,7 @@ public class CourierImpl extends AfterShipEndpoint implements CourierEndpoint {
   /**
    * Return a list of all couriers.
    *
-   * @return DataEntity<CourierList>
+   * @return DataEntity of CourierList
    */
   @Override
   public DataEntity<CourierList> listAllCouriers() {
@@ -50,7 +46,7 @@ public class CourierImpl extends AfterShipEndpoint implements CourierEndpoint {
    * list of couriers.
    *
    * @param requestData CourierDetectRequest
-   * @return DataEntity<CourierDetectList>
+   * @return DataEntity of CourierDetectList
    */
   @Override
   public DataEntity<CourierDetectList> detectCouriers(CourierDetectRequest requestData) {

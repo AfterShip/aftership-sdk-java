@@ -1,10 +1,6 @@
 package com.aftership.sdk.lib;
 
-/**
- * Define some constants
- *
- * @author chenjunbiao
- */
+/** Define some constants */
 public final class Define {
 
   /** Version of the current component */

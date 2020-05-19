@@ -1,10 +1,6 @@
 package com.aftership.sdk.error;
 
-/**
- * Exception for calling the API interface
- *
- * @author chenjunbiao
- */
+/** Exception for calling the API interface */
 public class AftershipException extends RuntimeException {
 
   /**

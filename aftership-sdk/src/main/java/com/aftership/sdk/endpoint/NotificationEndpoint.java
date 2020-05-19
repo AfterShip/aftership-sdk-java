@@ -4,11 +4,7 @@ import com.aftership.sdk.model.notification.NotificationWrapper;
 import com.aftership.sdk.model.tracking.SingleTrackingParam;
 import com.aftership.sdk.rest.DataEntity;
 
-/**
- * Endpoint provides the interface for all notifications handling API calls
- *
- * @author chenjunbiao
- */
+/** Endpoint provides the interface for all notifications handling API calls */
 public interface NotificationEndpoint {
   /**
    * Get contact information for the users to notify when the tracking changes. Please note that
@@ -16,7 +12,7 @@ public interface NotificationEndpoint {
    * will not be returned.
    *
    * @param param SingleTrackingParam
-   * @return DataEntity<NotificationWrapper>
+   * @return DataEntity of NotificationWrapper
    */
   DataEntity<NotificationWrapper> getNotification(SingleTrackingParam param);
 
@@ -24,17 +20,19 @@ public interface NotificationEndpoint {
    * Add notification receivers to a tracking number.
    *
    * @param param SingleTrackingParam
-   * @param notificationWrapper NotificationWrapper
-   * @return DataEntity<NotificationWrapper>
+   * @param addedNotification NotificationWrapper
+   * @return DataEntity of NotificationWrapper
    */
   DataEntity<NotificationWrapper> addNotification(
-      SingleTrackingParam param, NotificationWrapper notificationWrapper);
+      SingleTrackingParam param, NotificationWrapper addedNotification);
 
   /**
    * Remove notification receivers from a tracking number.
    *
    * @param param SingleTrackingParam
-   * @return DataEntity<NotificationWrapper>
+   * @param removedNotification Will be removed NotificationWrapper
+   * @return DataEntity of NotificationWrapper
    */
-  DataEntity<NotificationWrapper> removeNotification(SingleTrackingParam param);
+  DataEntity<NotificationWrapper> removeNotification(
+      SingleTrackingParam param, NotificationWrapper removedNotification);
 }

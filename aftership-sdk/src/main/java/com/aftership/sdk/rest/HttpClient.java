@@ -3,11 +3,7 @@ package com.aftership.sdk.rest;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 
-/**
- * Create OkHttpClient
- *
- * @author chenjunbiao
- */
+/** Create OkHttpClient */
 public class HttpClient {
   private static final long TIMEOUT = 50 * 1000L;
 

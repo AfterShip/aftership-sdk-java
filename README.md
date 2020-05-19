@@ -1,211 +1,489 @@
-aftership-java
+[TOC]
+
+aftership-sdk-java
 ==============
 
-The Java SDK of AfterShip API
+The Java SDK of `AfterShip API`, please see in: https://www.aftership.com/docs/api/4
 
 Requirements:
 
-- JDK 1.5 or superior.
-- org.json .jar, you can download it from: http://www.json.org/
-- Junit (only if you want to run the tests).
+- JDK 1.8 or superior.
+- Lombok Plugin [for source code build by IDE] . Example: [lombok-intellij-plugin](https://github.com/mplushnikov/lombok-intellij-plugin) 
 
-Quick Start
+
+
+Installation
 --------------
 
+### Maven
 
-**Get a list of supported couriers**
-
-	//Create a connectionAPI with your API Key (you will link it to your account)
-  	ConnectionAPI connection = new ConnectionAPI(“?????-6477-?????-93ec-86c4f872fb6b");
-
-   	List<Courier> couriers = connection.getAllCouriers();
-
-	//Now we can get information of each element
-	couriers.get(0).getSlug();
-	couriers.get(0).getName();
-	couriers.get(0).getWeb_url();
-	//etc
-
-	//If we want to iterate in the list, we can do
-	for(int i=0;i<couriers.size();i++)
-		couriers.get(i).getSlug();//Get slug of each element
-		
-**Get a list of the couriers in your account**
-
-	//Create a connectionAPI with your API Key (you will link it to your account)
-  	ConnectionAPI connection = new ConnectionAPI(“?????-6477-?????-93ec-86c4f872fb6b");
-
-   	List<Courier> couriers = connection.getCouriers();
-
-	//Now we can get information of each element
-	couriers.get(0).getSlug();
-	couriers.get(0).getName();
-	couriers.get(0).getWeb_url();
-	//etc
-
-	//If we want to iterate in the list, we can do
-	for(int i=0;i<couriers.size();i++)
-		couriers.get(i).getSlug();//Get slug of each element
-		
-
-
-**Detect which couriers defined in your account match a tracking number**
-
-	List<Courier> couriers = connection.detectCouriers(“09445246482536”);
-	//Now in couriers we have the Couriers that match
-
-
-**Post a tracking to your account**
-
-	//First we have to create a Tracking
-	Tracking tracking1 = new Tracking("05167019264110");
-
-	//Then we can add information;
-    tracking1.setSlug("dpd");
-    tracking1.setTitle("this title");
-    tracking1.addEmails("email@yourdomain.com");
-    tracking1.addEmails("another_email@yourdomain.com");
-    tracking1.addSmses("+85292345678");
-    tracking1.addSmses("+85292345679");
-
-	//Even add customer fields
-    tracking1.addCustomFields(“product_name”,"iPhone Case");
-    tracking1.addCustomFields(“product_price”,"USD19.99");
-
-	//Finally we add the tracking to our account
-    Tracking trackingPosted = connection.postTracking(tracking1);
-
-	//In the response we will have exactly the information of the server
-	trackingPosted.getTrackingNumber();
-	trackingPosted.getSlug();
-	//Etc.
-
-
-**Delete a tracking of your account**
-
-	//Return true if everything is correct, false or exception otherwise
-	
-	Tracking trackingDelete = new Tracking("123456789");//tracking number
-	trackingDelete.setSlug("dhl");
-	connection.deleteTracking(trackingDelete);
-
-
-**Get trackings of your account, there is two ways**
-
-	//1- Simplest way, with the page you want to get
-
-	List<Tracking> listTrackings100 = connection.getTrackings(1);//get first 100
-	List<Tracking> listTrackings200 = connection.getTrackings(2);//get 100-200
-	//If you delete tracings right before, you may get less number.
-
-	//2- Using Parameters tracking
-
-	//Create a new Parameter
-	ParametersTracking param = new ParametersTracking();
-
-	//Add the information we want in the parameter
-	param.addSlug("dhl");//Add slug to our parameters
-	Date date = new Date();//Create a date with value of now
-	Calendar c = Calendar.getInstance();
-	c.setTime(date);
-    c.add(Calendar.MONTH,-1); //Substract a Month to the date
-    date = c.getTime();
-    param.setCreatedAtMin(date);//SetCreadtedMin to the date of one month ago
-
-	//Return the first page of trackings in your account from dhl and created less than a month ago.
-	List <Tracking> totalDHL =connection.getTrackings(param);
-
-
-	//if the get has several pages, you can either modify the page you want in your get with param.setPage(page), or
-	call getTrackingsNext(param1) instead, it automatically increase the page , example:
-
-	//Get trackings with destination Spain, total 23
-	ParametersTracking param1 = new ParametersTracking();
-    param1.addDestination(ISO3Country.ESP);
-    param1.setLimit(20);//set limit of the page to 20
-    List<Tracking> totalSpain =connection.getTrackings(param1);//we will receive the 20 first
-    List<Tracking> totalSpain2 =connection.getTrackingsNext(param1); //we will receive the next 3
-    int total = param1.getTotal(); // we will receive the total 23;
-
-	//Get trackings that are OutForDelivery
-    ParametersTracking param2 = new ParametersTracking();
-    param2.addTag(StatusTag.OutForDelivery);
-    int totalOutDelivery=connection.getTrackings(param2);
-
-**Export trackings of your account**
-```java
- // setup request
- ParametersTrackingExport params = new ParametersTrackingExport();
- params.setCursor("cursor-id"); // OPTIONAL. Pass in the previous response's cursor data to retrieve the next tracking batch
- ExportTrackingResponse trackings =  api.exportTrackings(params);
+```text
+<dependency>
+  <groupId>com.aftership</groupId>
+  <artifactId>aftership-sdk</artifactId>
+  <version>2.0.0</version>
+</dependency>
 ```
 
-Parameters
+### Gradle
 
-cursor - [OPTIONAL] - will return the next batch of trackings starting from this offset
-
-See the [API documentation](https://www.aftership.com/docs/api/4/trackings/get-trackings-export) for a complete list of parameters
-
-Response Content(```ExportTrackingResponse```)
-
-```cursor``` - Pass the cursor returned in the previous response for retrieve next page. When the browsing reaches the end of the index, the returned cursor will be an empty string.
-
-```trackings``` - list of trackings
+```text
+implementation "com.aftership:aftership-sdk:2.0.0"
+```
 
 
-**Get a tracking from your account**
 
-	Tracking trackingToGet = new Tracking("RC328021065CN");
-	trackingToGet.setSlug("canada-post");
+## Quick Examples
 
-	Tracking tracking = connection.getTrackingByNumber(trackingToGet);
+### Main Steps
+
+The following code example shows the **three main steps** to use aftership-sdk-java:
+
+1. Create **AfterShip** Object.
+
+```java
+AfterShip afterShip = new AfterShip("YOUR_API_KEY", 
+	new AftershipOption("http://localhost:8080/v4"));
+```
+
+2. Get the Endpoint Interface and call the method, then return the **DataEntity<T>** object.
+
+```java 
+DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
+```
+
+3. Handling **AftershipError** or Business **Data** or **RateLimit**
+
+```java
+DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
+  if (entity.hasError()) {
+    // handle Error.
+  	System.out.println(entity.getError().getType());
+  } else {
+    // handle Data
+  	System.out.println(entity.getData());
+}
+// handle Rate Limiter.
+System.out.println(afterShip.getRateLimit().getReset());
+System.out.println(afterShip.getRateLimit().getLimit());
+System.out.println(afterShip.getRateLimit().getRemaining());
+```
+
+### Error Handling
+
+Error object of this SDK contain fields:
+
+- `type` - **Require** - type of the error, list of error types: 
+
+  Determine Aftership's error by isApiError(). 
+
+  ```java
+  if (entity.getError().isApiError()) {
+    System.out.println(entity.getError().getCode());
+  }
+  ```
+
+- `message` - **Optional** - detail message of the error
+
+- `code` - **Optional** - error code for API Error
+
+  You can find tips for Aftership's error codes in here: https://docs.aftership.com/api/4/errors
+
+- `data` - **Optional** - data lead to the error
+
+  The debug Data is a Map<String, Object> object that can get the call parameters. 
+
+  The following data may be available:
+
+  ```java 
+  System.out.println(entity.getError().getData().get("requestConfig"));
+  System.out.println(entity.getError().getData().get("requestHeaders"));
+  System.out.println(entity.getError().getData().get("requestData"));
+  System.out.println(entity.getError().getData().get("responseBody"));
+  ```
+
+### Rate Limiter
+
+To understand AfterShip rate limit policy, please see `limit` session in https://www.aftership.com/docs/api/4
+
+You can get the recent rate limit by `afterShip.getRateLimit()`. Initially all value are `null`.
+
+```java 
+AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
+System.out.println(afterShip.getRateLimit().getReset());
+System.out.println(afterShip.getRateLimit().getLimit());
+System.out.println(afterShip.getRateLimit().getRemaining());
+```
+
+After making an API call, it will be set.
+
+```java
+DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
+// handle Rate Limiter.
+System.out.println(afterShip.getRateLimit().getReset());
+System.out.println(afterShip.getRateLimit().getLimit());
+System.out.println(afterShip.getRateLimit().getRemaining());
+// 1589869159
+// 10
+// 9
+```
+
+## Examples
+
+### /couriers
+
+- #### listCouriers [GET /couriers]
+
+```java 
+DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
+if (entity.hasError()) {
+  System.out.println(entity.getError().getType());
+} else {
+  System.out.println(entity.getData().getTotal());
+  System.out.println(entity.getData().getCouriers());
+}
+```
+
+- #### listAllCouriers [GET /couriers/all]
+
+```java 
+DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listAllCouriers();
+if (entity.hasError()) {
+	System.out.println(entity.getError().getType());
+} else {
+	System.out.println(entity.getData().getTotal());
+	System.out.println(entity.getData().getCouriers());
+}
+```
+
+- #### detectCouriers [POST /couriers/detect]
+
+```java
+CourierDetectTracking tracking = new CourierDetectTracking();
+tracking.setTrackingNumber("906587618687");
+CourierDetectRequest courierDetectRequest = new CourierDetectRequest(tracking);
+
+DataEntity<CourierDetectList> entity =
+  afterShip.getCourierEndpoint().detectCouriers(courierDetectRequest);
+if (entity.hasError()) {
+  System.out.println(entity.getError().getType());
+} else {
+  System.out.println(entity.getData().getTotal());
+  System.out.println(entity.getData().getCouriers());
+}
+```
+
+### /trackings
+
+- #### createTracking [POST /trackings]
+
+```java
+// build request object
+NewTracking newTracking = new NewTracking();
+newTracking.setSlug(new String[] {"dhl"});
+newTracking.setTrackingNumber("123456789");
+newTracking.setTitle("Title Name");
+newTracking.setSmses(new String[] {"+18555072509", "+18555072501"});
+newTracking.setEmails(new String[] {
+  "email@yourdomain.com", "another_email@yourdomain.com"});
+newTracking.setOrderId("ID 1234");
+newTracking.setOrderIdPath("http://www.aftership.com/order_id=1234");
+newTracking.setCustomFields(
+  new HashMap<String, String>(2) {
+    {
+      put("product_name", "iPhone Case");
+      put("product_price", "USD19.99");
+    }
+  });
+newTracking.setLanguage("en");
+newTracking.setOrderPromisedDeliveryDate("2019-05-20");
+newTracking.setDeliveryType("pickup_at_store");
+newTracking.setPickupLocation("Flagship Store");
+newTracking.setPickupNote(
+  "Reach out to our staffs when you arrive our stores for shipment pickup");
+
+CreateTrackingRequest request = new CreateTrackingRequest(newTracking);
+
+DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().createTracking(request);
+if (entity.hasError()) {
+  System.out.println(entity.getError().getType());
+} else {
+  System.out.println(entity.getData().getTracking());
+}
+```
 
 
-**Modify a tracking from your account**
 
-	//Create a tracking
-	Tracking tracking = new Tracking("RC328021065CN");
-    tracking.setSlug("canada-post");
-    //Add the fields we want to modify
-    tracking.setTitle("another title");
+- #### deleteTracking [DELETE /trackings/:slug/:tracking_number]
 
-	//Returns a tracking with exactly the information of the server
-	Tracking tracking2 = connection.putTracking(tracking);
-	tracking2.getTitle();//Value “another title”
+```java 
+SingleTrackingParam param = new SingleTrackingParam();
+param.setId("abc");
 
+DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().deleteTracking(param);
+if (entity.hasError()) {
+  System.out.println(entity.getError().getType());
+} else {
+  Tracking tracking = entity.getData().getTracking();
+  System.out.println(tracking);
+}
+```
 
-**Retrack a tracking of your account**
+- #### getTrackings [GET /trackings]
 
-	Tracking tracking = new Tracking("RT224265042HK");
-    tracking.setSlug("hong-kong-post");
+```java 
+MultiTrackingsParams optionalParams = new MultiTrackingsParams();
+optionalParams.setFields(FieldsKind.combine(FieldsKind.ORDER_ID, FieldsKind.TAG));
+optionalParams.setLimit(2);
+
+DataEntity<MultiTrackingsData> entity =
+  afterShip.getTrackingEndpoint().getTrackings(optionalParams);
+if (entity.hasError()) {
+  System.out.println(entity.getError().getType());
+} else {
+  List<Tracking> trackings = entity.getData().getTrackings();
+  System.out.println("size: " + trackings.size());
+  System.out.println(trackings);
+}
+```
+
+- #### getTracking [GET /trackings/:slug/:tracking_number]
+
+  - Get by id:
+
+    ```java
+    SingleTrackingParam param = new SingleTrackingParam();
+    param.setId("vebix4hfu3sr3kac0epve01n");
     
-	connection.retrack(tracking);
-	//You can only retrack an expired tracking and only once
+    DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint()
+      .getTracking(param, null);
+    if (entity.hasError()) {
+      System.out.println(entity.getError().getType());
+    } else {
+      Tracking tracking = entity.getData().getTracking();
+      System.out.println(tracking);
+      if (tracking != null) {
+        System.out.println(tracking.getSlug());
+        System.out.println(tracking.getTrackingNumber());
+      }
+    }
+    ```
 
+  - Get by slug and tracking_number:
 
-**Get the last checkpoint of a tracking of your account**
-
-	Tracking tracking = new Tracking("GM605112270084510370");
-    tracking.setSlug("dhl-global-mail");
+    ```java 
+    SingleTrackingParam param = new SingleTrackingParam();
+    param.setSlug("dhl");
+    param.setTrackingNumber("1234567890");
     
-	Checkpoint newCheckpoint = connection.getLastCheckpoint(tracking);
-	newCheckpoint.getMessage()//"Delivered"
-	newCheckpoint.getCountryName()//"BUDERIM QLD, AU"
-	newCheckpoint.getTag()//"Delivered"
+    DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint()
+      .getTracking(param, null);
+    if (entity.hasError()) {
+      System.out.println(entity.getError().getType());
+    } else {
+      Tracking tracking = entity.getData().getTracking();
+      System.out.println(tracking);
+      if (tracking != null) {
+        System.out.println(tracking.getId());
+      }
+    }
+    ```
+
+- #### updateTracking [PUT /trackings/:slug/:tracking_number]
+
+```java
+SingleTrackingParam param = new SingleTrackingParam();
+param.setId("vebix4hfu3sr3kac0epve01n");
+
+UpdateTracking updateTracking = new UpdateTracking();
+updateTracking.setTitle("title123");
+UpdateTrackingRequest request = new UpdateTrackingRequest();
+request.setTracking(updateTracking);
+
+DataEntity<SingleTracking> entity =
+    afterShip.getTrackingEndpoint().updateTracking(param, request);
+if (entity.hasError()) {
+  System.out.println(entity.getError().getType());
+} else {
+  Tracking tracking = entity.getData().getTracking();
+  System.out.println(tracking);
+  if (tracking != null) {
+    System.out.println(tracking.getTitle());
+  }
+}
+```
+
+- #### reTrack [POST /trackings/:slug/:tracking_number/retrack]
+
+```java
+  SingleTrackingParam param = new SingleTrackingParam();
+  param.setId("vebix4hfu3sr3kac0epve01n");
+
+  DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().reTrack(param);
+  if (entity.hasError()) {
+    System.out.println(entity.getError().getType());
+    System.out.println(entity.getError().getCode());
+    System.out.println(entity.getError().getMessage());
+  } else {
+    Tracking tracking = entity.getData().getTracking();
+    System.out.println(tracking);
+    if (tracking != null) {
+      System.out.println(tracking.isActive());
+    }
+  }
+}
+```
+
+- #### completeTracking [POST /trackings/:slug/:tracking_number/mark-as-completed]
+
+```java 
+SingleTrackingParam param = new SingleTrackingParam();
+param.setId("wcwy86mie4o17kadedkcw029");
+CompleteTrackingRequest request = new CompleteTrackingRequest(ReasonKind.LOST);
+
+DataEntity<SingleTracking> entity =
+    afterShip.getTrackingEndpoint().completeTracking(param, request);
+if (entity.hasError()) {
+  System.out.println(entity.getError().getType());
+  System.out.println(entity.getError().getMessage());
+  System.out.println(entity.getError().getCode());
+} else {
+  Tracking tracking = entity.getData().getTracking();
+  System.out.println(tracking);
+}
+```
+
+### /last_checkpoint
+
+- #### getLastCheckpoint [GET /last_checkpoint/:slug/:tracking_number]
+
+```java
+SingleTrackingParam param = new SingleTrackingParam();
+param.setId("wcwy86mie4o17kadedkcw029");
+GetLastCheckpointParam optionalParams = new GetLastCheckpointParam();
+optionalParams.setFields(FieldsKind.combine(FieldsKind.TAG, FieldsKind.ORDER_ID));
+optionalParams.setLang(LangKind.CHINA_EMS);
+
+DataEntity<LastCheckpoint> entity =
+    afterShip.getCheckpointEndpoint().getLastCheckpoint(param, optionalParams);
+if (entity.hasError()) {
+  System.out.println(entity.getError().getType());
+} else {
+  LastCheckpoint lastCheckpoint = entity.getData();
+  System.out.println(lastCheckpoint.getSlug());
+  System.out.println(lastCheckpoint.getTrackingNumber());
+  System.out.println(lastCheckpoint.getCheckpoint());
+}
+```
+
+### /notifications
+
+- #### getNotification [GET /notifications/:slug/:tracking_number]
+
+```java 
+SingleTrackingParam param = new SingleTrackingParam();
+param.setId("wcwy86mie4o17kadedkcw029");
+DataEntity<NotificationWrapper> entity =
+  afterShip.getNotificationEndpoint().getNotification(param);
+if (entity.hasError()) {
+  System.out.println(entity.getError().getType());
+} else {
+  Notification notification = entity.getData().getNotification();
+  System.out.println(notification);
+}
+```
+
+- #### addNotification [POST /notifications/:slug/:tracking_number/add]
+
+```java
+Notification notification = new Notification();
+notification.setSmses(new String[] {"+85261236123", "Invalid Mobile Phone Number"});
+NotificationWrapper notificationWrapper = new NotificationWrapper(notification);
+SingleTrackingParam param = new SingleTrackingParam();
+param.setId("wcwy86mie4o17kadedkcw029");
+
+DataEntity<NotificationWrapper> entity =
+    afterShip.getNotificationEndpoint().addNotification(param, notificationWrapper);
+if (entity.hasError()) {
+  System.out.println(entity.getError().getType());
+  System.out.println(entity.getError().getCode());
+  System.out.println(entity.getError().getMessage());
+} else {
+  Notification result = entity.getData().getNotification();
+  System.out.println(result);
+}
+// Notification(emails=[another_email@yourdomain.com, email@yourdomain.com], smses=[+85291239123, +85261236123])
+```
+
+- #### removeNotification [POST /notifications/:slug/:tracking_number/remove]
+
+```java 
+Notification notification = new Notification();
+notification.setEmails(new String[] {"invalid EMail @ Gmail. com"});
+notification.setSmses(new String[] {"+85261236123"});
+NotificationWrapper removedNotification = new NotificationWrapper(notification);
+SingleTrackingParam param = new SingleTrackingParam();
+param.setId("wcwy86mie4o17kadedkcw029");
+
+DataEntity<NotificationWrapper> entity =
+    afterShip.getNotificationEndpoint().removeNotification(param, removedNotification);
+if (entity.hasError()) {
+  System.out.println(entity.getError().getType());
+} else {
+  Notification result = entity.getData().getNotification();
+  System.out.println(result);
+}
+// Notification(emails=[email@yourdomain.com, another_email@yourdomain.com], smses=[+85291239123])
+```
 
 
-**Be careful, all the operations that use tracking use the ID if it is informed**
+
+## Notes
+
+- #### When specifying a tracking, the `id` is equivalent to the `slug and tracking_number`.
+
+```java 
+SingleTrackingParam param = new SingleTrackingParam();
+param.setId("vebix4hfu3sr3kac0epve01n");
+```
+
+```java 
+SingleTrackingParam param = new SingleTrackingParam();
+param.setSlug("dhl");
+param.setTrackingNumber("1234567890");
+```
 
 
-	//Post a tracking in your account
-	Tracking tracking1 = new Tracking("05167019264110");
-    tracking1.setSlug("dpd");
-	Tracking trackingPosted =  connection.postTracking(tracking1);
-	
-	trackingPosted.getId();// this is the ID of the tracking in the Aftership system
 
 ## Release History
+
+#### 2020-05-20-v2.0.0
+
+- Highly encapsulated interface, supports rapid construction of new interfaces.
+- Complete parsing of the message body, Support IntelliSense.
+- Use Gradle as a dependency manager.
+  - depend okhttp library
+  - depend gson library
+- Simplify object definition with Lombok.
+- Published in maven central repository.
+- The interfaces for implementation and refactoring are as follows:
+  - CourierEndpoint.listCouriers
+  - CourierEndpoint.listAllCouriers
+  - CourierEndpoint.detectCouriers
+  - TrackingEndpoint.createTracking
+  - TrackingEndpoint.deleteTracking
+  - TrackingEndpoint.getTracking
+  - TrackingEndpoint.getTrackings
+  - TrackingEndpoint.updateTracking
+  - TrackingEndpoint.reTrack
+  - TrackingEndpoint.completeTracking
+  - CheckpointEndpoint.getLastCheckpoint
+  - NotificationEndpoint.getNotification
+  - NotificationEndpoint.addNotification
+  - NotificationEndpoint.removeNotification
+
 ####2016-04-26-v1.2.0
+
 * Properties added in Checkpoint class
  1. slug
  2. location
@@ -217,5 +495,5 @@ Response Content(```ExportTrackingResponse```)
 Copyright (c) 2015 Aftership  
 Licensed under the MIT license.
 
-	
+​	
 

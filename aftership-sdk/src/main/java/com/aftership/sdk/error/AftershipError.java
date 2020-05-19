@@ -7,11 +7,7 @@ import com.aftership.sdk.rest.BodyParser;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Error description for calling the API interface
- *
- * @author chenjunbiao
- */
+/** Error description for calling the API interface */
 @Data
 @NoArgsConstructor
 public class AftershipError {
@@ -23,6 +19,24 @@ public class AftershipError {
   private Integer code = null;
   /** Debug information of error */
   private Map<String, Object> data;
+
+  /**
+   * Is it a processing error on the SDK side?
+   *
+   * @return true is sdk error.
+   */
+  public boolean isSdkError() {
+    return ErrorType.get(getType()) != null;
+  }
+
+  /**
+   * Is it a processing error on the API side?
+   *
+   * @return true is API return error.
+   */
+  public boolean isApiError() {
+    return !isSdkError();
+  }
 
   /**
    * Create a AftershipError
@@ -63,6 +77,7 @@ public class AftershipError {
   @SafeVarargs
   public static AftershipError make(
       ErrorType errorType, Throwable t, Map.Entry<String, Object>... data) {
+    // t.printStackTrace();
     return make(errorType.getName(), t.getMessage(), data);
   }
 
@@ -125,18 +140,10 @@ public class AftershipError {
         }
       }
       error.setData(map);
+    } else {
+      error.setData(new HashMap<>());
     }
-    return error;
-  }
 
-  /**
-   * Create a InternalError
-   *
-   * @param data Debug information of error
-   * @return AftershipError
-   */
-  @SafeVarargs
-  public static AftershipError makeInternalError(Map.Entry<String, Object>... data) {
-    return make(ErrorType.InternalError.getName(), ErrorMessage.INTERNAL_INTERNAL_ERROR, 500, data);
+    return error;
   }
 }

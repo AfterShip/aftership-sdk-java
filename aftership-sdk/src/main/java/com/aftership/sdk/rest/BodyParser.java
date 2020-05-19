@@ -7,11 +7,7 @@ import com.aftership.sdk.lib.JsonUtil;
 import com.aftership.sdk.lib.StrUtil;
 import com.aftership.sdk.model.Meta;
 
-/**
- * Parsing the response message body
- *
- * @author chenjunbiao
- */
+/** Parsing the response message body */
 public class BodyParser {
 
   /**
@@ -46,7 +42,7 @@ public class BodyParser {
    * @param jsonObject 'com.google.gson.JsonObject' of message body
    * @param responseType type of Class
    * @param <T> Class
-   * @return
+   * @return T object
    */
   public static <T> T processData(JsonObject jsonObject, Class<T> responseType) {
     JsonElement dataJson = jsonObject.get("data");

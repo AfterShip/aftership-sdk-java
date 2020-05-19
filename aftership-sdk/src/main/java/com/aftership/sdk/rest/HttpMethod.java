@@ -1,10 +1,6 @@
 package com.aftership.sdk.rest;
 
-/**
- * Method of http request
- *
- * @author chenjunbiao
- */
+/** Method of http request */
 public enum HttpMethod {
   /** POST Method of http request */
   POST("POST"),

@@ -5,25 +5,27 @@ import com.aftership.sdk.error.AftershipError;
 /**
  * Data Entity's wrapper.
  *
- * @author chenjunbiao
  * @param <T> Class
  */
 public interface DataEntity<T> {
 
   /**
    * Data of response
-   * @return
+   *
+   * @return object of T
    */
   T getData();
 
   /**
    * Error of request
-   * @return
+   *
+   * @return Object of AftershipError
    */
   AftershipError getError();
 
   /**
    * Is there an error in the response
+   *
    * @return true/false
    */
   default boolean hasError() {

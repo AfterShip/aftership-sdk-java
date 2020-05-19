@@ -4,11 +4,7 @@ import java.util.Date;
 import java.util.List;
 import lombok.Data;
 
-/**
- * checkpoint information.
- *
- * @author chenjunbiao
- */
+/** checkpoint information. */
 @Data
 public class Checkpoint {
   /**

@@ -3,6 +3,9 @@ package com.aftership.sample;
 import com.aftership.sdk.config.EnvGetter;
 import com.aftership.sdk.model.AftershipOption;
 
+/**
+ * Util for Samples
+ */
 public final class SampleUtil {
     private static final String ENV_API_KEY = "Aftership-Sample-ApiKey";
     private static final String ENV_AFTERSHIP_OPTION = "Aftership-Sample-Endpoint";
