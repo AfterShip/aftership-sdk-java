@@ -58,7 +58,10 @@ subprojects {
 }
 
 project(':aftership-sdk') {
-    apply from: rootDir.canonicalPath + '/.gradle/publish.gradle'
+    def publishConfigPath = rootDir.canonicalPath + '/.gradle/publish.gradle'
+    if(file(publishConfigPath).exists()){
+        apply from: publishConfigPath
+    }
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
 
@@ -120,8 +123,8 @@ project(':aftership-sdk') {
             maven {
                 url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
                 credentials {
-                    username sonatypeUsername
-                    password sonatypePassword
+                    username ext.has('sonatypeUsername') ? sonatypeUsername : 'SONATYPE_USERNAME'
+                    password ext.has('sonatypePassword') ? sonatypePassword : 'SONATYPE_PASSWORD'
                 }
             }
         }
