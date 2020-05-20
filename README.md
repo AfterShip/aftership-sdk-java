@@ -1,10 +1,10 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.slack.api/slack-api-client.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:com.github.chenjunbiao%20a:aftership-sdk)
-[TOC]
+[![AfterShip SDKs channel](https://aftership-sdk-slackin.herokuapp.com/badge.svg)](https://aftership-sdk-slackin.herokuapp.com/)
 
 aftership-sdk-java
 ==============
 
-The Java SDK of `AfterShip API`, please see in: https://www.aftership.com/docs/api/4
+The Java SDK of `AfterShip API`, please see API documentation in: https://www.aftership.com/docs/api/4
 
 Requirements:
 
@@ -44,7 +44,7 @@ The following code example shows the **three main steps** to use aftership-sdk-j
 
 ```java
 AfterShip afterShip = new AfterShip("YOUR_API_KEY", 
-	new AftershipOption("http://localhost:8080/v4"));
+	new AftershipOption("https://api.aftership.com/v4"));
 ```
 
 2. Get the Endpoint Interface and call the method, then return the **DataEntity<T>** object.
@@ -483,17 +483,17 @@ param.setTrackingNumber("1234567890");
   - NotificationEndpoint.addNotification
   - NotificationEndpoint.removeNotification
 
-####2016-04-26-v1.2.0
+#### 2016-04-26-v1.2.0
 
 * Properties added in Checkpoint class
  1. slug
  2. location
 
-####2016-02-02-v1.1.1
+#### 2016-02-02-v1.1.1
 * Solving issue at Checkpoint.java, typo in ```country_iso3```
 
 ## License
-Copyright (c) 2015 Aftership  
+Copyright (c) 2015-2020 Aftership  
 Licensed under the MIT license.
 
 ​	
