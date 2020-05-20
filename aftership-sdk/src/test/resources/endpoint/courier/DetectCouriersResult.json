@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "data": {
+    "total": 2,
+    "couriers": [
+      {
+        "slug": "fedex",
+        "name": "FedEx",
+        "phone": "+1 800 247 4747",
+        "other_name": "Federal Express",
+        "web_url": "http://www.fedex.com/",
+        "required_fields": [],
+        "optional_fields": []
+      },
+      {
+        "slug": "dx",
+        "name": "DX",
+        "phone": "+44 0844 826 1178",
+        "other_name": "DX Freight",
+        "web_url": "https://www.thedx.co.uk/",
+        "required_fields": [
+          "tracking_postal_code"
+        ],
+        "optional_fields": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "data": {
+    "tracking": {
+      "id": "5b7658cec7c33c0e007de3c5",
+      "tracking_number": "772857780801111",
+      "slug": "fedex",
+      "tracking_account_number": null,
+      "tracking_origin_country": null,
+      "tracking_destination_country": null,
+      "tracking_key": null,
+      "tracking_postal_code": null,
+      "tracking_ship_date": null,
+      "tracking_state": null
+    }
+  }
+}

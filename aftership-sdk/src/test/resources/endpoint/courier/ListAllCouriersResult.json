@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "data": {
+    "total": 3,
+    "couriers": [
+      {
+        "slug": "india-post-int",
+        "name": "India Post International",
+        "phone": "+91 1800 11 2011",
+        "other_name": "भारतीय डाक, Speed Post & eMO, EMS, IPS Web",
+        "web_url": "http://www.indiapost.gov.in/",
+        "required_fields": [],
+        "optional_fields": []
+      },
+      {
+        "slug": "italy-sda",
+        "name": "Italy SDA",
+        "phone": "+39 199 113366",
+        "other_name": "SDA Express Courier",
+        "web_url": "http://www.sda.it/",
+        "required_fields": [],
+        "optional_fields": []
+      },
+      {
+        "slug": "bpost",
+        "name": "Belgium Post",
+        "phone": "+32 2 276 22 74",
+        "other_name": "bpost, Belgian Post",
+        "web_url": "http://www.bpost.be/",
+        "required_fields": [],
+        "optional_fields": []
+      }
+    ]
+  }
+}
