@@ -1,20 +1,17 @@
+# aftership-sdk-java
+
 [![Maven Central](https://img.shields.io/maven-central/v/com.slack.api/slack-api-client.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:com.github.chenjunbiao%20a:aftership-sdk)
 [![AfterShip SDKs channel](https://aftership-sdk-slackin.herokuapp.com/badge.svg)](https://aftership-sdk-slackin.herokuapp.com/)
-
-aftership-sdk-java
-==============
 
 The Java SDK of `AfterShip API`, please see API documentation in: https://www.aftership.com/docs/api/4
 
 Requirements:
 
 - JDK 1.8 or superior.
-- Lombok Plugin [for source code build by IDE] . Example: [lombok-intellij-plugin](https://github.com/mplushnikov/lombok-intellij-plugin) 
+- Lombok Plugin `for source code build by IDE` . Example: [lombok-intellij-plugin](https://github.com/mplushnikov/lombok-intellij-plugin) 
 
 
-
-Installation
---------------
+## Installation
 
 ### Maven
 
@@ -33,27 +30,26 @@ implementation "com.aftership:aftership-sdk:2.0.0"
 ```
 
 
-
 ## Quick Examples
 
 ### Main Steps
 
-The following code example shows the **three main steps** to use aftership-sdk-java:
+The following code example shows the `three main steps` to use aftership-sdk-java:
 
-1. Create **AfterShip** Object.
+1. Create `AfterShip` Object.
 
 ```java
 AfterShip afterShip = new AfterShip("YOUR_API_KEY", 
 	new AftershipOption("https://api.aftership.com/v4"));
 ```
 
-2. Get the Endpoint Interface and call the method, then return the **DataEntity<T>** object.
+2. Get the Endpoint Interface and call the method, then return the `DataEntity<T>` object.
 
 ```java 
 DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
 ```
 
-3. Handling **AftershipError** or Business **Data** or **RateLimit**
+3. Handling `AftershipError` or Business `Data` or `RateLimit`
 
 ```java
 DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
@@ -61,7 +57,7 @@ DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
     // handle Error.
   	System.out.println(entity.getError().getType());
   } else {
-    // handle Data
+    // handle Data.
   	System.out.println(entity.getData());
 }
 // handle Rate Limiter.
@@ -74,9 +70,9 @@ System.out.println(afterShip.getRateLimit().getRemaining());
 
 Error object of this SDK contain fields:
 
-- `type` - **Require** - type of the error, list of error types: 
+- `type` - **Require** - type of the error, please handle each error by this field
 
-  Determine Aftership's error by isApiError(). 
+  If it's Aftership's API Error, get code to confirm the cause of the error:
 
   ```java
   if (entity.getError().isApiError()) {
@@ -92,7 +88,7 @@ Error object of this SDK contain fields:
 
 - `data` - **Optional** - data lead to the error
 
-  The debug Data is a Map<String, Object> object that can get the call parameters. 
+  The debug Data is a `Map<String, Object>` object that can get the call parameters. 
 
   The following data may be available:
 
@@ -101,6 +97,10 @@ Error object of this SDK contain fields:
   System.out.println(entity.getError().getData().get("requestHeaders"));
   System.out.println(entity.getError().getData().get("requestData"));
   System.out.println(entity.getError().getData().get("responseBody"));
+  // or
+  entity.getError().getData().printData();
+  // or
+  entity.getError().getData().printData(s -> {});
   ```
 
 ### Rate Limiter
@@ -335,19 +335,17 @@ if (entity.hasError()) {
 }
 ```
 
-- #### completeTracking [POST /trackings/:slug/:tracking_number/mark-as-completed]
+- #### markAsCompleted [POST /trackings/:slug/:tracking_number/mark-as-completed]
 
 ```java 
 SingleTrackingParam param = new SingleTrackingParam();
 param.setId("wcwy86mie4o17kadedkcw029");
-CompleteTrackingRequest request = new CompleteTrackingRequest(ReasonKind.LOST);
+MarkAsCompletedRequest request = new MarkAsCompletedRequest(ReasonKind.LOST);
 
 DataEntity<SingleTracking> entity =
-    afterShip.getTrackingEndpoint().completeTracking(param, request);
+  afterShip.getTrackingEndpoint().markAsCompleted(param, request);
 if (entity.hasError()) {
   System.out.println(entity.getError().getType());
-  System.out.println(entity.getError().getMessage());
-  System.out.println(entity.getError().getCode());
 } else {
   Tracking tracking = entity.getData().getTracking();
   System.out.println(tracking);
@@ -477,7 +475,7 @@ param.setTrackingNumber("1234567890");
   - TrackingEndpoint.getTrackings
   - TrackingEndpoint.updateTracking
   - TrackingEndpoint.reTrack
-  - TrackingEndpoint.completeTracking
+  - TrackingEndpoint.markAsCompleted
   - CheckpointEndpoint.getLastCheckpoint
   - NotificationEndpoint.getNotification
   - NotificationEndpoint.addNotification

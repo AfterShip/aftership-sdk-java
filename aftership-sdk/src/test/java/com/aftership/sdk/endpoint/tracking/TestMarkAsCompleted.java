@@ -7,15 +7,15 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.model.tracking.CompleteTrackingRequest;
-import com.aftership.sdk.model.tracking.CompleteTrackingRequest.ReasonKind;
+import com.aftership.sdk.model.tracking.MarkAsCompletedRequest;
+import com.aftership.sdk.model.tracking.MarkAsCompletedRequest.ReasonKind;
 import com.aftership.sdk.model.tracking.SingleTracking;
 import com.aftership.sdk.model.tracking.SingleTrackingParam;
 import com.aftership.sdk.rest.DataEntity;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-public class TestCompleteTracking {
+public class TestMarkAsCompleted {
   public static MockWebServer server;
 
   @BeforeAll
@@ -23,7 +23,7 @@ public class TestCompleteTracking {
     server = new MockWebServer();
     server.enqueue(
         TestUtil.createMockResponse()
-            .setBody(TestUtil.getJson("endpoint/tracking/CompleteTrackingResult.json")));
+            .setBody(TestUtil.getJson("endpoint/tracking/MarkAsCompletedResult.json")));
     server.start();
   }
 
@@ -33,16 +33,16 @@ public class TestCompleteTracking {
   }
 
   @Test
-  public void testCompleteTracking() throws IOException, InterruptedException {
+  public void testMarkAsCompleted() throws IOException, InterruptedException {
     AfterShip afterShip = TestUtil.createAfterShip(server);
 
     // request
     SingleTrackingParam param = new SingleTrackingParam();
     param.setId("100");
 
-    CompleteTrackingRequest request = new CompleteTrackingRequest(ReasonKind.LOST);
+    MarkAsCompletedRequest request = new MarkAsCompletedRequest(ReasonKind.LOST);
     DataEntity<SingleTracking> entity =
-        afterShip.getTrackingEndpoint().completeTracking(param, request);
+        afterShip.getTrackingEndpoint().markAsCompleted(param, request);
 
     // assert
     Assertions.assertFalse(entity.hasError(), "No errors in response.");

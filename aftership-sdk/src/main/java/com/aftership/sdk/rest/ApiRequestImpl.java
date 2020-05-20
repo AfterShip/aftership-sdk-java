@@ -202,20 +202,20 @@ public class ApiRequestImpl implements ApiRequest {
   }
 
   private AbstractMap.SimpleEntry<String, Object> entryRequestConfig(RequestConfig requestConfig) {
-    return new AbstractMap.SimpleEntry<>("requestConfig", requestConfig);
+    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_KEY_REQUEST_CONFIG, requestConfig);
   }
 
   private AbstractMap.SimpleEntry<String, Object> entryRequestHeaders(
       Map<String, String> requestHeaders) {
-    return new AbstractMap.SimpleEntry<>("requestHeaders", requestHeaders);
+    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_KEY_REQUEST_HEADERS, requestHeaders);
   }
 
   private <T> AbstractMap.SimpleEntry<String, Object> entryRequestData(T requestData) {
-    return new AbstractMap.SimpleEntry<>("requestData", requestData);
+    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_KEY_REQUEST_DATA, requestData);
   }
 
   private AbstractMap.SimpleEntry<String, Object> entryResponseBody(Response response) {
-    String tag = "responseBody";
+    String tag = AftershipError.DEBUG_KEY_RESPONSE_BODY;
     try {
       if (StrUtil.isNotBlank(response.message())) {
         return new AbstractMap.SimpleEntry<>(tag, null);

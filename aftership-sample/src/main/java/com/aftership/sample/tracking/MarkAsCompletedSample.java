@@ -3,29 +3,29 @@ package com.aftership.sample.tracking;
 import com.aftership.sample.SampleUtil;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.impl.EndpointPath;
-import com.aftership.sdk.model.tracking.CompleteTrackingRequest;
-import com.aftership.sdk.model.tracking.CompleteTrackingRequest.ReasonKind;
+import com.aftership.sdk.model.tracking.MarkAsCompletedRequest;
+import com.aftership.sdk.model.tracking.MarkAsCompletedRequest.ReasonKind;
 import com.aftership.sdk.model.tracking.SingleTracking;
 import com.aftership.sdk.model.tracking.SingleTrackingParam;
 import com.aftership.sdk.model.tracking.Tracking;
 import com.aftership.sdk.rest.DataEntity;
 
-/** Sample of completeTracking method in TrackingEndpoint */
-public class CompleteTrackingSample {
+/** Sample of markAsCompleted method in TrackingEndpoint */
+public class MarkAsCompletedSample {
   public static void main(String[] args) {
     AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
-    completeTracking(afterShip);
+    markAsCompleted(afterShip);
   }
 
-  public static void completeTracking(AfterShip afterShip) {
-    System.out.println(EndpointPath.CREATE_TRACKING);
+  public static void markAsCompleted(AfterShip afterShip) {
+    System.out.println(EndpointPath.MARK_AS_COMPLETED);
 
     SingleTrackingParam param = new SingleTrackingParam();
-    param.setId("wcwy86mie4o17kadedkcw029");
-    CompleteTrackingRequest request = new CompleteTrackingRequest(ReasonKind.LOST);
+    param.setId("wpuezshqc272rkaewf2j3019");
+    MarkAsCompletedRequest request = new MarkAsCompletedRequest(ReasonKind.LOST);
 
     DataEntity<SingleTracking> entity =
-        afterShip.getTrackingEndpoint().completeTracking(param, request);
+        afterShip.getTrackingEndpoint().markAsCompleted(param, request);
     if (entity.hasError()) {
       System.out.println(entity.getError().getType());
       System.out.println(entity.getError().getMessage());

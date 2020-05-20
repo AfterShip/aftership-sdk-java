@@ -3,10 +3,10 @@ package com.aftership.sdk.model.tracking;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-/** Request body for CompleteTracking */
+/** Request body for MarkAsCompleted */
 @Data
 @AllArgsConstructor
-public class CompleteTrackingRequest {
+public class MarkAsCompletedRequest {
 
   /**
    * One of "DELIVERED", "LOST" or "RETURNED_TO_SENDER".
@@ -22,7 +22,7 @@ public class CompleteTrackingRequest {
    */
   private String reason;
 
-  /** Reason of CompleteTracking */
+  /** Reason of MarkAsCompleted */
   public static class ReasonKind {
     /**
      * Mark the tracking as completed with "DELIVERED". The tag of the tracking will be updated to

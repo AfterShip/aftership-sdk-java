@@ -61,8 +61,8 @@ public interface TrackingEndpoint {
   /**
    * Mark a tracking as completed. The tracking won't auto update until retrack it.
    * @param param SingleTrackingParam
-   * @param request CompleteTrackingRequest
+   * @param request MarkAsCompletedRequest
    * @return DataEntity of SingleTracking
    */
-  DataEntity<SingleTracking> completeTracking(SingleTrackingParam param, CompleteTrackingRequest request);
+  DataEntity<SingleTracking> markAsCompleted(SingleTrackingParam param, MarkAsCompletedRequest request);
 }

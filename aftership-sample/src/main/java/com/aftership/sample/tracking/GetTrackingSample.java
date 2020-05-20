@@ -36,7 +36,7 @@ public class GetTrackingSample {
 
   public static void getTracking2(AfterShip afterShip) {
     SingleTrackingParam param = new SingleTrackingParam();
-    param.setSlug("dhl");
+    param.setSlug("mx-cargo");
     param.setTrackingNumber("1234567890");
 
     DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().getTracking(param, null);

@@ -1,6 +1,8 @@
 package com.aftership.sdk.error;
 
+import java.text.MessageFormat;
 import java.util.*;
+import java.util.function.Consumer;
 import com.aftership.sdk.lib.StrUtil;
 import com.aftership.sdk.model.Meta;
 import com.aftership.sdk.rest.BodyParser;
@@ -11,6 +13,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AftershipError {
+  public static final String DEBUG_KEY_REQUEST_CONFIG = "requestConfig";
+  public static final String DEBUG_KEY_REQUEST_HEADERS = "requestHeaders";
+  public static final String DEBUG_KEY_REQUEST_DATA = "requestData";
+  public static final String DEBUG_KEY_RESPONSE_BODY = "responseBody";
+
   /** Type of error */
   private String type = StrUtil.EMPTY;
   /** Message of error */
@@ -19,6 +26,26 @@ public class AftershipError {
   private Integer code = null;
   /** Debug information of error */
   private Map<String, Object> data;
+
+  /**
+   * Print debug data
+   *
+   * @param consumer Consumer Interface Implementation
+   */
+  public void printData(Consumer<String> consumer) {
+    if (data != null && data.size() > 0) {
+      for (Map.Entry<String, Object> entry : data.entrySet()) {
+        String message =
+            MessageFormat.format("DEBUG DATA: {0}={1}", entry.getKey(), entry.getValue());
+        consumer.accept(message);
+      }
+    }
+  }
+
+  /** Print debug data */
+  public void printData() {
+    printData(System.out::println);
+  }
 
   /**
    * Is it a processing error on the SDK side?

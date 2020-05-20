@@ -173,12 +173,12 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
    * Mark a tracking as completed. The tracking won't auto update until retrack it.
    *
    * @param param SingleTrackingParam
-   * @param request CompleteTrackingRequest
+   * @param request MarkAsCompletedRequest
    * @return DataEntity of SingleTracking
    */
   @Override
-  public DataEntity<SingleTracking> completeTracking(
-      SingleTrackingParam param, CompleteTrackingRequest request) {
+  public DataEntity<SingleTracking> markAsCompleted(
+      SingleTrackingParam param, MarkAsCompletedRequest request) {
     Map.Entry<Boolean, DataEntity<SingleTracking>> error = errorOfSingleTrackingParam(param);
     if (error.getKey()) {
       return error.getValue();
@@ -190,8 +190,8 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             param.getSlug(),
             param.getTrackingNumber(),
             null,
-            EndpointPath.COMPLETE_TRACKING,
-            EndpointPath.COMPLETE_TRACKING_ACTION);
+            EndpointPath.MARK_AS_COMPLETED,
+            EndpointPath.MARK_AS_COMPLETED_ACTION);
 
     return this.request.makeRequest(
         new RequestConfig(HttpMethod.POST, path), request, SingleTracking.class);

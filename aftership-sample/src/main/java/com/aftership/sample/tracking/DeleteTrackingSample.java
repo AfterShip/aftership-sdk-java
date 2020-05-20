@@ -16,7 +16,7 @@ public class DeleteTrackingSample {
 
   public static void deleteTracking(AfterShip afterShip) {
     SingleTrackingParam param = new SingleTrackingParam();
-    param.setId("k5sddh3yt62lskacel22o02m");
+    param.setId("wpuezshqc272rkaewf2j3019");
 
     DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().deleteTracking(param);
     if (entity.hasError()) {

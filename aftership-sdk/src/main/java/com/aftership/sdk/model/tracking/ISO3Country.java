@@ -1,4 +1,4 @@
-package com.aftership.sdk.model;
+package com.aftership.sdk.model.tracking;
 
 /** Created by User on 13/6/14. */
 public enum ISO3Country {

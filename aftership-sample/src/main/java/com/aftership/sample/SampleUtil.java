@@ -16,7 +16,7 @@ public final class SampleUtil {
 
     public static final AftershipOption getAftershipOption() {
         AftershipOption option = new AftershipOption();
-        String endpoint = EnvGetter.getString(ENV_AFTERSHIP_OPTION, "http://localhost:8080/v4");
+        String endpoint = EnvGetter.getString(ENV_AFTERSHIP_OPTION, "https://api.aftership.com/v4");
         option.setEndpoint(endpoint);
         return option;
     }
