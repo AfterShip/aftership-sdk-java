@@ -7,8 +7,6 @@ buildscript {
         gsonVersion = '2.8.6'
 
         lombokVersion = '1.18.10'
-
-//        publishConfigFilePath = rootDir.canonicalPath + '/.gradle/publish.gradle'
     }
     repositories {
         mavenCentral()
