@@ -1,5 +1,7 @@
-def publishConfigFilePath = rootDir.canonicalPath + '/.gradle/publish.gradle'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
+def publishConfigFilePath = rootDir.canonicalPath + '/.gradle/publish.gradle'
 if (file("${publishConfigFilePath}").exists()) {
     apply from: "${publishConfigFilePath}"
 
