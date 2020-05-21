@@ -1,0 +1,57 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+def publishConfigFilePath = rootDir.canonicalPath + '/.gradle/publish.gradle'
+if (file("${publishConfigFilePath}").exists()) {
+    apply from: "${publishConfigFilePath}"
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                groupId = 'com.github.chenjunbiao'
+                artifactId = 'aftership-sdk'
+                version = project.version
+
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+                pom {
+                    name = 'aftership-sdk'
+                    description = 'aftership-sdk library'
+                    url = 'https://docs.aftership.com/api/4/overview'
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'https://opensource.org/licenses/MIT'
+                        }
+                    }
+                    developers {
+                        developer {
+                            name = 'chenjunbiao'
+                            email = 'jb.chen@aftership.net'
+                        }
+                    }
+                    scm {
+                        url = 'https://github.com/chenjunbiao/aftership-sdk-java'
+                        connection = 'scm:git:git@github.com:chenjunbiao/aftership-sdk-java.git'
+                        developerConnection = 'scm:git:ssh://git@github.com:chenjunbiao/aftership-sdk-java.git'
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                credentials {
+                    username sonatypeUsername
+                    password sonatypePassword
+                }
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}
