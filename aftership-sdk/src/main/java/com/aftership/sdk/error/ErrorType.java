@@ -1,6 +1,6 @@
 package com.aftership.sdk.error;
 
-import com.aftership.sdk.lib.StrUtil;
+import com.aftership.sdk.utils.StrUtils;
 
 /** Types of errors */
 public enum ErrorType {
@@ -31,7 +31,7 @@ public enum ErrorType {
   }
 
   public static ErrorType get(String name) {
-    if (StrUtil.isNotBlank(name)) {
+    if (StrUtils.isNotBlank(name)) {
       for (ErrorType r : ErrorType.values()) {
         if (r.name.equals(name)) {
           return r;

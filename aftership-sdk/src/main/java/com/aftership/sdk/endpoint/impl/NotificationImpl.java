@@ -1,9 +1,9 @@
-package com.aftership.sdk.impl;
+package com.aftership.sdk.endpoint.impl;
 
 import java.util.Map;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.NotificationEndpoint;
-import com.aftership.sdk.lib.UrlUtil;
+import com.aftership.sdk.utils.UrlUtils;
 import com.aftership.sdk.model.notification.NotificationWrapper;
 import com.aftership.sdk.model.tracking.SingleTrackingParam;
 import com.aftership.sdk.rest.ApiRequest;
@@ -39,7 +39,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
     }
 
     String path =
-        UrlUtil.buildTrackingPath(
+        UrlUtils.buildTrackingPath(
             param.getId(),
             param.getSlug(),
             param.getTrackingNumber(),
@@ -67,7 +67,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
     }
 
     String path =
-        UrlUtil.buildTrackingPath(
+        UrlUtils.buildTrackingPath(
             param.getId(),
             param.getSlug(),
             param.getTrackingNumber(),
@@ -95,7 +95,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
     }
 
     String path =
-        UrlUtil.buildTrackingPath(
+        UrlUtils.buildTrackingPath(
             param.getId(),
             param.getSlug(),
             param.getTrackingNumber(),

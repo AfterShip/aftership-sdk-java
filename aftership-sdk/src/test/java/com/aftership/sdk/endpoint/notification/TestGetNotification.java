@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.lib.UrlUtil;
 import com.aftership.sdk.model.notification.NotificationWrapper;
 import com.aftership.sdk.model.tracking.SingleTrackingParam;
 import com.aftership.sdk.rest.DataEntity;
+import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
@@ -52,7 +52,7 @@ public class TestGetNotification {
 
         //output
         TestUtil.printResponse(afterShip, entity);
-        System.out.println("Path: " + UrlUtil.decode(recordedRequest.getPath()));
+        System.out.println("Path: " + UrlUtils.decode(recordedRequest.getPath()));
         System.out.println("RequestBody: " + recordedRequest.getBody().readUtf8());
     }
 }

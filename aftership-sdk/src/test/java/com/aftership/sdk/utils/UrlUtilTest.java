@@ -1,9 +1,9 @@
-package com.aftership.sdk.lib;
+package com.aftership.sdk.utils;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
-import com.aftership.sdk.impl.EndpointPath;
+import com.aftership.sdk.endpoint.impl.EndpointPath;
 import lombok.SneakyThrows;
 
 class UrlUtilTest {
@@ -12,33 +12,33 @@ class UrlUtilTest {
   @Test
   void testUrlUtilClass() {
     Assertions.assertTrue(
-        Class.forName("com.aftership.sdk.lib.UrlUtil").newInstance() instanceof UrlUtil);
+        Class.forName("com.aftership.sdk.utils.UrlUtils").newInstance() instanceof UrlUtils);
   }
 
   @Test
   void encode() {
-    Assertions.assertEquals("%25", UrlUtil.encode("%"));
+    Assertions.assertEquals("%25", UrlUtils.encode("%"));
   }
 
   @Test
   void testEncode() {
-    Assertions.assertEquals("%25", UrlUtil.encode("%", UrlUtil.UTF8));
-    Assertions.assertEquals("%25", UrlUtil.encode("%", null));
-    Assertions.assertEquals(StrUtil.EMPTY, UrlUtil.encode("", UrlUtil.UTF8));
-    Assertions.assertEquals(StrUtil.EMPTY, UrlUtil.encode("%", "UTF64"));
+    Assertions.assertEquals("%25", UrlUtils.encode("%", UrlUtils.UTF8));
+    Assertions.assertEquals("%25", UrlUtils.encode("%", null));
+    Assertions.assertEquals(StrUtils.EMPTY, UrlUtils.encode("", UrlUtils.UTF8));
+    Assertions.assertEquals(StrUtils.EMPTY, UrlUtils.encode("%", "UTF64"));
   }
 
   @Test
   void decode() {
-    Assertions.assertEquals("%", UrlUtil.decode("%25"));
+    Assertions.assertEquals("%", UrlUtils.decode("%25"));
   }
 
   @Test
   void testDecode() {
-    Assertions.assertEquals("%", UrlUtil.decode("%25", UrlUtil.UTF8));
-    Assertions.assertEquals("%", UrlUtil.decode("%25", null));
-    Assertions.assertEquals(StrUtil.EMPTY, UrlUtil.decode("", UrlUtil.UTF8));
-    Assertions.assertEquals(StrUtil.EMPTY, UrlUtil.decode("%25", "UTF64"));
+    Assertions.assertEquals("%", UrlUtils.decode("%25", UrlUtils.UTF8));
+    Assertions.assertEquals("%", UrlUtils.decode("%25", null));
+    Assertions.assertEquals(StrUtils.EMPTY, UrlUtils.decode("", UrlUtils.UTF8));
+    Assertions.assertEquals(StrUtils.EMPTY, UrlUtils.decode("%25", "UTF64"));
   }
 
   @Test
@@ -46,27 +46,27 @@ class UrlUtilTest {
     Assertions.assertThrows(
         com.aftership.sdk.error.AftershipException.class,
         () -> {
-          UrlUtil.buildTrackingPath("id", "slug", "trackingNumber", new HashMap<>(), null, "");
+          UrlUtils.buildTrackingPath("id", "slug", "trackingNumber", new HashMap<>(), null, "");
         });
 
     Assertions.assertEquals(
         "/couriers/slug/trackingNumber",
-        UrlUtil.buildTrackingPath(
+        UrlUtils.buildTrackingPath(
             "", "slug", "trackingNumber", new HashMap<>(), EndpointPath.COURIERS, ""));
 
     Assertions.assertEquals(
-        StrUtil.EMPTY,
-        UrlUtil.buildTrackingPath(
+        StrUtils.EMPTY,
+        UrlUtils.buildTrackingPath(
             "", "", "trackingNumber", new HashMap<>(), EndpointPath.COURIERS, ""));
   }
 
   @Test
   void fillPathWithQuery() {
     Assertions.assertEquals(
-        "/trackings", UrlUtil.fillPathWithQuery(EndpointPath.TRACKING, new HashMap<>()));
+        "/trackings", UrlUtils.fillPathWithQuery(EndpointPath.TRACKING, new HashMap<>()));
     Assertions.assertEquals(
         "/trackings?aa=11",
-        UrlUtil.fillPathWithQuery(
+        UrlUtils.fillPathWithQuery(
             EndpointPath.TRACKING,
             new HashMap<String, String>() {
               {
@@ -75,7 +75,7 @@ class UrlUtilTest {
             }));
     Assertions.assertEquals(
         "/trackings?aa=11",
-        UrlUtil.fillPathWithQuery(
+        UrlUtils.fillPathWithQuery(
             EndpointPath.TRACKING + "?",
             new HashMap<String, String>() {
               {

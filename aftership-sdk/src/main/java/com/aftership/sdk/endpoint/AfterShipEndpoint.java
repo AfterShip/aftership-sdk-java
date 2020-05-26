@@ -6,7 +6,7 @@ import java.util.Map;
 import com.aftership.sdk.error.AftershipError;
 import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.error.ErrorType;
-import com.aftership.sdk.lib.StrUtil;
+import com.aftership.sdk.utils.StrUtils;
 import com.aftership.sdk.model.tracking.SingleTrackingParam;
 import com.aftership.sdk.rest.ApiRequest;
 import com.aftership.sdk.rest.DataEntity;
@@ -36,9 +36,9 @@ public abstract class AfterShipEndpoint {
   protected <T> Map.Entry<Boolean, DataEntity<T>> errorOfSingleTrackingParam(
       SingleTrackingParam param) {
     if (param == null
-        || (StrUtil.isBlank(param.getId())
-            && StrUtil.isBlank(param.getSlug())
-            && StrUtil.isBlank(param.getTrackingNumber()))) {
+        || (StrUtils.isBlank(param.getId())
+            && StrUtils.isBlank(param.getSlug())
+            && StrUtils.isBlank(param.getTrackingNumber()))) {
       return new AbstractMap.SimpleEntry<>(
           true,
           ResponseEntity.makeError(

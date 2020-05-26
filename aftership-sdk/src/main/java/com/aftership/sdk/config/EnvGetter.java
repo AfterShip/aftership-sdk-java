@@ -1,7 +1,7 @@
 package com.aftership.sdk.config;
 
 import java.util.Map;
-import com.aftership.sdk.lib.StrUtil;
+import com.aftership.sdk.utils.StrUtils;
 
 /** Get configuration through environment variables */
 public final class EnvGetter {
@@ -25,7 +25,7 @@ public final class EnvGetter {
    */
   public static String getString(String key, String defaultValue) {
     String value = getEnv().get(key);
-    if (StrUtil.isBlank(value)) {
+    if (StrUtils.isBlank(value)) {
       return defaultValue;
     }
     return value;
@@ -40,7 +40,7 @@ public final class EnvGetter {
    */
   public static int getInt(String key, int defaultValue) {
     String value = getEnv().get(key);
-    if (StrUtil.isBlank(value)) {
+    if (StrUtils.isBlank(value)) {
       return defaultValue;
     }
 
@@ -61,7 +61,7 @@ public final class EnvGetter {
    */
   public static long getLong(String key, long defaultValue) {
     String value = getEnv().get(key);
-    if (StrUtil.isBlank(value)) {
+    if (StrUtils.isBlank(value)) {
       return defaultValue;
     }
 
@@ -82,7 +82,7 @@ public final class EnvGetter {
    */
   public static boolean getBool(String key, boolean defaultValue) {
     String value = getEnv().get(key);
-    if (StrUtil.isBlank(value)) {
+    if (StrUtils.isBlank(value)) {
       return defaultValue;
     }
 

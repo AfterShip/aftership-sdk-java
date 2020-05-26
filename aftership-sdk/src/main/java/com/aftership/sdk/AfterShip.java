@@ -4,13 +4,13 @@ import com.aftership.sdk.endpoint.CheckpointEndpoint;
 import com.aftership.sdk.endpoint.CourierEndpoint;
 import com.aftership.sdk.endpoint.NotificationEndpoint;
 import com.aftership.sdk.endpoint.TrackingEndpoint;
+import com.aftership.sdk.endpoint.impl.CheckpointImpl;
+import com.aftership.sdk.endpoint.impl.CourierImpl;
+import com.aftership.sdk.endpoint.impl.NotificationImpl;
+import com.aftership.sdk.endpoint.impl.TrackingImpl;
 import com.aftership.sdk.error.AftershipException;
 import com.aftership.sdk.error.ErrorMessage;
-import com.aftership.sdk.impl.CheckpointImpl;
-import com.aftership.sdk.impl.CourierImpl;
-import com.aftership.sdk.impl.NotificationImpl;
-import com.aftership.sdk.impl.TrackingImpl;
-import com.aftership.sdk.lib.StrUtil;
+import com.aftership.sdk.utils.StrUtils;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.RateLimit;
 import com.aftership.sdk.rest.ApiRequest;
@@ -59,7 +59,7 @@ public class AfterShip {
    * @param options Optional parameters for API request
    */
   public AfterShip(String apiKey, AftershipOption options) {
-    if (StrUtil.isBlank(apiKey)) {
+    if (StrUtils.isBlank(apiKey)) {
       throw new AftershipException(ErrorMessage.CONSTRUCTOR_INVALID_API_KEY);
     }
 
@@ -68,9 +68,9 @@ public class AfterShip {
     // Setup
     if (options != null) {
       this.endpoint =
-          StrUtil.isNotBlank(options.getEndpoint()) ? options.getEndpoint() : DEFAULT_ENDPOINT;
+          StrUtils.isNotBlank(options.getEndpoint()) ? options.getEndpoint() : DEFAULT_ENDPOINT;
       this.userAgentPrefix =
-          StrUtil.isNotBlank(options.getUserAgentPrefix())
+          StrUtils.isNotBlank(options.getUserAgentPrefix())
               ? options.getUserAgentPrefix()
               : DEFAULT_USER_AGENT;
     } else {

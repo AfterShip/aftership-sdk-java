@@ -1,4 +1,4 @@
-package com.aftership.sdk.lib;
+package com.aftership.sdk.utils;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ class DefineTest {
   @Test
   void testDefineClass() {
     Assertions.assertTrue(
-        Class.forName("com.aftership.sdk.lib.Define").newInstance() instanceof Define);
+        Class.forName("com.aftership.sdk.utils.Define").newInstance() instanceof Define);
   }
 
 }

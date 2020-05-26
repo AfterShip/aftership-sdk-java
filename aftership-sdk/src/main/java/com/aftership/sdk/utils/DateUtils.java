@@ -1,4 +1,4 @@
-package com.aftership.sdk.lib;
+package com.aftership.sdk.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Optional;
 
 /** Date's assistant method. */
-public class DateUtil {
+public class DateUtils {
   public static final String FORMAT_WITH_T = "yyyy-MM-dd'T'HH:mm:ss";
   public static final String FORMAT_WITH_Z = "yyyy-MM-dd'T'HH:mm:ssZ";
   public static final String FORMAT_WITH_X = "yyyy-MM-dd'T'HH:mm:ssXXX";
@@ -38,7 +38,7 @@ public class DateUtil {
    */
   public static String format(String dateFormat, Date date) {
     if (date == null) {
-      return StrUtil.EMPTY;
+      return StrUtils.EMPTY;
     }
     SimpleDateFormat format = new SimpleDateFormat(dateFormat);
     return format.format(date);

@@ -3,8 +3,8 @@ package com.aftership.sdk.rest;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.aftership.sdk.lib.JsonUtil;
-import com.aftership.sdk.lib.StrUtil;
+import com.aftership.sdk.utils.JsonUtils;
+import com.aftership.sdk.utils.StrUtils;
 import com.aftership.sdk.model.Meta;
 
 /** Parsing the response message body */
@@ -18,7 +18,7 @@ public class BodyParser {
    */
   public static Meta processMeta(String jsonBody) {
     return processMeta(
-        JsonParser.parseString(StrUtil.isNotBlank(jsonBody) ? jsonBody : "{}").getAsJsonObject());
+        JsonParser.parseString(StrUtils.isNotBlank(jsonBody) ? jsonBody : "{}").getAsJsonObject());
   }
 
   /**
@@ -33,7 +33,7 @@ public class BodyParser {
       return null;
     }
 
-    return JsonUtil.create().fromJson(metaJson, Meta.class);
+    return JsonUtils.create().fromJson(metaJson, Meta.class);
   }
 
   /**
@@ -49,6 +49,6 @@ public class BodyParser {
     if (dataJson == null) {
       return null;
     }
-    return JsonUtil.create().fromJson(dataJson, responseType);
+    return JsonUtils.create().fromJson(dataJson, responseType);
   }
 }

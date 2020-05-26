@@ -1,4 +1,4 @@
-package com.aftership.sdk.impl;
+package com.aftership.sdk.endpoint.impl;
 
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.CourierEndpoint;

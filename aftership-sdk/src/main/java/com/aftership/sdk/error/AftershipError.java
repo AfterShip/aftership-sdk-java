@@ -3,7 +3,7 @@ package com.aftership.sdk.error;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.function.Consumer;
-import com.aftership.sdk.lib.StrUtil;
+import com.aftership.sdk.utils.StrUtils;
 import com.aftership.sdk.model.Meta;
 import com.aftership.sdk.rest.BodyParser;
 import lombok.Data;
@@ -19,9 +19,9 @@ public class AftershipError {
   public static final String DEBUG_KEY_RESPONSE_BODY = "responseBody";
 
   /** Type of error */
-  private String type = StrUtil.EMPTY;
+  private String type = StrUtils.EMPTY;
   /** Message of error */
-  private String message = StrUtil.EMPTY;
+  private String message = StrUtils.EMPTY;
   /** Coding of error */
   private Integer code = null;
   /** Debug information of error */
@@ -149,10 +149,10 @@ public class AftershipError {
   public static AftershipError make(
       String type, String message, Integer code, Map.Entry<String, Object>... data) {
     AftershipError error = new AftershipError();
-    if (StrUtil.isNotBlank(type)) {
+    if (StrUtils.isNotBlank(type)) {
       error.setType(type);
     }
-    if (StrUtil.isNotBlank(message)) {
+    if (StrUtils.isNotBlank(message)) {
       error.setMessage(message);
     }
     if (code != null) {

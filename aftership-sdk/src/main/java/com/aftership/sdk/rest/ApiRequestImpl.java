@@ -11,9 +11,9 @@ import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.error.AftershipError;
 import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.error.ErrorType;
-import com.aftership.sdk.lib.Define;
-import com.aftership.sdk.lib.JsonUtil;
-import com.aftership.sdk.lib.StrUtil;
+import com.aftership.sdk.utils.Define;
+import com.aftership.sdk.utils.JsonUtils;
+import com.aftership.sdk.utils.StrUtils;
 import com.aftership.sdk.model.AftershipResponse;
 import com.aftership.sdk.model.Meta;
 import com.aftership.sdk.model.RateLimit;
@@ -50,12 +50,12 @@ public class ApiRequestImpl implements ApiRequest {
   public <T, R> ResponseEntity<R> makeRequest(
       RequestConfig requestConfig, T requestData, Class<R> responseType) {
     // parameter check
-    if (requestConfig == null || StrUtil.isBlank(requestConfig.getPath())) {
+    if (requestConfig == null || StrUtils.isBlank(requestConfig.getPath())) {
       return ResponseEntity.makeError(
           AftershipError.make(
               ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_INVALID_REQUEST_CONFIG));
     }
-    if (StrUtil.isBlank(app.getApiKey())) {
+    if (StrUtils.isBlank(app.getApiKey())) {
       return ResponseEntity.makeError(
           AftershipError.make(
               ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_INVALID_API_KEY));
@@ -67,7 +67,7 @@ public class ApiRequestImpl implements ApiRequest {
     }
 
     // build headers
-    String requestId = StrUtil.uuid4();
+    String requestId = StrUtils.uuid4();
     Map<String, String> requestHeaders =
         new HashMap<String, String>() {
           {
@@ -81,7 +81,7 @@ public class ApiRequestImpl implements ApiRequest {
     // build request
     RequestBody requestBody = null;
     if (requestData != null) {
-      requestBody = RequestBody.create(JsonUtil.create().toJson(requestData), JSON);
+      requestBody = RequestBody.create(JsonUtils.create().toJson(requestData), JSON);
     }
     Request request =
         new Request.Builder()
@@ -118,7 +118,7 @@ public class ApiRequestImpl implements ApiRequest {
 
       String jsonBody =
           response.body() != null ? Objects.requireNonNull(response.body()).string() : "{}";
-      if (StrUtil.isBlank(jsonBody) || "{}".equals(jsonBody)) {
+      if (StrUtils.isBlank(jsonBody) || "{}".equals(jsonBody)) {
         return ResponseEntity.makeError(
             AftershipError.make(
                 ErrorType.HandlerError,
@@ -186,14 +186,14 @@ public class ApiRequestImpl implements ApiRequest {
     }
 
     RateLimit rateLimit = new RateLimit();
-    if (StrUtil.isNotBlank(response.header(RATE_LIMIT_RESET))) {
+    if (StrUtils.isNotBlank(response.header(RATE_LIMIT_RESET))) {
       rateLimit.setReset(Long.parseLong(Objects.requireNonNull(response.header(RATE_LIMIT_RESET))));
     }
-    if (StrUtil.isNotBlank(response.header(RATE_LIMIT_LIMIT))) {
+    if (StrUtils.isNotBlank(response.header(RATE_LIMIT_LIMIT))) {
       rateLimit.setLimit(
           Integer.parseInt(Objects.requireNonNull(response.header(RATE_LIMIT_LIMIT))));
     }
-    if (StrUtil.isNotBlank(response.header(RATE_LIMIT_REMAINING))) {
+    if (StrUtils.isNotBlank(response.header(RATE_LIMIT_REMAINING))) {
       rateLimit.setRemaining(
           Integer.parseInt(Objects.requireNonNull(response.header(RATE_LIMIT_REMAINING))));
     }
@@ -217,7 +217,7 @@ public class ApiRequestImpl implements ApiRequest {
   private AbstractMap.SimpleEntry<String, Object> entryResponseBody(Response response) {
     String tag = AftershipError.DEBUG_KEY_RESPONSE_BODY;
     try {
-      if (StrUtil.isNotBlank(response.message())) {
+      if (StrUtils.isNotBlank(response.message())) {
         return new AbstractMap.SimpleEntry<>(tag, null);
       }
       String jsonBody = Objects.requireNonNull(response.body()).string();

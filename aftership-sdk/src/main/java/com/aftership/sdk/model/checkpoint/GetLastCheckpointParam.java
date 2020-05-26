@@ -3,7 +3,7 @@ package com.aftership.sdk.model.checkpoint;
 import java.util.HashMap;
 import java.util.Map;
 import com.aftership.sdk.endpoint.StringMap;
-import com.aftership.sdk.lib.StrUtil;
+import com.aftership.sdk.utils.StrUtils;
 import lombok.Data;
 
 /** GetLastCheckpointParam is the additional parameters in getLastCheckpoint */
@@ -55,7 +55,7 @@ public class GetLastCheckpointParam implements StringMap {
      */
     public static String combine(String... fields) {
       if (fields == null) {
-        return StrUtil.EMPTY;
+        return StrUtils.EMPTY;
       }
       return String.join(",", fields);
     }

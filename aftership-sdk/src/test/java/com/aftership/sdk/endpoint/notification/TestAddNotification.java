@@ -4,11 +4,11 @@ import org.junit.jupiter.api.*;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.lib.JsonUtil;
-import com.aftership.sdk.lib.UrlUtil;
 import com.aftership.sdk.model.notification.NotificationWrapper;
 import com.aftership.sdk.model.tracking.SingleTrackingParam;
 import com.aftership.sdk.rest.DataEntity;
+import com.aftership.sdk.utils.JsonUtils;
+import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
@@ -40,7 +40,7 @@ public class TestAddNotification {
 
         //request
         String requestBody = TestUtil.getJson("endpoint/notification/AddNotificationRequest.json");
-        NotificationWrapper notificationWrapper = JsonUtil.create().fromJson(requestBody, NotificationWrapper.class);
+        NotificationWrapper notificationWrapper = JsonUtils.create().fromJson(requestBody, NotificationWrapper.class);
         SingleTrackingParam param = new SingleTrackingParam();
         param.setId("100");
 
@@ -55,12 +55,12 @@ public class TestAddNotification {
 
         RecordedRequest recordedRequest = server.takeRequest();
         Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
-        Assertions.assertEquals("/v4/notifications/100/add", UrlUtil.decode(recordedRequest.getPath()),
+        Assertions.assertEquals("/v4/notifications/100/add", UrlUtils.decode(recordedRequest.getPath()),
                 "path mismatch.");
 
         //output
         TestUtil.printResponse(afterShip, entity);
-        System.out.println("Path: " + UrlUtil.decode(recordedRequest.getPath()));
+        System.out.println("Path: " + UrlUtils.decode(recordedRequest.getPath()));
         System.out.println("RequestBody: " + recordedRequest.getBody().readUtf8());
     }
 

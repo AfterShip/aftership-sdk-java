@@ -1,9 +1,9 @@
-package com.aftership.sdk.lib;
+package com.aftership.sdk.utils;
 
 import java.util.UUID;
 
 /** String's assistant method. */
-public final class StrUtil {
+public final class StrUtils {
 
   /** Empty String */
   public static final String EMPTY = "";

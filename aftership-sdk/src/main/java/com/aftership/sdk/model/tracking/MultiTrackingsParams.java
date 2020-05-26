@@ -3,8 +3,8 @@ package com.aftership.sdk.model.tracking;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import com.aftership.sdk.lib.DateUtil;
-import com.aftership.sdk.lib.StrUtil;
+import com.aftership.sdk.utils.DateUtils;
+import com.aftership.sdk.utils.StrUtils;
 import lombok.Data;
 
 /** GetTrackingListParams represents the set of params for get getTrackingList API */
@@ -68,20 +68,20 @@ public class MultiTrackingsParams {
    */
   public Map<String, String> toMap() {
     Map<String, String> map = new HashMap<>();
-    map.put("page", this.getPage() != null ? this.getPage().toString() : StrUtil.EMPTY);
-    map.put("limit", this.getLimit() != null ? this.getLimit().toString() : StrUtil.EMPTY);
+    map.put("page", this.getPage() != null ? this.getPage().toString() : StrUtils.EMPTY);
+    map.put("limit", this.getLimit() != null ? this.getLimit().toString() : StrUtils.EMPTY);
     map.put("keyword", this.getKeyword());
     map.put("slug", this.getSlug());
     map.put(
         "delivery_time",
-        this.getDeliveryTime() != null ? this.getDeliveryTime().toString() : StrUtil.EMPTY);
+        this.getDeliveryTime() != null ? this.getDeliveryTime().toString() : StrUtils.EMPTY);
     map.put("origin", this.getOrigin());
     map.put("destination", this.getDestination());
     map.put("tag", this.getTag());
     // Example: 2013-03-15T16:41:56+08:00
-    map.put("created_at_min", DateUtil.format(DateUtil.FORMAT_WITH_X, this.getCreatedAtMin()));
+    map.put("created_at_min", DateUtils.format(DateUtils.FORMAT_WITH_X, this.getCreatedAtMin()));
     // Example: 2013-04-15T16:41:56+08:00
-    map.put("created_at_max", DateUtil.format(DateUtil.FORMAT_WITH_X, this.getCreatedAtMax()));
+    map.put("created_at_max", DateUtils.format(DateUtils.FORMAT_WITH_X, this.getCreatedAtMax()));
     map.put("fields", this.getFields());
     map.put("lang", this.getLang());
     return map;
@@ -112,7 +112,7 @@ public class MultiTrackingsParams {
      */
     public static String combine(String... fields) {
       if (fields == null) {
-        return StrUtil.EMPTY;
+        return StrUtils.EMPTY;
       }
       return String.join(",", fields);
     }

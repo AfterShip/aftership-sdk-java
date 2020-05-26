@@ -4,9 +4,9 @@ import org.junit.jupiter.api.*;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.lib.JsonUtil;
 import com.aftership.sdk.model.tracking.*;
 import com.aftership.sdk.rest.DataEntity;
+import com.aftership.sdk.utils.JsonUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
@@ -31,7 +31,7 @@ public class TestGetTracking {
 
         //request
         String getTrackingParams = TestUtil.getJson("endpoint/tracking/GetTrackingParams.json");
-        GetTrackingParams optionalParams = JsonUtil.create().fromJson(getTrackingParams, GetTrackingParams.class);
+        GetTrackingParams optionalParams = JsonUtils.create().fromJson(getTrackingParams, GetTrackingParams.class);
         SingleTrackingParam param = new SingleTrackingParam();
         param.setId("100");
         param.setOptionalParams(new SingleTrackingOptionalParams());

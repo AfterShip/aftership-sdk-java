@@ -1,4 +1,4 @@
-package com.aftership.sdk.lib;
+package com.aftership.sdk.utils;
 
 /** Define some constants */
 public final class Define {

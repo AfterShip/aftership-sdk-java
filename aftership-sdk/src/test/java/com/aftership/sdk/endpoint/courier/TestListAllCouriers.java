@@ -4,7 +4,7 @@ import org.junit.jupiter.api.*;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.impl.EndpointPath;
+import com.aftership.sdk.endpoint.impl.EndpointPath;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.courier.CourierList;
 import com.aftership.sdk.rest.DataEntity;

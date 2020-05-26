@@ -4,13 +4,13 @@ import org.junit.jupiter.api.*;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.impl.EndpointPath;
-import com.aftership.sdk.lib.UrlUtil;
+import com.aftership.sdk.endpoint.impl.EndpointPath;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.courier.CourierList;
 import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.rest.HttpMethod;
 import com.aftership.sdk.rest.ResponseEntity;
+import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
@@ -64,7 +64,7 @@ public class TestListCouriers {
 
         //output
         TestUtil.printResponse(afterShip, entity);
-        System.out.println("Path: " + UrlUtil.decode(recordedRequest.getPath()));
+        System.out.println("Path: " + UrlUtils.decode(recordedRequest.getPath()));
         System.out.println("RequestBody: " + recordedRequest.getBody().readUtf8());
     }
 

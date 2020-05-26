@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.lib.JsonUtil;
 import com.aftership.sdk.model.tracking.SingleTracking;
 import com.aftership.sdk.model.tracking.SingleTrackingParam;
 import com.aftership.sdk.model.tracking.UpdateTrackingRequest;
 import com.aftership.sdk.rest.DataEntity;
+import com.aftership.sdk.utils.JsonUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
@@ -37,7 +37,7 @@ public class TestUpdateTracking {
 
         //request
         String requestBody = TestUtil.getJson("endpoint/tracking/UpdateTrackingRequest.json");
-        UpdateTrackingRequest request = JsonUtil.create().fromJson(requestBody, UpdateTrackingRequest.class);
+        UpdateTrackingRequest request = JsonUtils.create().fromJson(requestBody, UpdateTrackingRequest.class);
 
         SingleTrackingParam param = new SingleTrackingParam();
         param.setId("100");

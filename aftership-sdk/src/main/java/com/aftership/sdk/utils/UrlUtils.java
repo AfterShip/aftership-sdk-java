@@ -1,4 +1,4 @@
-package com.aftership.sdk.lib;
+package com.aftership.sdk.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -9,7 +9,7 @@ import com.aftership.sdk.error.AftershipException;
 import com.aftership.sdk.error.ErrorMessage;
 
 /** Url's assistant method. */
-public final class UrlUtil {
+public final class UrlUtils {
 
   /** Url coding */
   public static final String UTF8 = "UTF-8";
@@ -25,16 +25,16 @@ public final class UrlUtil {
   }
 
   public static String encode(String value, String charset) {
-    if (StrUtil.isBlank(value)) {
-      return StrUtil.EMPTY;
+    if (StrUtils.isBlank(value)) {
+      return StrUtils.EMPTY;
     }
-    if (StrUtil.isBlank(charset)) {
+    if (StrUtils.isBlank(charset)) {
       charset = UTF8;
     }
     try {
       return URLEncoder.encode(value, charset);
     } catch (UnsupportedEncodingException e) {
-      return StrUtil.EMPTY;
+      return StrUtils.EMPTY;
     }
   }
 
@@ -43,16 +43,16 @@ public final class UrlUtil {
   }
 
   public static String decode(String value, String charset) {
-    if (StrUtil.isBlank(value)) {
-      return StrUtil.EMPTY;
+    if (StrUtils.isBlank(value)) {
+      return StrUtils.EMPTY;
     }
-    if (StrUtil.isBlank(charset)) {
+    if (StrUtils.isBlank(charset)) {
       charset = UTF8;
     }
     try {
       return URLDecoder.decode(value, charset);
     } catch (UnsupportedEncodingException e) {
-      return StrUtil.EMPTY;
+      return StrUtils.EMPTY;
     }
   }
 
@@ -63,19 +63,19 @@ public final class UrlUtil {
       Map<String, String> query,
       String rootPath,
       String action) {
-    if (StrUtil.isBlank(rootPath)) {
+    if (StrUtils.isBlank(rootPath)) {
       throw new AftershipException(ErrorMessage.CONSTRUCTOR_PATH_IS_EMPTY);
     }
 
     String trackingUrl = "";
-    if (StrUtil.isNotBlank(id)) {
+    if (StrUtils.isNotBlank(id)) {
       trackingUrl = MessageFormat.format("{0}/{1}", rootPath, encode(id));
-    } else if (StrUtil.isNotBlank(slug) && StrUtil.isNotBlank(trackingNumber)) {
+    } else if (StrUtils.isNotBlank(slug) && StrUtils.isNotBlank(trackingNumber)) {
       trackingUrl =
           MessageFormat.format("{0}/{1}/{2}", rootPath, encode(slug), encode(trackingNumber));
     }
 
-    if (StrUtil.isNotBlank(action)) {
+    if (StrUtils.isNotBlank(action)) {
       trackingUrl = MessageFormat.format("{0}/{1}", trackingUrl, encode(action));
     }
 
@@ -93,7 +93,7 @@ public final class UrlUtil {
         builder.append("?");
       }
       for (Map.Entry<String, String> entry : query.entrySet()) {
-        if (StrUtil.isNotBlank(entry.getValue())) {
+        if (StrUtils.isNotBlank(entry.getValue())) {
           builder.append(MessageFormat.format("{0}={1}", entry.getKey(), encode(entry.getValue())));
           builder.append("&");
         }

@@ -1,4 +1,4 @@
-package com.aftership.sdk.impl;
+package com.aftership.sdk.endpoint.impl;
 
 /** Definition of Endpoint Path */
 public class EndpointPath {

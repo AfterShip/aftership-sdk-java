@@ -1,14 +1,12 @@
-package com.aftership.sdk.lib;
+package com.aftership.sdk.utils;
 
 import com.google.gson.*;
 import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
 /** Json's assistant method. */
-public final class JsonUtil {
+public final class JsonUtils {
 
   /**
    * Parsing a string as an object
@@ -19,7 +17,7 @@ public final class JsonUtil {
    * @return Object
    */
   public static <T> T parseJson(String json, Class<T> tClass) {
-    if (StrUtil.isBlank(json)) {
+    if (StrUtils.isBlank(json)) {
       return null;
     }
     return create().fromJson(json, tClass);
@@ -58,19 +56,19 @@ public final class JsonUtil {
     }
 
     private Date parseDate(String dateString) {
-      if (StrUtil.isBlank(dateString)) {
+      if (StrUtils.isBlank(dateString)) {
         return null;
       }
 
       String[] formats =
           new String[] {
-            DateUtil.FORMAT_WITH_T,
-            DateUtil.FORMAT_WITHOUT_T,
-            DateUtil.FORMAT_WITH_Z,
-            DateUtil.FORMAT_WITH_X
+            DateUtils.FORMAT_WITH_T,
+            DateUtils.FORMAT_WITHOUT_T,
+            DateUtils.FORMAT_WITH_Z,
+            DateUtils.FORMAT_WITH_X
           };
       for (String item : formats) {
-        Optional<Date> optionalDate = DateUtil.parse(item, dateString);
+        Optional<Date> optionalDate = DateUtils.parse(item, dateString);
         if (optionalDate.isPresent()) {
           return optionalDate.get();
         }

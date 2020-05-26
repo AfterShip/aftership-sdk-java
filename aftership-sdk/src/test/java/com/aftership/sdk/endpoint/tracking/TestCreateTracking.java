@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.lib.JsonUtil;
 import com.aftership.sdk.model.tracking.CreateTrackingRequest;
 import com.aftership.sdk.model.tracking.SingleTracking;
 import com.aftership.sdk.rest.DataEntity;
+import com.aftership.sdk.utils.JsonUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
@@ -36,7 +36,7 @@ public class TestCreateTracking {
 
         //request
         String requestBody = TestUtil.getJson("endpoint/tracking/CreateTrackingRequest.json");
-        CreateTrackingRequest request = JsonUtil.create().fromJson(requestBody, CreateTrackingRequest.class);
+        CreateTrackingRequest request = JsonUtils.create().fromJson(requestBody, CreateTrackingRequest.class);
 
         DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().createTracking(request);
 

@@ -1,4 +1,4 @@
-package com.aftership.sdk.impl;
+package com.aftership.sdk.endpoint.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,8 +7,8 @@ import com.aftership.sdk.endpoint.TrackingEndpoint;
 import com.aftership.sdk.error.AftershipError;
 import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.error.ErrorType;
-import com.aftership.sdk.lib.StrUtil;
-import com.aftership.sdk.lib.UrlUtil;
+import com.aftership.sdk.utils.StrUtils;
+import com.aftership.sdk.utils.UrlUtils;
 import com.aftership.sdk.model.tracking.*;
 import com.aftership.sdk.rest.*;
 
@@ -32,7 +32,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
    */
   @Override
   public DataEntity<SingleTracking> createTracking(CreateTrackingRequest request) {
-    if (StrUtil.isBlank(request.getTracking().getTrackingNumber())) {
+    if (StrUtils.isBlank(request.getTracking().getTrackingNumber())) {
       return ResponseEntity.makeError(
           AftershipError.make(
               ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_REQUIRED_TRACKING_NUMBER));
@@ -57,7 +57,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     }
 
     String path =
-        UrlUtil.buildTrackingPath(
+        UrlUtils.buildTrackingPath(
             param.getId(),
             param.getSlug(),
             param.getTrackingNumber(),
@@ -87,7 +87,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     Map<String, String> query = this.merge(param.getOptionalParams(), optionalParams);
 
     String path =
-        UrlUtil.buildTrackingPath(
+        UrlUtils.buildTrackingPath(
             param.getId(),
             param.getSlug(),
             param.getTrackingNumber(),
@@ -108,7 +108,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
   @Override
   public DataEntity<MultiTrackingsData> getTrackings(MultiTrackingsParams optionalParams) {
     Map<String, String> query = optionalParams != null ? optionalParams.toMap() : new HashMap<>();
-    String path = UrlUtil.fillPathWithQuery(EndpointPath.GET_TRACKINGS, query);
+    String path = UrlUtils.fillPathWithQuery(EndpointPath.GET_TRACKINGS, query);
 
     return this.request.makeRequest(
         new RequestConfig(HttpMethod.GET, path), null, MultiTrackingsData.class);
@@ -130,7 +130,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     }
 
     String path =
-        UrlUtil.buildTrackingPath(
+        UrlUtils.buildTrackingPath(
             param.getId(),
             param.getSlug(),
             param.getTrackingNumber(),
@@ -156,7 +156,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     }
 
     String path =
-        UrlUtil.buildTrackingPath(
+        UrlUtils.buildTrackingPath(
             param.getId(),
             param.getSlug(),
             param.getTrackingNumber(),
@@ -185,7 +185,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     }
 
     String path =
-        UrlUtil.buildTrackingPath(
+        UrlUtils.buildTrackingPath(
             param.getId(),
             param.getSlug(),
             param.getTrackingNumber(),

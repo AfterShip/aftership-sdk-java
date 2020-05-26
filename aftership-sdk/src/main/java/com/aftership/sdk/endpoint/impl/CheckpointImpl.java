@@ -1,9 +1,9 @@
-package com.aftership.sdk.impl;
+package com.aftership.sdk.endpoint.impl;
 
 import java.util.Map;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.CheckpointEndpoint;
-import com.aftership.sdk.lib.UrlUtil;
+import com.aftership.sdk.utils.UrlUtils;
 import com.aftership.sdk.model.checkpoint.GetLastCheckpointParam;
 import com.aftership.sdk.model.checkpoint.LastCheckpoint;
 import com.aftership.sdk.model.tracking.SingleTrackingParam;
@@ -42,7 +42,7 @@ public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpo
     Map<String, String> query = this.merge(param.getOptionalParams(), optionalParams);
 
     String path =
-        UrlUtil.buildTrackingPath(
+        UrlUtils.buildTrackingPath(
             param.getId(),
             param.getSlug(),
             param.getTrackingNumber(),
