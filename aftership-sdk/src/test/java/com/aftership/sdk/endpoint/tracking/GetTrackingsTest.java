@@ -12,7 +12,7 @@ import com.aftership.sdk.model.tracking.MultiTrackingsParams;
 import com.aftership.sdk.rest.DataEntity;
 import okhttp3.mockwebserver.MockWebServer;
 
-public class TestGetTrackings {
+public class GetTrackingsTest {
     public static MockWebServer server;
 
     @BeforeAll

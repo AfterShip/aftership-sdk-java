@@ -6,7 +6,7 @@ import java.util.HashMap;
 import com.aftership.sdk.endpoint.impl.EndpointPath;
 import lombok.SneakyThrows;
 
-class UrlUtilTest {
+class UrlUtilsTest {
 
   @SneakyThrows
   @Test

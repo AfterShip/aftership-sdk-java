@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import lombok.SneakyThrows;
 
-class StrUtilTest {
+class StrUtilsTest {
 
   @SneakyThrows
   @Test

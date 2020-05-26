@@ -15,7 +15,7 @@ import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-public class TestGetLastCheckpoint {
+public class GetLastCheckpointTest {
     public static MockWebServer server;
 
     @BeforeAll

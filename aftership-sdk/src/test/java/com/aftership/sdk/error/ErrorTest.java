@@ -9,7 +9,7 @@ import com.aftership.sdk.model.courier.CourierList;
 import com.aftership.sdk.rest.DataEntity;
 import okhttp3.mockwebserver.MockWebServer;
 
-public class TestError {
+public class ErrorTest {
     public static MockWebServer server;
 
     @BeforeAll

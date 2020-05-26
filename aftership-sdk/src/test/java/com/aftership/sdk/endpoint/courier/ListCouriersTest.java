@@ -14,7 +14,7 @@ import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-public class TestListCouriers {
+public class ListCouriersTest {
     public static MockWebServer server;
 
     @BeforeAll

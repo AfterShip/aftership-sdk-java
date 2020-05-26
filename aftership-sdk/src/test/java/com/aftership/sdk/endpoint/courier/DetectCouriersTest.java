@@ -14,7 +14,7 @@ import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.utils.JsonUtils;
 import okhttp3.mockwebserver.MockWebServer;
 
-public class TestDetectCouriers {
+public class DetectCouriersTest {
   public static MockWebServer server;
 
   @BeforeAll

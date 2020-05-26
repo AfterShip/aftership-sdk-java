@@ -13,7 +13,7 @@ import com.aftership.sdk.rest.ResponseEntity;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-public class TestListAllCouriers {
+public class ListAllCouriersTest {
     public static MockWebServer server;
 
     @BeforeAll
