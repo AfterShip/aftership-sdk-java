@@ -454,44 +454,6 @@ param.setSlug("dhl");
 param.setTrackingNumber("1234567890");
 ```
 
-
-
-## Release History
-
-#### 2020-05-20-v2.0.0
-
-- Highly encapsulated interface, supports rapid construction of new interfaces.
-- Complete parsing of the message body, Support IntelliSense.
-- Use Gradle as a dependency manager.
-  - using okhttp library
-  - using gson library
-- Simplify object definition with Lombok.
-- Published in maven central repository.
-- The interfaces for implementation and refactoring are as follows:
-  - CourierEndpoint.listCouriers
-  - CourierEndpoint.listAllCouriers
-  - CourierEndpoint.detectCouriers
-  - TrackingEndpoint.createTracking
-  - TrackingEndpoint.deleteTracking
-  - TrackingEndpoint.getTracking
-  - TrackingEndpoint.getTrackings
-  - TrackingEndpoint.updateTracking
-  - TrackingEndpoint.reTrack
-  - TrackingEndpoint.markAsCompleted
-  - CheckpointEndpoint.getLastCheckpoint
-  - NotificationEndpoint.getNotification
-  - NotificationEndpoint.addNotification
-  - NotificationEndpoint.removeNotification
-
-#### 2016-04-26-v1.2.0
-
-* Properties added in Checkpoint class
- 1. slug
- 2. location
-
-#### 2016-02-02-v1.1.1
-* Solving issue at Checkpoint.java, typo in ```country_iso3```
-
 ## License
 Copyright (c) 2015-2020 Aftership  
 Licensed under the MIT license.
