@@ -2,31 +2,27 @@ package com.aftership.sample.tracking;
 
 import com.aftership.sample.SampleUtil;
 import com.aftership.sdk.AfterShip;
-import com.aftership.sdk.model.tracking.SingleTracking;
-import com.aftership.sdk.model.tracking.SingleTrackingParam;
+import com.aftership.sdk.endpoint.impl.EndpointPath;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.exception.ConstructorException;
 import com.aftership.sdk.model.tracking.Tracking;
-import com.aftership.sdk.rest.DataEntity;
 
 /** Sample of deleteTracking method in TrackingEndpoint */
 public class DeleteTrackingSample {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws ConstructorException {
     AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
     deleteTracking(afterShip);
   }
 
   public static void deleteTracking(AfterShip afterShip) {
-    SingleTrackingParam param = new SingleTrackingParam();
-    param.setId("wpuezshqc272rkaewf2j3019");
+    System.out.println(EndpointPath.DELETE_TRACKING);
 
-    DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().deleteTracking(param);
-    if (entity.hasError()) {
-      System.out.println(entity.getError().getType());
-      System.out.println(entity.getError().getMessage());
-      System.out.println(entity.getError().getCode());
-      System.out.println(entity.getError().getData());
-    } else {
-      Tracking tracking = entity.getData().getTracking();
+    String id = "u2qm5uu9xqpwykaqm8d5l010";
+    try {
+      Tracking tracking = afterShip.getTrackingEndpoint().deleteTracking(id);
       System.out.println(tracking);
+    } catch (AftershipException e) {
+      System.out.println(e.getMessage());
     }
   }
 }

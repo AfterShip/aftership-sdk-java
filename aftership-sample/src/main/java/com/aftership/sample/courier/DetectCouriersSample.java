@@ -1,17 +1,17 @@
 package com.aftership.sample.courier;
 
-import java.util.Arrays;
 import com.aftership.sample.SampleUtil;
 import com.aftership.sdk.AfterShip;
-import com.aftership.sdk.impl.EndpointPath;
+import com.aftership.sdk.endpoint.impl.EndpointPath;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.exception.ConstructorException;
 import com.aftership.sdk.model.courier.CourierDetectList;
 import com.aftership.sdk.model.courier.CourierDetectRequest;
 import com.aftership.sdk.model.courier.CourierDetectTracking;
-import com.aftership.sdk.rest.DataEntity;
 
 /** Sample of detectCouriers method in CourierEndpoint */
 public class DetectCouriersSample {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws ConstructorException {
     AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
     detectCouriers(afterShip);
   }
@@ -23,17 +23,15 @@ public class DetectCouriersSample {
     tracking.setTrackingNumber("906587618687");
     CourierDetectRequest courierDetectRequest = new CourierDetectRequest(tracking);
 
-    DataEntity<CourierDetectList> entity =
-        afterShip.getCourierEndpoint().detectCouriers(courierDetectRequest);
-    if (entity.hasError()) {
-      System.out.println(entity.getError().getType());
-    } else {
-      System.out.println(entity.getData().getTotal());
-      System.out.println(entity.getData().getCouriers());
-    }
+    try {
+      CourierDetectList courierDetectList =
+          afterShip.getCourierEndpoint().detectCouriers(courierDetectRequest.getTracking());
 
-    System.out.println(afterShip.getRateLimit().getReset());
-    System.out.println(afterShip.getRateLimit().getLimit());
-    System.out.println(afterShip.getRateLimit().getRemaining());
+      System.out.println(courierDetectList.getTotal());
+      System.out.println(courierDetectList.getCouriers());
+
+    } catch (AftershipException e) {
+      System.out.println(e.getMessage());
+    }
   }
 }

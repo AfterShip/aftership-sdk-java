@@ -2,15 +2,14 @@ package com.aftership.sample.notification;
 
 import com.aftership.sample.SampleUtil;
 import com.aftership.sdk.AfterShip;
-import com.aftership.sdk.impl.EndpointPath;
+import com.aftership.sdk.endpoint.impl.EndpointPath;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.exception.ConstructorException;
 import com.aftership.sdk.model.notification.Notification;
-import com.aftership.sdk.model.notification.NotificationWrapper;
-import com.aftership.sdk.model.tracking.SingleTrackingParam;
-import com.aftership.sdk.rest.DataEntity;
 
 /** Sample of addNotification method in NotificationEndpoint */
 public class AddNotificationSample {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws ConstructorException {
     AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
     addNotification(afterShip);
   }
@@ -18,21 +17,16 @@ public class AddNotificationSample {
   public static void addNotification(AfterShip afterShip) {
     System.out.println(EndpointPath.ADD_NOTIFICATION);
 
-    Notification notification = new Notification();
-    notification.setSmses(new String[] {"+85261236123", "Invalid Mobile Phone Number"});
-    NotificationWrapper notificationWrapper = new NotificationWrapper(notification);
-    SingleTrackingParam param = new SingleTrackingParam();
-    param.setId("wcwy86mie4o17kadedkcw029");
+    String id = "vebix4hfu3sr3kac0epve01n";
+    Notification addNotification = new Notification();
+    addNotification.setSmses(new String[] {"+85261236123", "Invalid Mobile Phone Number"});
 
-    DataEntity<NotificationWrapper> entity =
-        afterShip.getNotificationEndpoint().addNotification(param, notificationWrapper);
-    if (entity.hasError()) {
-      System.out.println(entity.getError().getType());
-      System.out.println(entity.getError().getCode());
-      System.out.println(entity.getError().getMessage());
-    } else {
-      Notification result = entity.getData().getNotification();
-      System.out.println(result);
+    try {
+      Notification notification =
+          afterShip.getNotificationEndpoint().addNotification(id, addNotification);
+      System.out.println(notification);
+    } catch (AftershipException e) {
+      System.out.println(e.getMessage());
     }
   }
 }

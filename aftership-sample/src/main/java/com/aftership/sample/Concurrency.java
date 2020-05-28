@@ -6,15 +6,16 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import com.aftership.sdk.AfterShip;
-import com.aftership.sdk.impl.EndpointPath;
+import com.aftership.sdk.endpoint.impl.EndpointPath;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.exception.ConstructorException;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.courier.CourierList;
-import com.aftership.sdk.rest.DataEntity;
 
 /** Examples of concurrent requests */
 public class Concurrency {
 
-  public static void main(String[] args) throws InterruptedException {
+  public static void main(String[] args) throws InterruptedException, ConstructorException {
     AftershipOption option = new AftershipOption();
     option.setEndpoint("http://localhost:8080/v4");
     AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), option);
@@ -62,11 +63,11 @@ public class Concurrency {
 
   private static void listCouriers(AfterShip afterShip) {
     System.out.println(EndpointPath.LIST_COURIERS);
-    DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
-    if (entity.hasError()) {
-      System.out.println(entity.getError().getCode());
-    } else {
-      System.out.println(entity.getData().getTotal());
+    try {
+      CourierList courierList = afterShip.getCourierEndpoint().listCouriers();
+      System.out.println(courierList);
+    } catch (AftershipException e) {
+      System.out.println(e.getMessage());
     }
   }
 }
