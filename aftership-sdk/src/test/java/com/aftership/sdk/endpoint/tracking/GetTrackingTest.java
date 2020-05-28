@@ -26,7 +26,7 @@ public class GetTrackingTest {
     server = new MockWebServer();
     server.enqueue(
         TestUtil.createMockResponse()
-            .setBody(TestUtil.getJson("endpoint/tracking/GetTracking.json")));
+            .setBody(TestUtil.getJson("endpoint/tracking/GetTrackingResult.json")));
     server.start();
   }
 
@@ -61,6 +61,7 @@ public class GetTrackingTest {
         MessageFormat.format("/v4/trackings/{0}", id),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
+    Assertions.assertNotNull(tracking.getCourierRedirectLink(), "courier_redirect_link mismatch");
 
     TestUtil.printResponse(afterShip, tracking);
     TestUtil.printRequest(recordedRequest);

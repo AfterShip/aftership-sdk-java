@@ -260,6 +260,7 @@
         "pickup_location": null,
         "pickup_note": null,
         "courier_tracking_link": "https://www.fedex.com/fedextrack/?tracknumbers=111111111111&cntry_code=us",
+        "courier_redirect_link": "https://www.fedex.com/track?loc=en_US&tracknum=111111111111&requester=WT/trackdetails",
         "first_attempted_at": "2018-08-01T13:19:47-04:00"
       },
       {
@@ -327,6 +328,7 @@
         "pickup_location": null,
         "pickup_note": null,
         "courier_tracking_link": "https://www.fedex.com/fedextrack/?tracknumbers=2222222222222&cntry_code=us",
+        "courier_redirect_link": "https://www.fedex.com/track?loc=en_US&tracknum=2222222222222&requester=WT/trackdetails",
         "first_attempted_at": null
       },
       {
@@ -393,6 +395,7 @@
         "pickup_location": null,
         "pickup_note": null,
         "courier_tracking_link": "https://www.fedex.com/fedextrack/?tracknumbers=1231231231231&cntry_code=us",
+        "courier_redirect_link": "https://www.fedex.com/track?loc=en_US&tracknum=1231231231231&requester=WT/trackdetails",
         "first_attempted_at": null
       }
     ]

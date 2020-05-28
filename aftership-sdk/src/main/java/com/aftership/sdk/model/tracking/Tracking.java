@@ -78,9 +78,7 @@ public class Tracking {
    * <p>String
    */
   private String slug;
-  /**
-   * Tracking number of a shipment.
-   */
+  /** Tracking number of a shipment. */
   private String trackingNumber;
   /**
    * Whether or not AfterShip will continue tracking the shipments. Value is false when tag (status)
@@ -337,6 +335,11 @@ public class Tracking {
    * <p>String
    */
   private String courierTrackingLink;
+  /**
+   * Delivery instructions (delivery date or address) can be modified by visiting the link if
+   * supported by a carrier.
+   */
+  private String courierRedirectLink;
   /**
    * date and time of the first attempt by the carrier to deliver the package to the addressee
    * Available format: YYYY-MM-DDTHH:MM:SS, or YYYY-MM-DDTHH:MM:SS+TIMEZONE
