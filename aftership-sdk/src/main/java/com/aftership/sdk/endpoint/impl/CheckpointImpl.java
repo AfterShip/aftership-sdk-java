@@ -1,16 +1,17 @@
 package com.aftership.sdk.endpoint.impl;
 
-import java.util.Map;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.CheckpointEndpoint;
-import com.aftership.sdk.utils.UrlUtils;
-import com.aftership.sdk.model.checkpoint.GetLastCheckpointParam;
+import com.aftership.sdk.exception.ApiException;
+import com.aftership.sdk.exception.ConstructorException;
+import com.aftership.sdk.exception.InvalidRequestException;
+import com.aftership.sdk.model.checkpoint.GetCheckpointParam;
 import com.aftership.sdk.model.checkpoint.LastCheckpoint;
-import com.aftership.sdk.model.tracking.SingleTrackingParam;
+import com.aftership.sdk.model.tracking.SlugTrackingNumber;
 import com.aftership.sdk.rest.ApiRequest;
-import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.rest.HttpMethod;
-import com.aftership.sdk.rest.RequestConfig;
+import com.aftership.sdk.rest.ResponseEntity;
+import com.aftership.sdk.utils.UrlUtils;
 
 /** CheckpointEndpoint's implementation class */
 public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpoint {
@@ -24,33 +25,39 @@ public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpo
     super(request);
   }
 
-  /**
-   * getLastCheckpoint Return the tracking information of the last checkpoint of a single tracking.
-   *
-   * @param param SingleTrackingParam
-   * @param optionalParams GetLastCheckpointParam
-   * @return DataEntity of LastCheckpoint
-   */
   @Override
-  public DataEntity<LastCheckpoint> getLastCheckpoint(
-      SingleTrackingParam param, GetLastCheckpointParam optionalParams) {
-    Map.Entry<Boolean, DataEntity<LastCheckpoint>> error = errorOfSingleTrackingParam(param);
-    if (error.getKey()) {
-      return error.getValue();
-    }
+  public LastCheckpoint getLastCheckpoint(String id, GetCheckpointParam optionalParam)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkTrackingId(id);
 
-    Map<String, String> query = this.merge(param.getOptionalParams(), optionalParams);
+    String path =
+        UrlUtils.buildTrackingPath(id, null, null, EndpointPath.GET_LAST_CHECKPOINT, null);
+
+    ResponseEntity<LastCheckpoint> entity =
+        this.request.makeRequest(
+            HttpMethod.GET, path, this.merge(optionalParam), null, LastCheckpoint.class);
+
+    return extractData(entity);
+  }
+
+  @Override
+  public LastCheckpoint getLastCheckpoint(
+      SlugTrackingNumber identifier, GetCheckpointParam optionalParam)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkSlugTrackingNumber(identifier);
 
     String path =
         UrlUtils.buildTrackingPath(
-            param.getId(),
-            param.getSlug(),
-            param.getTrackingNumber(),
-            query,
+            null,
+            identifier.getSlug(),
+            identifier.getTrackingNumber(),
             EndpointPath.GET_LAST_CHECKPOINT,
             null);
 
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.GET, path), null, LastCheckpoint.class);
+    ResponseEntity<LastCheckpoint> entity =
+        this.request.makeRequest(
+            HttpMethod.GET, path, this.merge(optionalParam), null, LastCheckpoint.class);
+
+    return extractData(entity);
   }
 }

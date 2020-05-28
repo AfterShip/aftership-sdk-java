@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import com.aftership.sdk.endpoint.impl.EndpointPath;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.exception.ConstructorException;
 import lombok.SneakyThrows;
 
 class UrlUtilsTest {
@@ -42,22 +44,22 @@ class UrlUtilsTest {
   }
 
   @Test
-  void buildTrackingPath() {
+  void buildTrackingPath() throws ConstructorException {
     Assertions.assertThrows(
-        com.aftership.sdk.error.AftershipException.class,
+        AftershipException.class,
         () -> {
-          UrlUtils.buildTrackingPath("id", "slug", "trackingNumber", new HashMap<>(), null, "");
+          UrlUtils.buildTrackingPath("id", "slug", "trackingNumber", null, null);
         });
 
     Assertions.assertEquals(
         "/couriers/slug/trackingNumber",
         UrlUtils.buildTrackingPath(
-            "", "slug", "trackingNumber", new HashMap<>(), EndpointPath.COURIERS, ""));
+            "", "slug", "trackingNumber", EndpointPath.COURIERS, ""));
 
     Assertions.assertEquals(
-        StrUtils.EMPTY,
+        "/couriers",
         UrlUtils.buildTrackingPath(
-            "", "", "trackingNumber", new HashMap<>(), EndpointPath.COURIERS, ""));
+            "", "", "trackingNumber", EndpointPath.COURIERS, ""));
   }
 
   @Test

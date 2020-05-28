@@ -3,9 +3,9 @@ package com.aftership.sdk.model.tracking;
 import java.util.List;
 import lombok.Data;
 
-/** MultiTrackingsData is a model for data part of the multiple trackings API responses */
+/** PagedTrackings is a model for data part of the multiple trackings API responses */
 @Data
-public class MultiTrackingsData {
+public class PagedTrackings {
   /** Number of trackings each page contain. (Default: 100) */
   private Integer limit;
   /** Total number of matched trackings, max. number is 10,000 */

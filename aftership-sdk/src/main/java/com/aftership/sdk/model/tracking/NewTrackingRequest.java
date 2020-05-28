@@ -6,7 +6,7 @@ import lombok.Data;
 /** Request body for CreateTracking */
 @Data
 @AllArgsConstructor
-public class CreateTrackingRequest {
+public class NewTrackingRequest {
   /** NewTracking Object */
   private NewTracking tracking;
 }

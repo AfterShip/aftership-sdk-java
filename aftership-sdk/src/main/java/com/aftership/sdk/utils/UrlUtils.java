@@ -5,8 +5,9 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.Map;
-import com.aftership.sdk.error.AftershipException;
 import com.aftership.sdk.error.ErrorMessage;
+import com.aftership.sdk.error.ErrorType;
+import com.aftership.sdk.exception.ConstructorException;
 
 /** Url's assistant method. */
 public final class UrlUtils {
@@ -60,14 +61,15 @@ public final class UrlUtils {
       String id,
       String slug,
       String trackingNumber,
-      Map<String, String> query,
       String rootPath,
-      String action) {
+      String action) throws ConstructorException {
     if (StrUtils.isBlank(rootPath)) {
-      throw new AftershipException(ErrorMessage.CONSTRUCTOR_PATH_IS_EMPTY);
+      throw new ConstructorException(
+          ErrorType.ConstructorError.getName(), ErrorMessage.CONSTRUCTOR_REQUIRED_PATH);
     }
 
-    String trackingUrl = "";
+    String trackingUrl = rootPath;
+
     if (StrUtils.isNotBlank(id)) {
       trackingUrl = MessageFormat.format("{0}/{1}", rootPath, encode(id));
     } else if (StrUtils.isNotBlank(slug) && StrUtils.isNotBlank(trackingNumber)) {
@@ -77,10 +79,6 @@ public final class UrlUtils {
 
     if (StrUtils.isNotBlank(action)) {
       trackingUrl = MessageFormat.format("{0}/{1}", trackingUrl, encode(action));
-    }
-
-    if (query != null && query.size() > 0) {
-      trackingUrl = fillPathWithQuery(trackingUrl, query);
     }
 
     return trackingUrl;

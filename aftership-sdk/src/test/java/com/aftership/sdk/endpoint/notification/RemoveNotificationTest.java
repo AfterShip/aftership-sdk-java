@@ -5,11 +5,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.model.notification.Notification;
 import com.aftership.sdk.model.notification.NotificationWrapper;
-import com.aftership.sdk.model.tracking.SingleTrackingParam;
-import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.utils.JsonUtils;
 import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
@@ -33,37 +36,30 @@ public class RemoveNotificationTest {
   }
 
   @Test
-  public void testRemoveNotification() throws IOException, InterruptedException {
+  public void testRemoveNotification()
+      throws IOException, InterruptedException, AftershipException, URISyntaxException {
     AfterShip afterShip = TestUtil.createAfterShip(server);
 
-    // request
-    SingleTrackingParam param = new SingleTrackingParam();
-    param.setId("100");
+    System.out.println(">>>>> removeNotification(String id, Notification notification)");
+    String id = "100";
 
-    NotificationWrapper removedNotification =
-        JsonUtils.create()
-            .fromJson(
-                TestUtil.getJson("endpoint/notification/RemoveNotificationRequest.json"),
-                NotificationWrapper.class);
-    DataEntity<NotificationWrapper> entity =
-        afterShip.getNotificationEndpoint().removeNotification(param, removedNotification);
+    String requestBody = TestUtil.getJson("endpoint/notification/RemoveNotificationRequest.json");
+    NotificationWrapper wrapper =
+        JsonUtils.create().fromJson(requestBody, NotificationWrapper.class);
+    Notification notification =
+        afterShip.getNotificationEndpoint().removeNotification(id, wrapper.getNotification());
 
-    // assert
-    Assertions.assertFalse(entity.hasError(), "No errors in response.");
-    Assertions.assertNotNull(entity.getData().getNotification(), "Response data cannot be empty.");
-    Assertions.assertEquals(
-        2, entity.getData().getNotification().getEmails().length, "emails size mismatch.");
+    Assertions.assertNotNull(notification);
+    Assertions.assertEquals(2, notification.getEmails().length, "emails size mismatch.");
 
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        "/v4/notifications/100/remove",
-        UrlUtils.decode(recordedRequest.getPath()),
+        MessageFormat.format("/v4/notifications/{0}/remove", id),
+        new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 
-    // output
-    TestUtil.printResponse(afterShip, entity);
-    System.out.println("Path: " + UrlUtils.decode(recordedRequest.getPath()));
-    System.out.println("RequestBody: " + recordedRequest.getBody().readUtf8());
+    TestUtil.printResponse(afterShip, notification);
+    TestUtil.printRequest(recordedRequest);
   }
 }

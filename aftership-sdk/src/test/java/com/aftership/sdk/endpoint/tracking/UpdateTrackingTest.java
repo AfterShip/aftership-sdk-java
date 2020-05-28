@@ -5,58 +5,62 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.model.tracking.SingleTracking;
-import com.aftership.sdk.model.tracking.SingleTrackingParam;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.model.tracking.Tracking;
 import com.aftership.sdk.model.tracking.UpdateTrackingRequest;
-import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.utils.JsonUtils;
+import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
 public class UpdateTrackingTest {
-    public static MockWebServer server;
+  public static MockWebServer server;
 
-    @BeforeAll
-    static void setUp() throws IOException {
-        server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson(
-                "endpoint/tracking/UpdateTrackingResult.json")));
-        server.start();
-    }
+  @BeforeAll
+  static void setUp() throws IOException {
+    server = new MockWebServer();
+    server.enqueue(
+        TestUtil.createMockResponse()
+            .setBody(TestUtil.getJson("endpoint/tracking/UpdateTrackingResult.json")));
+    server.start();
+  }
 
-    @AfterAll
-    static void tearDown() throws IOException {
-        server.shutdown();
-    }
+  @AfterAll
+  static void tearDown() throws IOException {
+    server.shutdown();
+  }
 
-    @Test
-    public void testTestUpdateTracking() throws IOException, InterruptedException {
-        AfterShip afterShip = TestUtil.createAfterShip(server);
+  @Test
+  public void testTestUpdateTracking()
+      throws IOException, InterruptedException, AftershipException, URISyntaxException {
+    AfterShip afterShip = TestUtil.createAfterShip(server);
 
-        //request
-        String requestBody = TestUtil.getJson("endpoint/tracking/UpdateTrackingRequest.json");
-        UpdateTrackingRequest request = JsonUtils.create().fromJson(requestBody, UpdateTrackingRequest.class);
+    System.out.println(">>>>> updateTracking(String id, UpdateTracking update)");
+    String id = "100";
+    String requestBody = TestUtil.getJson("endpoint/tracking/UpdateTrackingRequest.json");
+    UpdateTrackingRequest updateTrackingRequest =
+        JsonUtils.create().fromJson(requestBody, UpdateTrackingRequest.class);
+    Tracking tracking =
+        afterShip.getTrackingEndpoint().updateTracking(id, updateTrackingRequest.getTracking());
 
-        SingleTrackingParam param = new SingleTrackingParam();
-        param.setId("100");
-        DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().updateTracking(param, request);
+    Assertions.assertNotNull(tracking);
+    Assertions.assertEquals("fedex", tracking.getSlug(), "Slug mismatch.");
+    Assertions.assertEquals(
+        "InfoReceived", tracking.getCheckpoints().get(0).getTag(), "checkpoints::tag mismatch.");
 
-        //assert
-        Assertions.assertFalse(entity.hasError(), "No errors in response.");
-        Assertions.assertNotNull(entity.getData().getTracking(), "Response data cannot be empty.");
-        Assertions.assertEquals("fedex", entity.getData().getTracking().getSlug(), "Slug mismatch.");
-        Assertions.assertEquals("InfoReceived", entity.getData().getTracking().getCheckpoints().get(0).getTag(),
-                "checkpoints::tag mismatch.");
+    RecordedRequest recordedRequest = server.takeRequest();
+    Assertions.assertEquals("PUT", recordedRequest.getMethod(), "Method mismatch.");
+    Assertions.assertEquals(
+        MessageFormat.format("/v4/trackings/{0}", id),
+        new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
+        "path mismatch.");
 
-        RecordedRequest recordedRequest = server.takeRequest();
-        Assertions.assertEquals("PUT", recordedRequest.getMethod(), "Method mismatch.");
-
-        //output
-        TestUtil.printResponse(afterShip, entity);
-        System.out.println("Path: " + recordedRequest.getPath());
-        System.out.println("RequestBody: " + recordedRequest.getBody().readUtf8());
-    }
-
+    TestUtil.printResponse(afterShip, tracking);
+    TestUtil.printRequest(recordedRequest);
+  }
 }

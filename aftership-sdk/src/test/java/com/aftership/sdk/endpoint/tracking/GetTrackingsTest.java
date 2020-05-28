@@ -5,51 +5,65 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.model.tracking.MultiTrackingsData;
-import com.aftership.sdk.model.tracking.MultiTrackingsParams;
-import com.aftership.sdk.rest.DataEntity;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.model.tracking.GetTrackingsParams;
+import com.aftership.sdk.model.tracking.PagedTrackings;
+import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 
 public class GetTrackingsTest {
-    public static MockWebServer server;
+  public static MockWebServer server;
 
-    @BeforeAll
-    static void setUp() throws IOException {
-        server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse().setBody(TestUtil.getJson(
-                "endpoint/tracking/GetTrackings.json")));
-        server.start();
-    }
+  @BeforeAll
+  static void setUp() throws IOException {
+    server = new MockWebServer();
+    server.enqueue(
+        TestUtil.createMockResponse()
+            .setBody(TestUtil.getJson("endpoint/tracking/GetTrackings.json")));
+    server.start();
+  }
 
-    @AfterAll
-    static void tearDown() throws IOException {
-        server.shutdown();
-    }
+  @AfterAll
+  static void tearDown() throws IOException {
+    server.shutdown();
+  }
 
-    @Test
-    public void testGetTrackings() throws IOException, InterruptedException {
-        AfterShip afterShip = TestUtil.createAfterShip(server);
+  @Test
+  public void testGetTrackings()
+      throws IOException, InterruptedException, AftershipException, URISyntaxException {
+    AfterShip afterShip = TestUtil.createAfterShip(server);
 
-        MultiTrackingsParams optionalParams = new MultiTrackingsParams();
-        optionalParams.setFields("title,order_id");
-        optionalParams.setLang("china-post");
-        optionalParams.setLimit(10);
+    System.out.println(">>>>> getTrackings(GetTrackingsParams params)");
+    GetTrackingsParams optionalParams = new GetTrackingsParams();
+    optionalParams.setFields("title,order_id");
+    optionalParams.setLang("china-post");
+    optionalParams.setLimit(10);
 
-        DataEntity<MultiTrackingsData> entity = afterShip.getTrackingEndpoint().getTrackings(optionalParams);
+    PagedTrackings pagedTrackings = afterShip.getTrackingEndpoint().getTrackings(optionalParams);
 
-        Assertions.assertFalse(entity.hasError(), "No errors in response.");
-        Assertions.assertNotNull(entity.getData().getTrackings(), "Response data cannot be empty.");
-        Assertions.assertEquals(1, entity.getData().getPage(), "Page value mismatch");
-        Assertions.assertEquals(3, entity.getData().getCount(), "Count value mismatch");
-        Assertions.assertEquals("usps", entity.getData().getTrackings().get(2).getSlug(), "Slug value mismatch");
-        Assertions.assertEquals("InfoReceived", entity.getData().getTrackings().get(0).getCheckpoints().get(0).getTag(),
-                "Tag value mismatch");
+    Assertions.assertNotNull(pagedTrackings);
+    Assertions.assertEquals(1, pagedTrackings.getPage(), "Page value mismatch");
+    Assertions.assertEquals(3, pagedTrackings.getCount(), "Count value mismatch");
+    Assertions.assertEquals(
+        "usps", pagedTrackings.getTrackings().get(2).getSlug(), "Slug value mismatch");
+    Assertions.assertEquals(
+        "InfoReceived",
+        pagedTrackings.getTrackings().get(0).getCheckpoints().get(0).getTag(),
+        "Tag value mismatch");
 
-        TestUtil.printResponse(afterShip, entity);
-        System.out.println(server.takeRequest().getPath());
+    RecordedRequest recordedRequest = server.takeRequest();
+    Assertions.assertEquals("GET", recordedRequest.getMethod(), "Method mismatch.");
+    Assertions.assertEquals(
+        "/v4/trackings",
+        new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
+        "path mismatch.");
 
-    }
-
+    TestUtil.printResponse(afterShip, pagedTrackings);
+    TestUtil.printRequest(recordedRequest);
+  }
 }

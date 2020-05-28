@@ -3,9 +3,9 @@ package com.aftership.sdk.rest;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.aftership.sdk.model.Meta;
 import com.aftership.sdk.utils.JsonUtils;
 import com.aftership.sdk.utils.StrUtils;
-import com.aftership.sdk.model.Meta;
 
 /** Parsing the response message body */
 public class BodyParser {

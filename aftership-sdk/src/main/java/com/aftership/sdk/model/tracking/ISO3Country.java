@@ -1,6 +1,7 @@
 package com.aftership.sdk.model.tracking;
 
 /** Created by User on 13/6/14. */
+@Deprecated
 public enum ISO3Country {
   ABW("Aruba"),
   AFG("Afghanistan"),

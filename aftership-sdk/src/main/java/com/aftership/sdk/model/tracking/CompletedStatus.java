@@ -6,7 +6,7 @@ import lombok.Data;
 /** Request body for MarkAsCompleted */
 @Data
 @AllArgsConstructor
-public class MarkAsCompletedRequest {
+public class CompletedStatus {
 
   /**
    * One of "DELIVERED", "LOST" or "RETURNED_TO_SENDER".

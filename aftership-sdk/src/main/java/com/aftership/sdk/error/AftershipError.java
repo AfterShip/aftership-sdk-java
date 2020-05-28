@@ -1,11 +1,12 @@
 package com.aftership.sdk.error;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
-import com.aftership.sdk.utils.StrUtils;
 import com.aftership.sdk.model.Meta;
 import com.aftership.sdk.rest.BodyParser;
+import com.aftership.sdk.utils.StrUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +27,7 @@ public class AftershipError {
   private Integer code = null;
   /** Debug information of error */
   private Map<String, Object> data;
+
 
   /**
    * Print debug data

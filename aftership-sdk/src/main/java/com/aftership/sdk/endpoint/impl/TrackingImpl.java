@@ -1,16 +1,25 @@
 package com.aftership.sdk.endpoint.impl;
 
-import java.util.HashMap;
-import java.util.Map;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.TrackingEndpoint;
-import com.aftership.sdk.error.AftershipError;
-import com.aftership.sdk.error.ErrorMessage;
-import com.aftership.sdk.error.ErrorType;
-import com.aftership.sdk.utils.StrUtils;
+import com.aftership.sdk.exception.ApiException;
+import com.aftership.sdk.exception.ConstructorException;
+import com.aftership.sdk.exception.InvalidRequestException;
+import com.aftership.sdk.model.tracking.CompletedStatus;
+import com.aftership.sdk.model.tracking.GetTrackingParams;
+import com.aftership.sdk.model.tracking.GetTrackingsParams;
+import com.aftership.sdk.model.tracking.NewTracking;
+import com.aftership.sdk.model.tracking.NewTrackingRequest;
+import com.aftership.sdk.model.tracking.PagedTrackings;
+import com.aftership.sdk.model.tracking.SingleTracking;
+import com.aftership.sdk.model.tracking.SlugTrackingNumber;
+import com.aftership.sdk.model.tracking.Tracking;
+import com.aftership.sdk.model.tracking.UpdateTracking;
+import com.aftership.sdk.model.tracking.UpdateTrackingRequest;
+import com.aftership.sdk.rest.ApiRequest;
+import com.aftership.sdk.rest.HttpMethod;
+import com.aftership.sdk.rest.ResponseEntity;
 import com.aftership.sdk.utils.UrlUtils;
-import com.aftership.sdk.model.tracking.*;
-import com.aftership.sdk.rest.*;
 
 /** TrackingEndpoint's implementation class */
 public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint {
@@ -24,176 +33,223 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     super(request);
   }
 
-  /**
-   * Create a tracking.
-   *
-   * @param request CreateTrackingRequest
-   * @return DataEntity of SingleTracking
-   */
   @Override
-  public DataEntity<SingleTracking> createTracking(CreateTrackingRequest request) {
-    if (StrUtils.isBlank(request.getTracking().getTrackingNumber())) {
-      return ResponseEntity.makeError(
-          AftershipError.make(
-              ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_REQUIRED_TRACKING_NUMBER));
-    }
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.POST, EndpointPath.CREATE_TRACKING),
-        request,
-        SingleTracking.class);
+  public Tracking createTracking(NewTracking newTracking)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkNullParam(newTracking);
+    checkTrackingNumber(newTracking.getTrackingNumber());
+
+    ResponseEntity<SingleTracking> entity =
+        this.request.makeRequest(
+            HttpMethod.POST,
+            EndpointPath.CREATE_TRACKING,
+            null,
+            new NewTrackingRequest(newTracking),
+            SingleTracking.class);
+
+    return extractData(entity).getTracking();
   }
 
-  /**
-   * Delete a tracking.
-   *
-   * @param param SingleTrackingParam
-   * @return DataEntity of SingleTracking
-   */
   @Override
-  public DataEntity<SingleTracking> deleteTracking(SingleTrackingParam param) {
-    Map.Entry<Boolean, DataEntity<SingleTracking>> error = errorOfSingleTrackingParam(param);
-    if (error.getKey()) {
-      return error.getValue();
-    }
+  public Tracking deleteTracking(String id)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkTrackingSlug(id);
+
+    String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.DELETE_TRACKING, null);
+
+    ResponseEntity<SingleTracking> entity =
+        this.request.makeRequest(HttpMethod.DELETE, path, null, null, SingleTracking.class);
+
+    return extractData(entity).getTracking();
+  }
+
+  @Override
+  public Tracking deleteTracking(SlugTrackingNumber identifier)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkSlugTrackingNumber(identifier);
 
     String path =
         UrlUtils.buildTrackingPath(
-            param.getId(),
-            param.getSlug(),
-            param.getTrackingNumber(),
             null,
+            identifier.getSlug(),
+            identifier.getTrackingNumber(),
             EndpointPath.DELETE_TRACKING,
             null);
 
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.DELETE, path), null, SingleTracking.class);
+    ResponseEntity<SingleTracking> entity =
+        this.request.makeRequest(
+            HttpMethod.DELETE,
+            path,
+            this.merge(identifier.getOptionalParams()),
+            null,
+            SingleTracking.class);
+
+    return extractData(entity).getTracking();
   }
 
-  /**
-   * Get tracking results of multiple trackings.
-   *
-   * @param param SingleTrackingParam
-   * @param optionalParams GetTrackingParams
-   * @return DataEntity of SingleTracking
-   */
   @Override
-  public DataEntity<SingleTracking> getTracking(
-      SingleTrackingParam param, GetTrackingParams optionalParams) {
-    Map.Entry<Boolean, DataEntity<SingleTracking>> error = errorOfSingleTrackingParam(param);
-    if (error.getKey()) {
-      return error.getValue();
-    }
+  public Tracking getTracking(String id, GetTrackingParams optionalParams)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkTrackingId(id);
 
-    Map<String, String> query = this.merge(param.getOptionalParams(), optionalParams);
+    String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.GET_TRACKING, null);
+
+    ResponseEntity<SingleTracking> entity =
+        this.request.makeRequest(
+            HttpMethod.GET, path, merge(optionalParams), null, SingleTracking.class);
+
+    return extractData(entity).getTracking();
+  }
+
+  @Override
+  public Tracking getTracking(SlugTrackingNumber identifier, GetTrackingParams optionalParams)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkSlugTrackingNumber(identifier);
 
     String path =
         UrlUtils.buildTrackingPath(
-            param.getId(),
-            param.getSlug(),
-            param.getTrackingNumber(),
-            query,
+            null,
+            identifier.getSlug(),
+            identifier.getTrackingNumber(),
             EndpointPath.GET_TRACKING,
             null);
 
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.GET, path), null, SingleTracking.class);
+    ResponseEntity<SingleTracking> entity =
+        this.request.makeRequest(
+            HttpMethod.GET,
+            path,
+            this.merge(optionalParams, identifier.getOptionalParams()),
+            null,
+            SingleTracking.class);
+
+    return extractData(entity).getTracking();
   }
 
-  /**
-   * GetTrackings Gets tracking results of multiple trackings.
-   *
-   * @param optionalParams MultiTrackingsParams
-   * @return DataEntity of MultiTrackingsData
-   */
   @Override
-  public DataEntity<MultiTrackingsData> getTrackings(MultiTrackingsParams optionalParams) {
-    Map<String, String> query = optionalParams != null ? optionalParams.toMap() : new HashMap<>();
-    String path = UrlUtils.fillPathWithQuery(EndpointPath.GET_TRACKINGS, query);
+  public PagedTrackings getTrackings(GetTrackingsParams params)
+      throws ConstructorException, InvalidRequestException, ApiException {
 
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.GET, path), null, MultiTrackingsData.class);
+    String path = UrlUtils.buildTrackingPath(null, null, null, EndpointPath.GET_TRACKINGS, null);
+
+    ResponseEntity<PagedTrackings> entity =
+        this.request.makeRequest(HttpMethod.GET, path, params.toMap(), null, PagedTrackings.class);
+
+    return extractData(entity);
   }
 
-  /**
-   * UpdateTracking Updates a tracking.
-   *
-   * @param param SingleTrackingParam
-   * @param update UpdateTrackingRequest
-   * @return DataEntity of SingleTracking
-   */
   @Override
-  public DataEntity<SingleTracking> updateTracking(
-      SingleTrackingParam param, UpdateTrackingRequest update) {
-    Map.Entry<Boolean, DataEntity<SingleTracking>> error = errorOfSingleTrackingParam(param);
-    if (error.getKey()) {
-      return error.getValue();
-    }
+  public Tracking updateTracking(String id, UpdateTracking update)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkTrackingId(id);
+
+    String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.UPDATE_TRACKING, null);
+
+    ResponseEntity<SingleTracking> entity =
+        this.request.makeRequest(
+            HttpMethod.PUT, path, null, new UpdateTrackingRequest(update), SingleTracking.class);
+
+    return extractData(entity).getTracking();
+  }
+
+  @Override
+  public Tracking updateTracking(SlugTrackingNumber identifier, UpdateTracking update)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkSlugTrackingNumber(identifier);
 
     String path =
         UrlUtils.buildTrackingPath(
-            param.getId(),
-            param.getSlug(),
-            param.getTrackingNumber(),
             null,
+            identifier.getSlug(),
+            identifier.getTrackingNumber(),
             EndpointPath.UPDATE_TRACKING,
             null);
 
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.PUT, path), update, SingleTracking.class);
+    ResponseEntity<SingleTracking> entity =
+        this.request.makeRequest(
+            HttpMethod.PUT,
+            path,
+            this.merge(identifier.getOptionalParams()),
+            new UpdateTrackingRequest(update),
+            SingleTracking.class);
+
+    return extractData(entity).getTracking();
   }
 
-  /**
-   * ReTrack an expired tracking once. Max. 3 times per tracking.
-   *
-   * @param param SingleTrackingParam
-   * @return DataEntity of SingleTracking
-   */
   @Override
-  public DataEntity<SingleTracking> reTrack(SingleTrackingParam param) {
-    Map.Entry<Boolean, DataEntity<SingleTracking>> error = errorOfSingleTrackingParam(param);
-    if (error.getKey()) {
-      return error.getValue();
-    }
+  public Tracking reTrack(String id)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkTrackingId(id);
 
     String path =
         UrlUtils.buildTrackingPath(
-            param.getId(),
-            param.getSlug(),
-            param.getTrackingNumber(),
+            id, null, null, EndpointPath.UPDATE_RETRACK, EndpointPath.UPDATE_RETRACK_ACTION);
+
+    ResponseEntity<SingleTracking> entity =
+        this.request.makeRequest(HttpMethod.POST, path, null, new Object(), SingleTracking.class);
+
+    return extractData(entity).getTracking();
+  }
+
+  @Override
+  public Tracking reTrack(SlugTrackingNumber identifier)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkSlugTrackingNumber(identifier);
+
+    String path =
+        UrlUtils.buildTrackingPath(
             null,
+            identifier.getSlug(),
+            identifier.getTrackingNumber(),
             EndpointPath.UPDATE_RETRACK,
             EndpointPath.UPDATE_RETRACK_ACTION);
 
-    // 'new Object()' for error of 'method POST must have a request body'
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.POST, path), new Object(), SingleTracking.class);
+    ResponseEntity<SingleTracking> entity =
+        this.request.makeRequest(
+            HttpMethod.POST,
+            path,
+            this.merge(identifier.getOptionalParams()),
+            new Object(),
+            SingleTracking.class);
+
+    return extractData(entity).getTracking();
   }
 
-  /**
-   * Mark a tracking as completed. The tracking won't auto update until retrack it.
-   *
-   * @param param SingleTrackingParam
-   * @param request MarkAsCompletedRequest
-   * @return DataEntity of SingleTracking
-   */
   @Override
-  public DataEntity<SingleTracking> markAsCompleted(
-      SingleTrackingParam param, MarkAsCompletedRequest request) {
-    Map.Entry<Boolean, DataEntity<SingleTracking>> error = errorOfSingleTrackingParam(param);
-    if (error.getKey()) {
-      return error.getValue();
-    }
+  public Tracking markAsCompleted(String id, CompletedStatus status)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkTrackingId(id);
 
     String path =
         UrlUtils.buildTrackingPath(
-            param.getId(),
-            param.getSlug(),
-            param.getTrackingNumber(),
+            id, null, null, EndpointPath.MARK_AS_COMPLETED, EndpointPath.MARK_AS_COMPLETED_ACTION);
+
+    ResponseEntity<SingleTracking> entity =
+        this.request.makeRequest(HttpMethod.POST, path, null, status, SingleTracking.class);
+
+    return extractData(entity).getTracking();
+  }
+
+  @Override
+  public Tracking markAsCompleted(SlugTrackingNumber identifier, CompletedStatus status)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkSlugTrackingNumber(identifier);
+
+    String path =
+        UrlUtils.buildTrackingPath(
             null,
+            identifier.getSlug(),
+            identifier.getTrackingNumber(),
             EndpointPath.MARK_AS_COMPLETED,
             EndpointPath.MARK_AS_COMPLETED_ACTION);
 
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.POST, path), request, SingleTracking.class);
+    ResponseEntity<SingleTracking> entity =
+        this.request.makeRequest(
+            HttpMethod.POST,
+            path,
+            this.merge(identifier.getOptionalParams()),
+            status,
+            SingleTracking.class);
+
+    return extractData(entity).getTracking();
   }
 }

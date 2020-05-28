@@ -2,8 +2,13 @@ package com.aftership.sdk.endpoint.impl;
 
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.CourierEndpoint;
+import com.aftership.sdk.exception.ApiException;
+import com.aftership.sdk.exception.ConstructorException;
+import com.aftership.sdk.exception.InvalidRequestException;
+import com.aftership.sdk.model.checkpoint.LastCheckpoint;
 import com.aftership.sdk.model.courier.CourierDetectList;
 import com.aftership.sdk.model.courier.CourierDetectRequest;
+import com.aftership.sdk.model.courier.CourierDetectTracking;
 import com.aftership.sdk.model.courier.CourierList;
 import com.aftership.sdk.rest.*;
 
@@ -19,40 +24,38 @@ public class CourierImpl extends AfterShipEndpoint implements CourierEndpoint {
     super(request);
   }
 
-  /**
-   * Return a list of couriers activated at your AfterShip account.
-   *
-   * @return DataEntity of CourierList
-   */
   @Override
-  public DataEntity<CourierList> listCouriers() {
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.GET, EndpointPath.LIST_COURIERS), null, CourierList.class);
+  public CourierList listCouriers() throws InvalidRequestException, ApiException {
+    ResponseEntity<CourierList> entity =
+        this.request.makeRequest(
+            HttpMethod.GET, EndpointPath.LIST_COURIERS, null, null, CourierList.class);
+
+    return extractData(entity);
   }
 
-  /**
-   * Return a list of all couriers.
-   *
-   * @return DataEntity of CourierList
-   */
   @Override
-  public DataEntity<CourierList> listAllCouriers() {
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.GET, EndpointPath.LIST_ALL_COURIERS), null, CourierList.class);
+  public CourierList listAllCouriers() throws InvalidRequestException, ApiException {
+    ResponseEntity<CourierList> entity =
+        this.request.makeRequest(
+            HttpMethod.GET, EndpointPath.LIST_ALL_COURIERS, null, null, CourierList.class);
+
+    return extractData(entity);
   }
 
-  /**
-   * Return a list of matched couriers based on tracking number format and selected couriers or a
-   * list of couriers.
-   *
-   * @param requestData CourierDetectRequest
-   * @return DataEntity of CourierDetectList
-   */
   @Override
-  public DataEntity<CourierDetectList> detectCouriers(CourierDetectRequest requestData) {
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.POST, EndpointPath.DETECT_COURIERS),
-        requestData,
-        CourierDetectList.class);
+  public CourierDetectList detectCouriers(CourierDetectTracking detectTracking)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkNullParam(detectTracking);
+    checkTrackingNumber(detectTracking.getTrackingNumber());
+
+    ResponseEntity<CourierDetectList> entity =
+        this.request.makeRequest(
+            HttpMethod.POST,
+            EndpointPath.DETECT_COURIERS,
+            null,
+            new CourierDetectRequest(detectTracking),
+            CourierDetectList.class);
+
+    return extractData(entity);
   }
 }

@@ -11,13 +11,19 @@ import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.error.AftershipError;
 import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.error.ErrorType;
-import com.aftership.sdk.utils.Define;
-import com.aftership.sdk.utils.JsonUtils;
-import com.aftership.sdk.utils.StrUtils;
 import com.aftership.sdk.model.AftershipResponse;
 import com.aftership.sdk.model.Meta;
 import com.aftership.sdk.model.RateLimit;
-import okhttp3.*;
+import com.aftership.sdk.utils.Define;
+import com.aftership.sdk.utils.JsonUtils;
+import com.aftership.sdk.utils.StrUtils;
+import com.aftership.sdk.utils.UrlUtils;
+import okhttp3.Call;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /** ApiRequest implementation class */
 public class ApiRequestImpl implements ApiRequest {
@@ -39,7 +45,8 @@ public class ApiRequestImpl implements ApiRequest {
   /**
    * Initiate a request
    *
-   * @param requestConfig Basic configuration of the request
+   * @param method Method of http request
+   * @param path path of request url
    * @param requestData Requested body data
    * @param responseType Type of response
    * @param <T> Class of request Data
@@ -48,9 +55,13 @@ public class ApiRequestImpl implements ApiRequest {
    */
   @Override
   public <T, R> ResponseEntity<R> makeRequest(
-      RequestConfig requestConfig, T requestData, Class<R> responseType) {
+      HttpMethod method,
+      String path,
+      Map<String, String> queryParams,
+      T requestData,
+      Class<R> responseType) {
     // parameter check
-    if (requestConfig == null || StrUtils.isBlank(requestConfig.getPath())) {
+    if (StrUtils.isBlank(path)) {
       return ResponseEntity.makeError(
           AftershipError.make(
               ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_INVALID_REQUEST_CONFIG));
@@ -65,6 +76,9 @@ public class ApiRequestImpl implements ApiRequest {
           AftershipError.make(
               ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_INVALID_RESPONSE_TYPE));
     }
+
+    // build url
+    String url = buildUrl(path, queryParams);
 
     // build headers
     String requestId = StrUtils.uuid4();
@@ -85,8 +99,8 @@ public class ApiRequestImpl implements ApiRequest {
     }
     Request request =
         new Request.Builder()
-            .url(buildUrl(requestConfig.getPath()))
-            .method(requestConfig.getMethod().getName(), requestBody)
+            .url(url)
+            .method(method.getName(), requestBody)
             .headers(Headers.of(requestHeaders))
             .build();
 
@@ -99,7 +113,7 @@ public class ApiRequestImpl implements ApiRequest {
         return ResponseEntity.makeError(
             AftershipError.make(
                 response.body().string(),
-                entryRequestConfig(requestConfig),
+                entryRequestConfig(method, path),
                 entryRequestHeaders(requestHeaders),
                 entryRequestData(requestData),
                 entryResponseBody(response)));
@@ -112,7 +126,7 @@ public class ApiRequestImpl implements ApiRequest {
             AftershipError.make(
                 ErrorType.HandlerError,
                 ErrorMessage.HANDLER_BODY_IS_NULL,
-                entryRequestConfig(requestConfig),
+                entryRequestConfig(method, path),
                 entryRequestHeaders(requestHeaders)));
       }
 
@@ -123,7 +137,7 @@ public class ApiRequestImpl implements ApiRequest {
             AftershipError.make(
                 ErrorType.HandlerError,
                 ErrorMessage.HANDLER_EMPTY_BODY,
-                entryRequestConfig(requestConfig),
+                entryRequestConfig(method, path),
                 entryRequestHeaders(requestHeaders),
                 entryRequestData(requestData)));
       }
@@ -134,7 +148,7 @@ public class ApiRequestImpl implements ApiRequest {
             AftershipError.make(
                 ErrorType.HandlerError,
                 ErrorMessage.HANDLER_BODY_NOT_JSON_OBJECT,
-                entryRequestConfig(requestConfig),
+                entryRequestConfig(method, path),
                 entryRequestHeaders(requestHeaders),
                 entryRequestData(requestData),
                 entryResponseBody(response)));
@@ -145,7 +159,7 @@ public class ApiRequestImpl implements ApiRequest {
         return ResponseEntity.makeError(
             AftershipError.make(
                 result.getMeta(),
-                entryRequestConfig(requestConfig),
+                entryRequestConfig(method, path),
                 entryRequestHeaders(requestHeaders),
                 entryRequestData(requestData)));
       }
@@ -156,7 +170,7 @@ public class ApiRequestImpl implements ApiRequest {
           AftershipError.make(
               ErrorType.HandlerError,
               t,
-              entryRequestConfig(requestConfig),
+              entryRequestConfig(method, path),
               entryRequestHeaders(requestHeaders),
               entryRequestData(requestData)));
     }
@@ -201,8 +215,16 @@ public class ApiRequestImpl implements ApiRequest {
     app.setRateLimit(rateLimit);
   }
 
-  private AbstractMap.SimpleEntry<String, Object> entryRequestConfig(RequestConfig requestConfig) {
-    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_KEY_REQUEST_CONFIG, requestConfig);
+  private AbstractMap.SimpleEntry<String, Object> entryRequestConfig(
+      HttpMethod method, String path) {
+    Map<String, String> map =
+        new HashMap<String, String>() {
+          {
+            put("method", method.getName());
+            put("path", path);
+          }
+        };
+    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_KEY_REQUEST_CONFIG, map);
   }
 
   private AbstractMap.SimpleEntry<String, Object> entryRequestHeaders(
@@ -228,8 +250,14 @@ public class ApiRequestImpl implements ApiRequest {
     }
   }
 
-  private String buildUrl(String path) {
-    return app.getEndpoint() + path;
+  private String buildUrl(String path, Map<String, String> query) {
+    String url = app.getEndpoint() + path;
+
+    if (query != null && query.size() > 0) {
+      url = UrlUtils.fillPathWithQuery(url, query);
+    }
+
+    return url;
   }
 
   private static boolean isSuccessful(int code) {

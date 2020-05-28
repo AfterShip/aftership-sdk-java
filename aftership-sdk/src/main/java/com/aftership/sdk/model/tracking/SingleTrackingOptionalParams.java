@@ -47,11 +47,13 @@ public class SingleTrackingOptionalParams implements StringMap {
    */
   @Override
   public Map<String, String> toMap() {
-    Map<String, String> map = new HashMap<>();
+    Map<String, String> map = new HashMap<>(10);
     map.put("tracking_postal_code", this.getTrackingPostalCode());
     map.put("tracking_ship_date", this.getTrackingShipDate());
     map.put("tracking_destination_country", this.getTrackingDestinationCountry());
     map.put("tracking_account_number", this.getTrackingAccountNumber());
+    map.put("tracking_key", this.getTrackingKey());
+    map.put("tracking_origin_country", this.getTrackingOriginCountry());
     map.put("tracking_state", this.getTrackingState());
     return map;
   }

@@ -5,14 +5,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.model.AftershipOption;
+import com.aftership.sdk.exception.AftershipException;
 import com.aftership.sdk.model.courier.CourierDetectList;
 import com.aftership.sdk.model.courier.CourierDetectRequest;
-import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.utils.JsonUtils;
+import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 
 public class DetectCouriersTest {
   public static MockWebServer server;
@@ -32,29 +35,33 @@ public class DetectCouriersTest {
   }
 
   @Test
-  public void detectCouriers() throws IOException, InterruptedException {
-    AftershipOption option = new AftershipOption();
-    option.setEndpoint(String.format(TestUtil.ENDPOINT_FORMAT, server.getPort()));
-    AfterShip afterShip = new AfterShip(TestUtil.YOUR_API_KEY, option);
+  public void detectCouriers()
+      throws AftershipException, IOException, InterruptedException, URISyntaxException {
+    AfterShip afterShip = TestUtil.createAfterShip(server);
 
+    System.out.println(">>>>> detectCouriers(CourierDetectTracking detectTracking)");
     String requestBody = TestUtil.getJson("endpoint/courier/CourierDetectRequest.json");
     CourierDetectRequest courierDetectRequest =
         JsonUtils.create().fromJson(requestBody, CourierDetectRequest.class);
-    DataEntity<CourierDetectList> entity =
-        afterShip.getCourierEndpoint().detectCouriers(courierDetectRequest);
 
-    Assertions.assertFalse(entity.hasError(), "No errors in response.");
-    Assertions.assertNotNull(entity.getData(), "Response data cannot be empty.");
-    Assertions.assertNull(entity.getData().getTracking(), "Incorrect TRACKING field for response");
+    CourierDetectList courierDetectList =
+        afterShip.getCourierEndpoint().detectCouriers(courierDetectRequest.getTracking());
+
+    Assertions.assertNotNull(courierDetectList);
+    Assertions.assertNull(courierDetectList.getTracking(), "Incorrect TRACKING field for response");
     Assertions.assertEquals(
         "tracking_postal_code",
-        entity.getData().getCouriers().get(1).getRequiredFields().get(0),
+        courierDetectList.getCouriers().get(1).getRequiredFields().get(0),
         "Incorrect TRACKING_POSTAL_CODE field for the response");
 
-    Assertions.assertTrue(
-        JsonUtils.create()
-            .fromJson(server.takeRequest().getBody().readUtf8(), CourierDetectRequest.class)
-            .equals(courierDetectRequest),
-        "Request's Body is inconsistent.");
+    RecordedRequest recordedRequest = server.takeRequest();
+    Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
+    Assertions.assertEquals(
+        "/v4/couriers/detect",
+        new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
+        "path mismatch.");
+
+    TestUtil.printResponse(afterShip, courierDetectList);
+    TestUtil.printRequest(recordedRequest);
   }
 }

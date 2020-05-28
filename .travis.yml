@@ -20,6 +20,8 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
+  - ./gradlew --version
+  - ./gradlew clean
   - ./gradlew check
   - ./gradlew jacocoTestReport
 

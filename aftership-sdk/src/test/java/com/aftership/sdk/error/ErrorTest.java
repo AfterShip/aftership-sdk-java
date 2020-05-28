@@ -1,44 +1,48 @@
 package com.aftership.sdk.error;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.model.AftershipOption;
-import com.aftership.sdk.model.courier.CourierList;
-import com.aftership.sdk.rest.DataEntity;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.exception.ApiException;
+import com.aftership.sdk.exception.ConstructorException;
 import okhttp3.mockwebserver.MockWebServer;
 
 public class ErrorTest {
-    public static MockWebServer server;
+  public static MockWebServer server;
 
-    @BeforeAll
-    static void setUp() throws IOException {
-        server = new MockWebServer();
-        server.enqueue(TestUtil.createMockResponse()
-                .setResponseCode(401)
-                .setBody(TestUtil.getJson("error/Error.json")));
-        server.start();
-    }
+  @BeforeAll
+  static void setUp() throws IOException {
+    server = new MockWebServer();
+    server.enqueue(
+        TestUtil.createMockResponse()
+            .setResponseCode(401)
+            .setBody(TestUtil.getJson("error/Error.json")));
+    server.start();
+  }
 
-    @AfterAll
-    static void tearDown() throws IOException {
-        server.shutdown();
-    }
+  @AfterAll
+  static void tearDown() throws IOException {
+    server.shutdown();
+  }
 
-    @Test
-    public void testError() {
-        AftershipOption option = new AftershipOption();
-        option.setEndpoint(String.format(TestUtil.ENDPOINT_FORMAT, server.getPort()));
-        AfterShip afterShip = new AfterShip(TestUtil.YOUR_API_KEY, option);
+  @Test
+  public void testError() throws ConstructorException {
+    AfterShip afterShip = TestUtil.createAfterShip(server);
 
-        DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
-        Assertions.assertTrue(entity.hasError(), "Entity returned with an error.");
-        Assertions.assertEquals(401, entity.getError().getCode().intValue(), "Incorrect error code returned.");
-        Assertions.assertEquals("Invalid API Key.", entity.getError().getMessage(), "The message returned is " +
-                "incorrect.");
-        Assertions.assertEquals("Unauthorized", entity.getError().getType(), "The type returned is incorrect.");
-
-        TestUtil.printResponse(afterShip, entity);
-    }
+    Assertions.assertThrows(
+        ApiException.class,
+        () -> {
+          try {
+            afterShip.getCourierEndpoint().listCouriers();
+          } catch (AftershipException ex) {
+            System.out.println(ex.getMessage());
+            throw ex;
+          }
+        });
+  }
 }

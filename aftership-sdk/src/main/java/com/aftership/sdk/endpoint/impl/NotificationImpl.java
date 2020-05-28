@@ -1,15 +1,17 @@
 package com.aftership.sdk.endpoint.impl;
 
-import java.util.Map;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.NotificationEndpoint;
-import com.aftership.sdk.utils.UrlUtils;
+import com.aftership.sdk.exception.ApiException;
+import com.aftership.sdk.exception.ConstructorException;
+import com.aftership.sdk.exception.InvalidRequestException;
+import com.aftership.sdk.model.notification.Notification;
 import com.aftership.sdk.model.notification.NotificationWrapper;
-import com.aftership.sdk.model.tracking.SingleTrackingParam;
+import com.aftership.sdk.model.tracking.SlugTrackingNumber;
 import com.aftership.sdk.rest.ApiRequest;
-import com.aftership.sdk.rest.DataEntity;
 import com.aftership.sdk.rest.HttpMethod;
-import com.aftership.sdk.rest.RequestConfig;
+import com.aftership.sdk.rest.ResponseEntity;
+import com.aftership.sdk.utils.UrlUtils;
 
 /** NotificationEndpoint's implementation class */
 public class NotificationImpl extends AfterShipEndpoint implements NotificationEndpoint {
@@ -23,87 +25,127 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
     super(request);
   }
 
-  /**
-   * Get contact information for the users to notify when the tracking changes. Please note that
-   * only customer receivers will be returned. Any email, sms or webhook that belongs to the Store
-   * will not be returned.
-   *
-   * @param param SingleTrackingParam
-   * @return DataEntity of NotificationWrapper
-   */
   @Override
-  public DataEntity<NotificationWrapper> getNotification(SingleTrackingParam param) {
-    Map.Entry<Boolean, DataEntity<NotificationWrapper>> error = errorOfSingleTrackingParam(param);
-    if (error.getKey()) {
-      return error.getValue();
-    }
+  public Notification getNotification(String id)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkTrackingId(id);
+
+    String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.GET_NOTIFICATION, null);
+
+    ResponseEntity<NotificationWrapper> entity =
+        this.request.makeRequest(HttpMethod.GET, path, null, null, NotificationWrapper.class);
+
+    return extractData(entity).getNotification();
+  }
+
+  @Override
+  public Notification getNotification(SlugTrackingNumber identifier)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkSlugTrackingNumber(identifier);
 
     String path =
         UrlUtils.buildTrackingPath(
-            param.getId(),
-            param.getSlug(),
-            param.getTrackingNumber(),
             null,
+            identifier.getSlug(),
+            identifier.getTrackingNumber(),
             EndpointPath.GET_NOTIFICATION,
             null);
 
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.GET, path), null, NotificationWrapper.class);
+    ResponseEntity<NotificationWrapper> entity =
+        this.request.makeRequest(HttpMethod.GET, path, null, null, NotificationWrapper.class);
+
+    return extractData(entity).getNotification();
   }
 
-  /**
-   * Add notification receivers to a tracking number.
-   *
-   * @param param SingleTrackingParam
-   * @param addedNotification Will be created NotificationWrapper
-   * @return DataEntity of NotificationWrapper
-   */
   @Override
-  public DataEntity<NotificationWrapper> addNotification(
-      SingleTrackingParam param, NotificationWrapper addedNotification) {
-    Map.Entry<Boolean, DataEntity<NotificationWrapper>> error = errorOfSingleTrackingParam(param);
-    if (error.getKey()) {
-      return error.getValue();
-    }
+  public Notification addNotification(String id, Notification notification)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkTrackingId(id);
 
     String path =
         UrlUtils.buildTrackingPath(
-            param.getId(),
-            param.getSlug(),
-            param.getTrackingNumber(),
+            id, null, null, EndpointPath.ADD_NOTIFICATION, EndpointPath.ADD_NOTIFICATION_ACTION);
+
+    ResponseEntity<NotificationWrapper> entity =
+        this.request.makeRequest(
+            HttpMethod.POST,
+            path,
             null,
+            new NotificationWrapper(notification),
+            NotificationWrapper.class);
+
+    return extractData(entity).getNotification();
+  }
+
+  @Override
+  public Notification addNotification(SlugTrackingNumber identifier, Notification notification)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkSlugTrackingNumber(identifier);
+
+    String path =
+        UrlUtils.buildTrackingPath(
+            null,
+            identifier.getSlug(),
+            identifier.getTrackingNumber(),
             EndpointPath.ADD_NOTIFICATION,
             EndpointPath.ADD_NOTIFICATION_ACTION);
 
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.POST, path), addedNotification, NotificationWrapper.class);
+    ResponseEntity<NotificationWrapper> entity =
+        this.request.makeRequest(
+            HttpMethod.POST,
+            path,
+            null,
+            new NotificationWrapper(notification),
+            NotificationWrapper.class);
+
+    return extractData(entity).getNotification();
   }
 
-  /**
-   * Remove notification receivers from a tracking number.
-   *
-   * @param param SingleTrackingParam
-   * @param removedNotification Will be removed NotificationWrapper
-   * @return DataEntity of NotificationWrapper
-   */
   @Override
-  public DataEntity<NotificationWrapper> removeNotification(
-      SingleTrackingParam param, NotificationWrapper removedNotification) {
-    Map.Entry<Boolean, DataEntity<NotificationWrapper>> error = errorOfSingleTrackingParam(param);
-    if (error.getKey()) {
-      return error.getValue();
-    }
+  public Notification removeNotification(String id, Notification notification)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkTrackingId(id);
 
     String path =
         UrlUtils.buildTrackingPath(
-            param.getId(),
-            param.getSlug(),
-            param.getTrackingNumber(),
+            id,
+            null,
             null,
             EndpointPath.REMOVE_NOTIFICATION,
             EndpointPath.REMOVE_NOTIFICATION_ACTION);
 
-    return this.request.makeRequest(
-        new RequestConfig(HttpMethod.POST, path), removedNotification, NotificationWrapper.class);
+    ResponseEntity<NotificationWrapper> entity =
+        this.request.makeRequest(
+            HttpMethod.POST,
+            path,
+            null,
+            new NotificationWrapper(notification),
+            NotificationWrapper.class);
+
+    return extractData(entity).getNotification();
+  }
+
+  @Override
+  public Notification removeNotification(SlugTrackingNumber identifier, Notification notification)
+      throws ConstructorException, InvalidRequestException, ApiException {
+    checkSlugTrackingNumber(identifier);
+
+    String path =
+        UrlUtils.buildTrackingPath(
+            null,
+            identifier.getSlug(),
+            identifier.getTrackingNumber(),
+            EndpointPath.REMOVE_NOTIFICATION,
+            EndpointPath.REMOVE_NOTIFICATION_ACTION);
+
+    ResponseEntity<NotificationWrapper> entity =
+        this.request.makeRequest(
+            HttpMethod.POST,
+            path,
+            null,
+            new NotificationWrapper(notification),
+            NotificationWrapper.class);
+
+    return extractData(entity).getNotification();
   }
 }

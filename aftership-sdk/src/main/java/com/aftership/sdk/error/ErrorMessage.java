@@ -14,6 +14,10 @@ public class ErrorMessage {
       "ConstructorError: Required tracking number";
   public static final String CONSTRUCTOR_REQUIRED_TRACKING_ID =
       "ConstructorError: Required tracking id";
+  public static final String CONSTRUCTOR_REQUIRED_SLUG =
+      "ConstructorError: Required tracking slug";
+  public static final String CONSTRUCTOR_REQUIRED_PATH = "ConstructorError: Required tracking path";
+  public static final String CONSTRUCTOR_NULL_PARAM = "ConstructorError: Parameters cannot be null";
 
   public static final String HANDLER_EMPTY_BODY = "HandlerError: Body is empty";
   public static final String HANDLER_NULL_META = "HandlerError: Meta is Null";
