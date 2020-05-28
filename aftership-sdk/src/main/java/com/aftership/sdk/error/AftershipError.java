@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import com.aftership.sdk.model.Meta;
-import com.aftership.sdk.rest.BodyParser;
+import com.aftership.sdk.request.BodyParser;
 import com.aftership.sdk.utils.StrUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -463,8 +463,8 @@ param.setTrackingNumber("1234567890");
 - Highly encapsulated interface, supports rapid construction of new interfaces.
 - Complete parsing of the message body, Support IntelliSense.
 - Use Gradle as a dependency manager.
-  - depend okhttp library
-  - depend gson library
+  - using okhttp library
+  - using gson library
 - Simplify object definition with Lombok.
 - Published in maven central repository.
 - The interfaces for implementation and refactoring are as follows:

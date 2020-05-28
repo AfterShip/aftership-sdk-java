@@ -5,12 +5,11 @@ import com.aftership.sdk.endpoint.CourierEndpoint;
 import com.aftership.sdk.exception.ApiException;
 import com.aftership.sdk.exception.ConstructorException;
 import com.aftership.sdk.exception.InvalidRequestException;
-import com.aftership.sdk.model.checkpoint.LastCheckpoint;
 import com.aftership.sdk.model.courier.CourierDetectList;
 import com.aftership.sdk.model.courier.CourierDetectRequest;
 import com.aftership.sdk.model.courier.CourierDetectTracking;
 import com.aftership.sdk.model.courier.CourierList;
-import com.aftership.sdk.rest.*;
+import com.aftership.sdk.request.*;
 
 /** CourierEndpoint's implementation class */
 public class CourierImpl extends AfterShipEndpoint implements CourierEndpoint {

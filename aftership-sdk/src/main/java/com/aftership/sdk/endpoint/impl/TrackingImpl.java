@@ -16,9 +16,9 @@ import com.aftership.sdk.model.tracking.SlugTrackingNumber;
 import com.aftership.sdk.model.tracking.Tracking;
 import com.aftership.sdk.model.tracking.UpdateTracking;
 import com.aftership.sdk.model.tracking.UpdateTrackingRequest;
-import com.aftership.sdk.rest.ApiRequest;
-import com.aftership.sdk.rest.HttpMethod;
-import com.aftership.sdk.rest.ResponseEntity;
+import com.aftership.sdk.request.ApiRequest;
+import com.aftership.sdk.request.HttpMethod;
+import com.aftership.sdk.request.ResponseEntity;
 import com.aftership.sdk.utils.UrlUtils;
 
 /** TrackingEndpoint's implementation class */

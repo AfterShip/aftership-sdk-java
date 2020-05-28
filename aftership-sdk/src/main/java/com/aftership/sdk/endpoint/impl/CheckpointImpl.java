@@ -8,9 +8,9 @@ import com.aftership.sdk.exception.InvalidRequestException;
 import com.aftership.sdk.model.checkpoint.GetCheckpointParam;
 import com.aftership.sdk.model.checkpoint.LastCheckpoint;
 import com.aftership.sdk.model.tracking.SlugTrackingNumber;
-import com.aftership.sdk.rest.ApiRequest;
-import com.aftership.sdk.rest.HttpMethod;
-import com.aftership.sdk.rest.ResponseEntity;
+import com.aftership.sdk.request.ApiRequest;
+import com.aftership.sdk.request.HttpMethod;
+import com.aftership.sdk.request.ResponseEntity;
 import com.aftership.sdk.utils.UrlUtils;
 
 /** CheckpointEndpoint's implementation class */

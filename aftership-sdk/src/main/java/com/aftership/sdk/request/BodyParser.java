@@ -1,4 +1,4 @@
-package com.aftership.sdk.rest;
+package com.aftership.sdk.request;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

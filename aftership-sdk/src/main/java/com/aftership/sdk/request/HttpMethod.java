@@ -1,4 +1,4 @@
-package com.aftership.sdk.rest;
+package com.aftership.sdk.request;
 
 /** Method of http request */
 public enum HttpMethod {

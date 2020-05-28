@@ -1,4 +1,4 @@
-package com.aftership.sdk.rest;
+package com.aftership.sdk.request;
 
 import java.util.Map;
 

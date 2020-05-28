@@ -9,8 +9,8 @@ import com.aftership.sdk.exception.ApiException;
 import com.aftership.sdk.exception.ConstructorException;
 import com.aftership.sdk.exception.InvalidRequestException;
 import com.aftership.sdk.model.tracking.SlugTrackingNumber;
-import com.aftership.sdk.rest.ApiRequest;
-import com.aftership.sdk.rest.ResponseEntity;
+import com.aftership.sdk.request.ApiRequest;
+import com.aftership.sdk.request.ResponseEntity;
 import com.aftership.sdk.utils.StrUtils;
 
 /** AfterShip Endpoint's base class */
