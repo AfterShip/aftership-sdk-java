@@ -2,7 +2,6 @@ package com.aftership.sdk.endpoint;
 
 import java.util.HashMap;
 import java.util.Map;
-import com.aftership.sdk.error.AftershipError;
 import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.error.ErrorType;
 import com.aftership.sdk.exception.ApiException;
@@ -63,14 +62,14 @@ public abstract class AfterShipEndpoint {
   }
 
   public <T> T extractData(ResponseEntity<T> entity) throws ApiException, RequestException {
-    if (entity.hasError()) {
-      AftershipError error = entity.getError();
-      if (error.isApiError()) {
-        throw new ApiException(
-            error.getType(), error.getMessage(), error.getCode(), error.getData());
-      }
-      throw new RequestException(error.getType(), error.getMessage(), error.getData());
-    }
+//    if (entity.hasError()) {
+//      AftershipError error = entity.getError();
+//      if (error.isApiError()) {
+//        throw new ApiException(
+//            error.getType(), error.getMessage(), error.getCode(), error.getData());
+//      }
+//      throw new RequestException(error.getType(), error.getMessage(), error.getData());
+//    }
 
     return entity.getData();
   }

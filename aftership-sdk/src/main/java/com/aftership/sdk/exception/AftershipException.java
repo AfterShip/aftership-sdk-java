@@ -36,6 +36,10 @@ public class AftershipException extends Exception {
     this(type, message, null);
   }
 
+  public AftershipException(String type, Throwable cause, Map<String, Object> data) {
+    this(type, null, null, cause, data);
+  }
+
   /**
    * Constructor
    *
@@ -55,6 +59,7 @@ public class AftershipException extends Exception {
    * @param code Coding of error
    * @param data Debug information of error
    */
+  @Deprecated
   public AftershipException(
       String type, String message, Integer code, Map.Entry<String, Object>... data) {
     this(type, message, code, null, data);
@@ -81,6 +86,7 @@ public class AftershipException extends Exception {
    * @param cause Throwable
    * @param data Debug information of error
    */
+  @Deprecated
   public AftershipException(
       String type,
       String message,
@@ -139,8 +145,9 @@ public class AftershipException extends Exception {
   }
 
   /**
-   * Determine if the current exception is caused by "TooManyRequests",
-   * if so, please check the RateLimit object
+   * Determine if the current exception is caused by "TooManyRequests", if so, please check the
+   * RateLimit object
+   *
    * @return boolean
    */
   public boolean isTooManyRequests() {

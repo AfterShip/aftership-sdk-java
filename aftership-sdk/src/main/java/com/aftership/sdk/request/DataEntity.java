@@ -1,12 +1,11 @@
 package com.aftership.sdk.request;
 
-import com.aftership.sdk.error.AftershipError;
-
 /**
  * Data Entity's wrapper.
  *
  * @param <T> Class
  */
+@Deprecated
 public interface DataEntity<T> {
 
   /**
@@ -16,19 +15,19 @@ public interface DataEntity<T> {
    */
   T getData();
 
-  /**
-   * Error of request
-   *
-   * @return Object of AftershipError
-   */
-  AftershipError getError();
+//  /**
+//   * Error of request
+//   *
+//   * @return Object of AftershipError
+//   */
+//  AftershipError getError();
 
-  /**
-   * Is there an error in the response
-   *
-   * @return true/false
-   */
-  default boolean hasError() {
-    return getError() != null;
-  }
+//  /**
+//   * Is there an error in the response
+//   *
+//   * @return true/false
+//   */
+//  default boolean hasError() {
+//    return getError() != null;
+//  }
 }

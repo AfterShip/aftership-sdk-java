@@ -8,9 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import com.aftership.sdk.AfterShip;
-import com.aftership.sdk.error.AftershipError;
 import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.error.ErrorType;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.exception.ApiException;
+import com.aftership.sdk.exception.RequestException;
+import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.AftershipResponse;
 import com.aftership.sdk.model.Meta;
 import com.aftership.sdk.model.RateLimit;
@@ -59,22 +62,20 @@ public class ApiRequestImpl implements ApiRequest {
       String path,
       Map<String, String> queryParams,
       T requestData,
-      Class<R> responseType) {
+      Class<R> responseType)
+      throws SdkException, RequestException, ApiException {
     // parameter check
     if (StrUtils.isBlank(path)) {
-      return ResponseEntity.makeError(
-          AftershipError.make(
-              ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_INVALID_REQUEST_CONFIG));
+      throw new SdkException(
+          ErrorType.ConstructorError.getName(), ErrorMessage.CONSTRUCTOR_INVALID_REQUEST_CONFIG);
     }
     if (StrUtils.isBlank(app.getApiKey())) {
-      return ResponseEntity.makeError(
-          AftershipError.make(
-              ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_INVALID_API_KEY));
+      throw new SdkException(
+          ErrorType.ConstructorError.getName(), ErrorMessage.CONSTRUCTOR_INVALID_API_KEY);
     }
     if (responseType == null) {
-      return ResponseEntity.makeError(
-          AftershipError.make(
-              ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_INVALID_RESPONSE_TYPE));
+      throw new SdkException(
+          ErrorType.ConstructorError.getName(), ErrorMessage.CONSTRUCTOR_INVALID_RESPONSE_TYPE);
     }
 
     // build url
@@ -110,69 +111,66 @@ public class ApiRequestImpl implements ApiRequest {
       // System.out.println("isSuccessful: "+ response.isSuccessful());
       if (!response.isSuccessful()) {
         setRateLimiting(this.app, response);
-        return ResponseEntity.makeError(
-            AftershipError.make(
-                response.body().string(),
-                entryRequestConfig(method, path),
-                entryRequestHeaders(requestHeaders),
-                entryRequestData(requestData),
-                entryResponseBody(response)));
+        throw new ApiException(
+            BodyParser.processMeta(requireResponseBodyNonNull(response.body()).string()),
+            entryRequestConfig(method, path),
+            entryRequestHeaders(requestHeaders),
+            entryRequestData(requestData),
+            entryResponseBody(response));
       }
 
       setRateLimiting(this.app, response);
 
-      if (response.body() == null) {
-        return ResponseEntity.makeError(
-            AftershipError.make(
-                ErrorType.HandlerError,
-                ErrorMessage.HANDLER_BODY_IS_NULL,
-                entryRequestConfig(method, path),
-                entryRequestHeaders(requestHeaders)));
-      }
-
-      String jsonBody =
-          response.body() != null ? Objects.requireNonNull(response.body()).string() : "{}";
+      String jsonBody = requireResponseBodyNonNull(response.body()).string();
       if (StrUtils.isBlank(jsonBody) || "{}".equals(jsonBody)) {
-        return ResponseEntity.makeError(
-            AftershipError.make(
-                ErrorType.HandlerError,
-                ErrorMessage.HANDLER_EMPTY_BODY,
-                entryRequestConfig(method, path),
-                entryRequestHeaders(requestHeaders),
-                entryRequestData(requestData)));
+        throw new RequestException(
+            ErrorType.HandlerError.getName(),
+            ErrorMessage.HANDLER_RESPONSE_BODY_IS_EMPTY,
+            entryRequestConfig(method, path),
+            entryRequestHeaders(requestHeaders),
+            entryRequestData(requestData));
       }
 
       JsonElement jsonElement = JsonParser.parseString(jsonBody);
       if (!jsonElement.isJsonObject()) {
-        return ResponseEntity.makeError(
-            AftershipError.make(
-                ErrorType.HandlerError,
-                ErrorMessage.HANDLER_BODY_NOT_JSON_OBJECT,
-                entryRequestConfig(method, path),
-                entryRequestHeaders(requestHeaders),
-                entryRequestData(requestData),
-                entryResponseBody(response)));
+        throw new RequestException(
+            ErrorType.HandlerError.getName(),
+            ErrorMessage.HANDLER_BODY_NOT_JSON_OBJECT,
+            entryRequestConfig(method, path),
+            entryRequestHeaders(requestHeaders),
+            entryRequestData(requestData),
+            entryResponseBody(response));
       }
 
       AftershipResponse<R> result = processResponse(jsonElement, responseType);
-      if (result.getMeta() == null || !isSuccessful(result.getMeta().getCode())) {
-        return ResponseEntity.makeError(
-            AftershipError.make(
-                result.getMeta(),
-                entryRequestConfig(method, path),
-                entryRequestHeaders(requestHeaders),
-                entryRequestData(requestData)));
+      if (result.getMeta() == null) {
+        throw new RequestException(
+            ErrorType.HandlerError.getName(),
+            ErrorMessage.HANDLER_NULL_META,
+            entryRequestConfig(method, path),
+            entryRequestHeaders(requestHeaders),
+            entryRequestData(requestData),
+            entryResponseBody(response));
+      }
+      if (!isSuccessful(result.getMeta().getCode())) {
+        throw new ApiException(
+            result.getMeta(),
+            entryRequestConfig(method, path),
+            entryRequestHeaders(requestHeaders),
+            entryRequestData(requestData),
+            entryResponseBody(response));
       }
 
       return ResponseEntity.makeResponse(result);
+    } catch (ApiException | RequestException ex) {
+      throw ex;
     } catch (Throwable t) {
-      return ResponseEntity.makeError(
-          AftershipError.make(
-              ErrorType.HandlerError,
-              t,
-              entryRequestConfig(method, path),
-              entryRequestHeaders(requestHeaders),
-              entryRequestData(requestData)));
+      throw new RequestException(
+          ErrorType.HandlerError.getName(),
+          t,
+          entryRequestConfig(method, path),
+          entryRequestHeaders(requestHeaders),
+          entryRequestData(requestData));
     }
   }
 
@@ -224,20 +222,21 @@ public class ApiRequestImpl implements ApiRequest {
             put("path", path);
           }
         };
-    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_DATA_KEY_REQUEST_CONFIG, map);
+    return new AbstractMap.SimpleEntry<>(AftershipException.DEBUG_DATA_KEY_REQUEST_CONFIG, map);
   }
 
   private AbstractMap.SimpleEntry<String, Object> entryRequestHeaders(
       Map<String, String> requestHeaders) {
-    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_DATA_KEY_REQUEST_HEADERS, requestHeaders);
+    return new AbstractMap.SimpleEntry<>(
+        AftershipException.DEBUG_DATA_KEY_REQUEST_HEADERS, requestHeaders);
   }
 
   private <T> AbstractMap.SimpleEntry<String, Object> entryRequestData(T requestData) {
-    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_DATA_KEY_REQUEST_DATA, requestData);
+    return new AbstractMap.SimpleEntry<>(AftershipException.DEBUG_DATA_KEY_REQUEST_DATA, requestData);
   }
 
   private AbstractMap.SimpleEntry<String, Object> entryResponseBody(Response response) {
-    String tag = AftershipError.DEBUG_DATA_KEY_RESPONSE_BODY;
+    String tag = AftershipException.DEBUG_DATA_KEY_RESPONSE_BODY;
     try {
       if (StrUtils.isNotBlank(response.message())) {
         return new AbstractMap.SimpleEntry<>(tag, null);
@@ -267,5 +266,13 @@ public class ApiRequestImpl implements ApiRequest {
       }
     }
     return false;
+  }
+
+  public static <T> T requireResponseBodyNonNull(T obj) throws RequestException {
+    if (obj == null) {
+      throw new RequestException(
+          ErrorType.HandlerError.getName(), ErrorMessage.HANDLER_RESPONSE_BODY_IS_NULL);
+    }
+    return obj;
   }
 }

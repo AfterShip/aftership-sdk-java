@@ -19,10 +19,10 @@ public class ErrorMessage {
   public static final String CONSTRUCTOR_REQUIRED_PATH = "ConstructorError: Required tracking path";
   public static final String CONSTRUCTOR_NULL_PARAM = "ConstructorError: Parameters cannot be null";
 
-  public static final String HANDLER_EMPTY_BODY = "HandlerError: Body is empty";
+  public static final String HANDLER_RESPONSE_BODY_IS_EMPTY = "HandlerError: Body is empty";
   public static final String HANDLER_NULL_META = "HandlerError: Meta is Null";
   public static final String HANDLER_BODY_NOT_JSON_OBJECT = "Body is not a Json object.";
   public static final String HANDLER_INVALID_BODY = "HandlerError: Invalid Body value";
 
-  public static final String HANDLER_BODY_IS_NULL = "HandlerError: return body is null";
+  public static final String HANDLER_RESPONSE_BODY_IS_NULL = "HandlerError: return body is null";
 }

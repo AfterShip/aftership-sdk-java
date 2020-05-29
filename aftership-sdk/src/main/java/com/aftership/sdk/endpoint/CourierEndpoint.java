@@ -16,7 +16,7 @@ public interface CourierEndpoint {
    * @throws RequestException
    * @throws ApiException
    */
-  CourierList listCouriers() throws RequestException, ApiException;
+  CourierList listCouriers() throws RequestException, ApiException, SdkException;
 
   /**
    * Return a list of all couriers.
@@ -25,7 +25,7 @@ public interface CourierEndpoint {
    * @throws RequestException
    * @throws ApiException
    */
-  CourierList listAllCouriers() throws RequestException, ApiException;
+  CourierList listAllCouriers() throws RequestException, ApiException, SdkException;
 
   /**
    * Return a list of matched couriers based on tracking number format and selected couriers or a

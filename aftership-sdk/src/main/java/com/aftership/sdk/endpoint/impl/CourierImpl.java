@@ -26,16 +26,15 @@ public class CourierImpl extends AfterShipEndpoint implements CourierEndpoint {
   }
 
   @Override
-  public CourierList listCouriers() throws RequestException, ApiException {
+  public CourierList listCouriers() throws RequestException, ApiException, SdkException {
     ResponseEntity<CourierList> entity =
         this.request.makeRequest(
             HttpMethod.GET, EndpointPath.LIST_COURIERS, null, null, CourierList.class);
-
     return extractData(entity);
   }
 
   @Override
-  public CourierList listAllCouriers() throws RequestException, ApiException {
+  public CourierList listAllCouriers() throws RequestException, ApiException, SdkException {
     ResponseEntity<CourierList> entity =
         this.request.makeRequest(
             HttpMethod.GET, EndpointPath.LIST_ALL_COURIERS, null, null, CourierList.class);
