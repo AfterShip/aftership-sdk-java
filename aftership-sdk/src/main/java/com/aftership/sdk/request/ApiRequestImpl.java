@@ -57,7 +57,7 @@ public class ApiRequestImpl implements ApiRequest {
    * @return ResponseEntity
    */
   @Override
-  public <T, R> ResponseEntity<R> makeRequest(
+  public <T, R> AftershipResponse<R> makeRequest(
       HttpMethod method,
       String path,
       Map<String, String> queryParams,
@@ -66,16 +66,14 @@ public class ApiRequestImpl implements ApiRequest {
       throws SdkException, RequestException, ApiException {
     // parameter check
     if (StrUtils.isBlank(path)) {
-      throw new SdkException(
-          ErrorType.ConstructorError.getName(), ErrorMessage.CONSTRUCTOR_INVALID_REQUEST_CONFIG);
+      throw new SdkException(ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_PATH_IS_EMPTY);
     }
     if (StrUtils.isBlank(app.getApiKey())) {
-      throw new SdkException(
-          ErrorType.ConstructorError.getName(), ErrorMessage.CONSTRUCTOR_INVALID_API_KEY);
+      throw new SdkException(ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_API_KEY_IS_NULL);
     }
     if (responseType == null) {
       throw new SdkException(
-          ErrorType.ConstructorError.getName(), ErrorMessage.CONSTRUCTOR_INVALID_RESPONSE_TYPE);
+          ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_RESPONSE_TYPE_IS_NULL);
     }
 
     // build url
@@ -124,7 +122,7 @@ public class ApiRequestImpl implements ApiRequest {
       String jsonBody = requireResponseBodyNonNull(response.body()).string();
       if (StrUtils.isBlank(jsonBody) || "{}".equals(jsonBody)) {
         throw new RequestException(
-            ErrorType.HandlerError.getName(),
+            ErrorType.HandlerError,
             ErrorMessage.HANDLER_RESPONSE_BODY_IS_EMPTY,
             entryRequestConfig(method, path),
             entryRequestHeaders(requestHeaders),
@@ -134,8 +132,8 @@ public class ApiRequestImpl implements ApiRequest {
       JsonElement jsonElement = JsonParser.parseString(jsonBody);
       if (!jsonElement.isJsonObject()) {
         throw new RequestException(
-            ErrorType.HandlerError.getName(),
-            ErrorMessage.HANDLER_BODY_NOT_JSON_OBJECT,
+            ErrorType.HandlerError,
+            ErrorMessage.HANDLER_RESPONSE_BODY_IS_NOT_JSON_OBJECT,
             entryRequestConfig(method, path),
             entryRequestHeaders(requestHeaders),
             entryRequestData(requestData),
@@ -145,8 +143,8 @@ public class ApiRequestImpl implements ApiRequest {
       AftershipResponse<R> result = processResponse(jsonElement, responseType);
       if (result.getMeta() == null) {
         throw new RequestException(
-            ErrorType.HandlerError.getName(),
-            ErrorMessage.HANDLER_NULL_META,
+            ErrorType.HandlerError,
+            ErrorMessage.HANDLER_RESPONSE_META_IS_NULL,
             entryRequestConfig(method, path),
             entryRequestHeaders(requestHeaders),
             entryRequestData(requestData),
@@ -161,12 +159,12 @@ public class ApiRequestImpl implements ApiRequest {
             entryResponseBody(response));
       }
 
-      return ResponseEntity.makeResponse(result);
+      return result;
     } catch (ApiException | RequestException ex) {
       throw ex;
     } catch (Throwable t) {
       throw new RequestException(
-          ErrorType.HandlerError.getName(),
+          ErrorType.HandlerError,
           t,
           entryRequestConfig(method, path),
           entryRequestHeaders(requestHeaders),
@@ -232,7 +230,8 @@ public class ApiRequestImpl implements ApiRequest {
   }
 
   private <T> AbstractMap.SimpleEntry<String, Object> entryRequestData(T requestData) {
-    return new AbstractMap.SimpleEntry<>(AftershipException.DEBUG_DATA_KEY_REQUEST_DATA, requestData);
+    return new AbstractMap.SimpleEntry<>(
+        AftershipException.DEBUG_DATA_KEY_REQUEST_DATA, requestData);
   }
 
   private AbstractMap.SimpleEntry<String, Object> entryResponseBody(Response response) {
@@ -271,7 +270,7 @@ public class ApiRequestImpl implements ApiRequest {
   public static <T> T requireResponseBodyNonNull(T obj) throws RequestException {
     if (obj == null) {
       throw new RequestException(
-          ErrorType.HandlerError.getName(), ErrorMessage.HANDLER_RESPONSE_BODY_IS_NULL);
+          ErrorType.HandlerError, ErrorMessage.HANDLER_RESPONSE_BODY_OBJECT_IS_NULL);
     }
     return obj;
   }

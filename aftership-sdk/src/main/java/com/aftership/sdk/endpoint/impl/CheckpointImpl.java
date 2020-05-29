@@ -5,12 +5,12 @@ import com.aftership.sdk.endpoint.CheckpointEndpoint;
 import com.aftership.sdk.exception.ApiException;
 import com.aftership.sdk.exception.RequestException;
 import com.aftership.sdk.exception.SdkException;
+import com.aftership.sdk.model.AftershipResponse;
 import com.aftership.sdk.model.checkpoint.GetCheckpointParam;
 import com.aftership.sdk.model.checkpoint.LastCheckpoint;
 import com.aftership.sdk.model.tracking.SlugTrackingNumber;
 import com.aftership.sdk.request.ApiRequest;
 import com.aftership.sdk.request.HttpMethod;
-import com.aftership.sdk.request.ResponseEntity;
 import com.aftership.sdk.utils.UrlUtils;
 
 /** CheckpointEndpoint's implementation class */
@@ -33,11 +33,11 @@ public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpo
     String path =
         UrlUtils.buildTrackingPath(id, null, null, EndpointPath.GET_LAST_CHECKPOINT, null);
 
-    ResponseEntity<LastCheckpoint> entity =
+    AftershipResponse<LastCheckpoint> response =
         this.request.makeRequest(
             HttpMethod.GET, path, this.merge(optionalParam), null, LastCheckpoint.class);
 
-    return extractData(entity);
+    return extractData(response);
   }
 
   @Override
@@ -54,10 +54,10 @@ public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpo
             EndpointPath.GET_LAST_CHECKPOINT,
             null);
 
-    ResponseEntity<LastCheckpoint> entity =
+    AftershipResponse<LastCheckpoint> response =
         this.request.makeRequest(
             HttpMethod.GET, path, this.merge(optionalParam), null, LastCheckpoint.class);
 
-    return extractData(entity);
+    return extractData(response);
   }
 }

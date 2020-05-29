@@ -1,9 +1,10 @@
 package com.aftership.sdk.exception;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-import com.aftership.sdk.utils.MapUtils;
+import com.aftership.sdk.utils.JsonUtils;
 import com.aftership.sdk.utils.StrUtils;
 import lombok.Getter;
 
@@ -19,10 +20,13 @@ public class AftershipException extends Exception {
 
   /** Type of error */
   private String type;
+
   /** Message of error */
   private String message;
+
   /** Coding of error */
   private Integer code;
+
   /** Debug information of error */
   private Map<String, Object> data;
 
@@ -59,45 +63,8 @@ public class AftershipException extends Exception {
    * @param code Coding of error
    * @param data Debug information of error
    */
-  @Deprecated
-  public AftershipException(
-      String type, String message, Integer code, Map.Entry<String, Object>... data) {
-    this(type, message, code, null, data);
-  }
-
-  /**
-   * Constructor
-   *
-   * @param type Type of error
-   * @param message Message of error
-   * @param code Coding of error
-   * @param data Debug information of error
-   */
   public AftershipException(String type, String message, Integer code, Map<String, Object> data) {
     this(type, message, code, null, data);
-  }
-
-  /**
-   * Constructor
-   *
-   * @param type Type of error
-   * @param message Message of error
-   * @param code Coding of error
-   * @param cause Throwable
-   * @param data Debug information of error
-   */
-  @Deprecated
-  public AftershipException(
-      String type,
-      String message,
-      Integer code,
-      Throwable cause,
-      Map.Entry<String, Object>... data) {
-    super(message, cause);
-    this.type = type;
-    this.message = message;
-    this.code = code;
-    this.data = MapUtils.toMap(data);
   }
 
   /**
@@ -167,22 +134,40 @@ public class AftershipException extends Exception {
   }
 
   /**
-   * Print debug data
-   *
-   * @param consumer Consumer Interface Implementation
+   * Print Message, Using System.out::print and Pretty message in Json format
    */
-  public void printData(Consumer<String> consumer) {
-    if (data != null && data.size() > 0) {
-      for (Map.Entry<String, Object> entry : data.entrySet()) {
-        String message =
-            MessageFormat.format("DEBUG DATA: {0}={1}", entry.getKey(), entry.getValue());
-        consumer.accept(message);
-      }
-    }
+  public void printMessage() {
+    printMessage(true);
   }
 
-  /** Print debug data */
-  public void printData() {
-    printData(System.out::println);
+  /**
+   * Print Message, Using System.out::print
+   * @param pretty is pretty message?
+   */
+  public void printMessage(boolean pretty) {
+    printMessage(pretty, System.out::print);
+  }
+
+  /**
+   * Print Message
+   * @param pretty  boolean
+   * @param consumer Log output method
+   */
+  public void printMessage(boolean pretty, Consumer<String> consumer) {
+    consumer.accept(prettyMessage(pretty));
+  }
+
+  /**
+   * Pretty message in Json format
+   * @param pretty is pretty message?
+   * @return String
+   */
+  public String prettyMessage(boolean pretty) {
+    Map<String, Object> map = new HashMap<>(4);
+    map.put("type", getType());
+    map.put("message", this.message);
+    map.put("code", getCode());
+    map.put("data", getData());
+    return JsonUtils.create(pretty).toJson(map);
   }
 }

@@ -41,6 +41,7 @@ public class ErrorTest {
             afterShip.getCourierEndpoint().listCouriers();
           } catch (AftershipException ex) {
             System.out.println(ex.getMessage());
+            ex.printMessage();
             throw ex;
           }
         });

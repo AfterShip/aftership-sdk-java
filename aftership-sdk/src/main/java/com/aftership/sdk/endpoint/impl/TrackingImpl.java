@@ -5,6 +5,7 @@ import com.aftership.sdk.endpoint.TrackingEndpoint;
 import com.aftership.sdk.exception.ApiException;
 import com.aftership.sdk.exception.RequestException;
 import com.aftership.sdk.exception.SdkException;
+import com.aftership.sdk.model.AftershipResponse;
 import com.aftership.sdk.model.tracking.CompletedStatus;
 import com.aftership.sdk.model.tracking.GetTrackingParams;
 import com.aftership.sdk.model.tracking.GetTrackingsParams;
@@ -18,7 +19,6 @@ import com.aftership.sdk.model.tracking.UpdateTracking;
 import com.aftership.sdk.model.tracking.UpdateTrackingRequest;
 import com.aftership.sdk.request.ApiRequest;
 import com.aftership.sdk.request.HttpMethod;
-import com.aftership.sdk.request.ResponseEntity;
 import com.aftership.sdk.utils.UrlUtils;
 
 /** TrackingEndpoint's implementation class */
@@ -39,7 +39,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     checkNullParam(newTracking);
     checkTrackingNumber(newTracking.getTrackingNumber());
 
-    ResponseEntity<SingleTracking> entity =
+    AftershipResponse<SingleTracking> response =
         this.request.makeRequest(
             HttpMethod.POST,
             EndpointPath.CREATE_TRACKING,
@@ -47,7 +47,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             new NewTrackingRequest(newTracking),
             SingleTracking.class);
 
-    return extractData(entity).getTracking();
+    return extractData(response).getTracking();
   }
 
   @Override
@@ -57,10 +57,10 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.DELETE_TRACKING, null);
 
-    ResponseEntity<SingleTracking> entity =
+    AftershipResponse<SingleTracking> response =
         this.request.makeRequest(HttpMethod.DELETE, path, null, null, SingleTracking.class);
 
-    return extractData(entity).getTracking();
+    return extractData(response).getTracking();
   }
 
   @Override
@@ -76,7 +76,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             EndpointPath.DELETE_TRACKING,
             null);
 
-    ResponseEntity<SingleTracking> entity =
+    AftershipResponse<SingleTracking> response =
         this.request.makeRequest(
             HttpMethod.DELETE,
             path,
@@ -84,7 +84,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             null,
             SingleTracking.class);
 
-    return extractData(entity).getTracking();
+    return extractData(response).getTracking();
   }
 
   @Override
@@ -94,11 +94,11 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.GET_TRACKING, null);
 
-    ResponseEntity<SingleTracking> entity =
+    AftershipResponse<SingleTracking> response =
         this.request.makeRequest(
             HttpMethod.GET, path, merge(optionalParams), null, SingleTracking.class);
 
-    return extractData(entity).getTracking();
+    return extractData(response).getTracking();
   }
 
   @Override
@@ -114,7 +114,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             EndpointPath.GET_TRACKING,
             null);
 
-    ResponseEntity<SingleTracking> entity =
+    AftershipResponse<SingleTracking> response =
         this.request.makeRequest(
             HttpMethod.GET,
             path,
@@ -122,7 +122,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             null,
             SingleTracking.class);
 
-    return extractData(entity).getTracking();
+    return extractData(response).getTracking();
   }
 
   @Override
@@ -131,10 +131,10 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     String path = UrlUtils.buildTrackingPath(null, null, null, EndpointPath.GET_TRACKINGS, null);
 
-    ResponseEntity<PagedTrackings> entity =
+    AftershipResponse<PagedTrackings> response =
         this.request.makeRequest(HttpMethod.GET, path, params.toMap(), null, PagedTrackings.class);
 
-    return extractData(entity);
+    return extractData(response);
   }
 
   @Override
@@ -144,11 +144,11 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.UPDATE_TRACKING, null);
 
-    ResponseEntity<SingleTracking> entity =
+    AftershipResponse<SingleTracking> response =
         this.request.makeRequest(
             HttpMethod.PUT, path, null, new UpdateTrackingRequest(update), SingleTracking.class);
 
-    return extractData(entity).getTracking();
+    return extractData(response).getTracking();
   }
 
   @Override
@@ -164,7 +164,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             EndpointPath.UPDATE_TRACKING,
             null);
 
-    ResponseEntity<SingleTracking> entity =
+    AftershipResponse<SingleTracking> response =
         this.request.makeRequest(
             HttpMethod.PUT,
             path,
@@ -172,7 +172,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             new UpdateTrackingRequest(update),
             SingleTracking.class);
 
-    return extractData(entity).getTracking();
+    return extractData(response).getTracking();
   }
 
   @Override
@@ -184,10 +184,10 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         UrlUtils.buildTrackingPath(
             id, null, null, EndpointPath.UPDATE_RETRACK, EndpointPath.UPDATE_RETRACK_ACTION);
 
-    ResponseEntity<SingleTracking> entity =
+    AftershipResponse<SingleTracking> response =
         this.request.makeRequest(HttpMethod.POST, path, null, new Object(), SingleTracking.class);
 
-    return extractData(entity).getTracking();
+    return extractData(response).getTracking();
   }
 
   @Override
@@ -203,7 +203,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             EndpointPath.UPDATE_RETRACK,
             EndpointPath.UPDATE_RETRACK_ACTION);
 
-    ResponseEntity<SingleTracking> entity =
+    AftershipResponse<SingleTracking> response =
         this.request.makeRequest(
             HttpMethod.POST,
             path,
@@ -211,7 +211,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             new Object(),
             SingleTracking.class);
 
-    return extractData(entity).getTracking();
+    return extractData(response).getTracking();
   }
 
   @Override
@@ -223,10 +223,10 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         UrlUtils.buildTrackingPath(
             id, null, null, EndpointPath.MARK_AS_COMPLETED, EndpointPath.MARK_AS_COMPLETED_ACTION);
 
-    ResponseEntity<SingleTracking> entity =
+    AftershipResponse<SingleTracking> response =
         this.request.makeRequest(HttpMethod.POST, path, null, status, SingleTracking.class);
 
-    return extractData(entity).getTracking();
+    return extractData(response).getTracking();
   }
 
   @Override
@@ -242,7 +242,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             EndpointPath.MARK_AS_COMPLETED,
             EndpointPath.MARK_AS_COMPLETED_ACTION);
 
-    ResponseEntity<SingleTracking> entity =
+    AftershipResponse<SingleTracking> response =
         this.request.makeRequest(
             HttpMethod.POST,
             path,
@@ -250,6 +250,6 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
             status,
             SingleTracking.class);
 
-    return extractData(entity).getTracking();
+    return extractData(response).getTracking();
   }
 }

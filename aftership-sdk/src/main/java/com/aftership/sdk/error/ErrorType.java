@@ -4,10 +4,11 @@ import com.aftership.sdk.utils.StrUtils;
 
 /** Types of errors */
 public enum ErrorType {
+
   /** Constructor Error */
   ConstructorError("ConstructorError"),
+
   /** Handler Error */
-  @Deprecated
   HandlerError("HandlerError");
 
   /** name of ErrorType */

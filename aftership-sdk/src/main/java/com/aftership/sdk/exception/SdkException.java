@@ -1,5 +1,7 @@
 package com.aftership.sdk.exception;
 
+import com.aftership.sdk.error.ErrorType;
+
 /** Exception for constructed parameter */
 public class SdkException extends AftershipException {
 
@@ -8,7 +10,7 @@ public class SdkException extends AftershipException {
    * @param type Type of error
    * @param message Message of error
    */
-  public SdkException(String type, String message) {
-    super(type, message);
+  public SdkException(ErrorType type, String message) {
+    super(type.getName(), message);
   }
 }

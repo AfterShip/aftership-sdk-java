@@ -5,12 +5,12 @@ import com.aftership.sdk.endpoint.NotificationEndpoint;
 import com.aftership.sdk.exception.ApiException;
 import com.aftership.sdk.exception.RequestException;
 import com.aftership.sdk.exception.SdkException;
+import com.aftership.sdk.model.AftershipResponse;
 import com.aftership.sdk.model.notification.Notification;
 import com.aftership.sdk.model.notification.NotificationWrapper;
 import com.aftership.sdk.model.tracking.SlugTrackingNumber;
 import com.aftership.sdk.request.ApiRequest;
 import com.aftership.sdk.request.HttpMethod;
-import com.aftership.sdk.request.ResponseEntity;
 import com.aftership.sdk.utils.UrlUtils;
 
 /** NotificationEndpoint's implementation class */
@@ -32,10 +32,10 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
 
     String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.GET_NOTIFICATION, null);
 
-    ResponseEntity<NotificationWrapper> entity =
+    AftershipResponse<NotificationWrapper> response =
         this.request.makeRequest(HttpMethod.GET, path, null, null, NotificationWrapper.class);
 
-    return extractData(entity).getNotification();
+    return extractData(response).getNotification();
   }
 
   @Override
@@ -51,10 +51,10 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
             EndpointPath.GET_NOTIFICATION,
             null);
 
-    ResponseEntity<NotificationWrapper> entity =
+    AftershipResponse<NotificationWrapper> response =
         this.request.makeRequest(HttpMethod.GET, path, null, null, NotificationWrapper.class);
 
-    return extractData(entity).getNotification();
+    return extractData(response).getNotification();
   }
 
   @Override
@@ -66,7 +66,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
         UrlUtils.buildTrackingPath(
             id, null, null, EndpointPath.ADD_NOTIFICATION, EndpointPath.ADD_NOTIFICATION_ACTION);
 
-    ResponseEntity<NotificationWrapper> entity =
+    AftershipResponse<NotificationWrapper> response =
         this.request.makeRequest(
             HttpMethod.POST,
             path,
@@ -74,7 +74,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
             new NotificationWrapper(notification),
             NotificationWrapper.class);
 
-    return extractData(entity).getNotification();
+    return extractData(response).getNotification();
   }
 
   @Override
@@ -90,7 +90,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
             EndpointPath.ADD_NOTIFICATION,
             EndpointPath.ADD_NOTIFICATION_ACTION);
 
-    ResponseEntity<NotificationWrapper> entity =
+    AftershipResponse<NotificationWrapper> response =
         this.request.makeRequest(
             HttpMethod.POST,
             path,
@@ -98,7 +98,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
             new NotificationWrapper(notification),
             NotificationWrapper.class);
 
-    return extractData(entity).getNotification();
+    return extractData(response).getNotification();
   }
 
   @Override
@@ -114,7 +114,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
             EndpointPath.REMOVE_NOTIFICATION,
             EndpointPath.REMOVE_NOTIFICATION_ACTION);
 
-    ResponseEntity<NotificationWrapper> entity =
+    AftershipResponse<NotificationWrapper> response =
         this.request.makeRequest(
             HttpMethod.POST,
             path,
@@ -122,7 +122,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
             new NotificationWrapper(notification),
             NotificationWrapper.class);
 
-    return extractData(entity).getNotification();
+    return extractData(response).getNotification();
   }
 
   @Override
@@ -138,7 +138,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
             EndpointPath.REMOVE_NOTIFICATION,
             EndpointPath.REMOVE_NOTIFICATION_ACTION);
 
-    ResponseEntity<NotificationWrapper> entity =
+    AftershipResponse<NotificationWrapper> response =
         this.request.makeRequest(
             HttpMethod.POST,
             path,
@@ -146,6 +146,6 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
             new NotificationWrapper(notification),
             NotificationWrapper.class);
 
-    return extractData(entity).getNotification();
+    return extractData(response).getNotification();
   }
 }

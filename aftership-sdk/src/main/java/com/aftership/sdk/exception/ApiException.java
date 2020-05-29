@@ -10,18 +10,6 @@ public class ApiException extends AftershipException {
   /**
    * Constructor
    *
-   * @param type Type of error
-   * @param message Message of error
-   * @param code Coding of error
-   * @param data Debug information of error
-   */
-  public ApiException(String type, String message, Integer code, Map<String, Object> data) {
-    super(type, message, code, data);
-  }
-
-  /**
-   * Constructor
-   *
    * @param meta The meta key is used to communicate extra information about the response to the
    *     developer
    * @param data Debug information of error

@@ -58,14 +58,10 @@ public final class UrlUtils {
   }
 
   public static String buildTrackingPath(
-      String id,
-      String slug,
-      String trackingNumber,
-      String rootPath,
-      String action) throws SdkException {
+      String id, String slug, String trackingNumber, String rootPath, String action)
+      throws SdkException {
     if (StrUtils.isBlank(rootPath)) {
-      throw new SdkException(
-          ErrorType.ConstructorError.getName(), ErrorMessage.CONSTRUCTOR_REQUIRED_PATH);
+      throw new SdkException(ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_REQUIRED_PATH);
     }
 
     String trackingUrl = rootPath;

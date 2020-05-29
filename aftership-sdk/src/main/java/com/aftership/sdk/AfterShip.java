@@ -61,8 +61,7 @@ public class AfterShip {
    */
   public AfterShip(String apiKey, AftershipOption options) throws SdkException {
     if (StrUtils.isBlank(apiKey)) {
-      throw new SdkException(
-          ErrorType.ConstructorError.getName(), ErrorMessage.CONSTRUCTOR_INVALID_API_KEY);
+      throw new SdkException(ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_API_KEY_IS_NULL);
     }
 
     this.apiKey = apiKey;
