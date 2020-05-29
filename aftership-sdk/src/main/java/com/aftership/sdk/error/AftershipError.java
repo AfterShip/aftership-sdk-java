@@ -14,10 +14,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AftershipError {
-  public static final String DEBUG_KEY_REQUEST_CONFIG = "requestConfig";
-  public static final String DEBUG_KEY_REQUEST_HEADERS = "requestHeaders";
-  public static final String DEBUG_KEY_REQUEST_DATA = "requestData";
-  public static final String DEBUG_KEY_RESPONSE_BODY = "responseBody";
+  @Deprecated
+  public static final String DEBUG_DATA_KEY_REQUEST_CONFIG = "requestConfig";
+  @Deprecated
+  public static final String DEBUG_DATA_KEY_REQUEST_HEADERS = "requestHeaders";
+  @Deprecated
+  public static final String DEBUG_DATA_KEY_REQUEST_DATA = "requestData";
+  @Deprecated
+  public static final String DEBUG_DATA_KEY_RESPONSE_BODY = "responseBody";
 
   /** Type of error */
   private String type = StrUtils.EMPTY;

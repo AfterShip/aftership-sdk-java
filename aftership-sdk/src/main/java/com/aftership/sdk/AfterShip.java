@@ -10,7 +10,7 @@ import com.aftership.sdk.endpoint.impl.NotificationImpl;
 import com.aftership.sdk.endpoint.impl.TrackingImpl;
 import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.error.ErrorType;
-import com.aftership.sdk.exception.ConstructorException;
+import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.RateLimit;
 import com.aftership.sdk.request.ApiRequest;
@@ -49,7 +49,7 @@ public class AfterShip {
    *
    * @param apiKey apiKey parameter in API request
    */
-  public AfterShip(String apiKey) throws ConstructorException {
+  public AfterShip(String apiKey) throws SdkException {
     this(apiKey, null);
   }
 
@@ -59,9 +59,9 @@ public class AfterShip {
    * @param apiKey apiKey parameter in API request
    * @param options Optional parameters for API request
    */
-  public AfterShip(String apiKey, AftershipOption options) throws ConstructorException {
+  public AfterShip(String apiKey, AftershipOption options) throws SdkException {
     if (StrUtils.isBlank(apiKey)) {
-      throw new ConstructorException(
+      throw new SdkException(
           ErrorType.ConstructorError.getName(), ErrorMessage.CONSTRUCTOR_INVALID_API_KEY);
     }
 

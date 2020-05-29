@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import com.aftership.sdk.endpoint.impl.EndpointPath;
 import com.aftership.sdk.exception.AftershipException;
-import com.aftership.sdk.exception.ConstructorException;
+import com.aftership.sdk.exception.SdkException;
 import lombok.SneakyThrows;
 
 class UrlUtilsTest {
@@ -44,7 +44,7 @@ class UrlUtilsTest {
   }
 
   @Test
-  void buildTrackingPath() throws ConstructorException {
+  void buildTrackingPath() throws SdkException {
     Assertions.assertThrows(
         AftershipException.class,
         () -> {

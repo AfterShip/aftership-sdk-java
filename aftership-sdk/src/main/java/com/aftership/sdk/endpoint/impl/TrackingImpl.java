@@ -3,8 +3,8 @@ package com.aftership.sdk.endpoint.impl;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.TrackingEndpoint;
 import com.aftership.sdk.exception.ApiException;
-import com.aftership.sdk.exception.ConstructorException;
-import com.aftership.sdk.exception.InvalidRequestException;
+import com.aftership.sdk.exception.RequestException;
+import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.tracking.CompletedStatus;
 import com.aftership.sdk.model.tracking.GetTrackingParams;
 import com.aftership.sdk.model.tracking.GetTrackingsParams;
@@ -35,7 +35,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
   @Override
   public Tracking createTracking(NewTracking newTracking)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkNullParam(newTracking);
     checkTrackingNumber(newTracking.getTrackingNumber());
 
@@ -52,7 +52,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
   @Override
   public Tracking deleteTracking(String id)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkTrackingSlug(id);
 
     String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.DELETE_TRACKING, null);
@@ -65,7 +65,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
   @Override
   public Tracking deleteTracking(SlugTrackingNumber identifier)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkSlugTrackingNumber(identifier);
 
     String path =
@@ -89,7 +89,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
   @Override
   public Tracking getTracking(String id, GetTrackingParams optionalParams)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
     String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.GET_TRACKING, null);
@@ -103,7 +103,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
   @Override
   public Tracking getTracking(SlugTrackingNumber identifier, GetTrackingParams optionalParams)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkSlugTrackingNumber(identifier);
 
     String path =
@@ -127,7 +127,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
   @Override
   public PagedTrackings getTrackings(GetTrackingsParams params)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
 
     String path = UrlUtils.buildTrackingPath(null, null, null, EndpointPath.GET_TRACKINGS, null);
 
@@ -139,7 +139,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
   @Override
   public Tracking updateTracking(String id, UpdateTracking update)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
     String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.UPDATE_TRACKING, null);
@@ -153,7 +153,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
   @Override
   public Tracking updateTracking(SlugTrackingNumber identifier, UpdateTracking update)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkSlugTrackingNumber(identifier);
 
     String path =
@@ -177,7 +177,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
   @Override
   public Tracking reTrack(String id)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
     String path =
@@ -192,7 +192,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
   @Override
   public Tracking reTrack(SlugTrackingNumber identifier)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkSlugTrackingNumber(identifier);
 
     String path =
@@ -216,7 +216,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
   @Override
   public Tracking markAsCompleted(String id, CompletedStatus status)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
     String path =
@@ -231,7 +231,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
   @Override
   public Tracking markAsCompleted(SlugTrackingNumber identifier, CompletedStatus status)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkSlugTrackingNumber(identifier);
 
     String path =

@@ -2,6 +2,7 @@ package com.aftership.sdk.exception;
 
 import java.text.MessageFormat;
 import java.util.Map;
+import java.util.function.Consumer;
 import com.aftership.sdk.utils.MapUtils;
 import com.aftership.sdk.utils.StrUtils;
 import lombok.Getter;
@@ -9,6 +10,12 @@ import lombok.Getter;
 /** Exception for calling the API interface */
 @Getter
 public class AftershipException extends Exception {
+  private static final int CODE_TOO_MANY_REQUESTS = 429;
+
+  public static final String DEBUG_DATA_KEY_REQUEST_CONFIG = "requestConfig";
+  public static final String DEBUG_DATA_KEY_REQUEST_HEADERS = "requestHeaders";
+  public static final String DEBUG_DATA_KEY_REQUEST_DATA = "requestData";
+  public static final String DEBUG_DATA_KEY_RESPONSE_BODY = "responseBody";
 
   /** Type of error */
   private String type;
@@ -129,5 +136,46 @@ public class AftershipException extends Exception {
     }
 
     return super.getMessage() + additionalInfo;
+  }
+
+  /**
+   * Determine if the current exception is caused by "TooManyRequests",
+   * if so, please check the RateLimit object
+   * @return boolean
+   */
+  public boolean isTooManyRequests() {
+    if (this.getCode() != null && this.getCode() == CODE_TOO_MANY_REQUESTS) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Is it a processing error on the API side?
+   *
+   * @return true is API return error.
+   */
+  public boolean isApiError() {
+    return this.getCode() != null && this.getCode() > 0;
+  }
+
+  /**
+   * Print debug data
+   *
+   * @param consumer Consumer Interface Implementation
+   */
+  public void printData(Consumer<String> consumer) {
+    if (data != null && data.size() > 0) {
+      for (Map.Entry<String, Object> entry : data.entrySet()) {
+        String message =
+            MessageFormat.format("DEBUG DATA: {0}={1}", entry.getKey(), entry.getValue());
+        consumer.accept(message);
+      }
+    }
+  }
+
+  /** Print debug data */
+  public void printData() {
+    printData(System.out::println);
   }
 }

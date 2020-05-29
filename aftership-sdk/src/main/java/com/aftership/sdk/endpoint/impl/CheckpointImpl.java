@@ -3,8 +3,8 @@ package com.aftership.sdk.endpoint.impl;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.CheckpointEndpoint;
 import com.aftership.sdk.exception.ApiException;
-import com.aftership.sdk.exception.ConstructorException;
-import com.aftership.sdk.exception.InvalidRequestException;
+import com.aftership.sdk.exception.RequestException;
+import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.checkpoint.GetCheckpointParam;
 import com.aftership.sdk.model.checkpoint.LastCheckpoint;
 import com.aftership.sdk.model.tracking.SlugTrackingNumber;
@@ -27,7 +27,7 @@ public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpo
 
   @Override
   public LastCheckpoint getLastCheckpoint(String id, GetCheckpointParam optionalParam)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
     String path =
@@ -43,7 +43,7 @@ public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpo
   @Override
   public LastCheckpoint getLastCheckpoint(
       SlugTrackingNumber identifier, GetCheckpointParam optionalParam)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkSlugTrackingNumber(identifier);
 
     String path =

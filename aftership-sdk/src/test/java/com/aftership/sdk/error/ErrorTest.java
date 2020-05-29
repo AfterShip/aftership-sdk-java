@@ -9,7 +9,7 @@ import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.exception.AftershipException;
 import com.aftership.sdk.exception.ApiException;
-import com.aftership.sdk.exception.ConstructorException;
+import com.aftership.sdk.exception.SdkException;
 import okhttp3.mockwebserver.MockWebServer;
 
 public class ErrorTest {
@@ -31,7 +31,7 @@ public class ErrorTest {
   }
 
   @Test
-  public void testError() throws ConstructorException {
+  public void testError() throws SdkException {
     AfterShip afterShip = TestUtil.createAfterShip(server);
 
     Assertions.assertThrows(

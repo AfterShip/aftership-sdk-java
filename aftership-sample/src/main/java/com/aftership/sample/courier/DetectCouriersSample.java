@@ -4,14 +4,14 @@ import com.aftership.sample.SampleUtil;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.endpoint.impl.EndpointPath;
 import com.aftership.sdk.exception.AftershipException;
-import com.aftership.sdk.exception.ConstructorException;
+import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.courier.CourierDetectList;
 import com.aftership.sdk.model.courier.CourierDetectRequest;
 import com.aftership.sdk.model.courier.CourierDetectTracking;
 
 /** Sample of detectCouriers method in CourierEndpoint */
 public class DetectCouriersSample {
-  public static void main(String[] args) throws ConstructorException {
+  public static void main(String[] args) throws SdkException {
     AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
     detectCouriers(afterShip);
   }

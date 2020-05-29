@@ -7,7 +7,7 @@ import java.text.MessageFormat;
 import java.util.Map;
 import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.error.ErrorType;
-import com.aftership.sdk.exception.ConstructorException;
+import com.aftership.sdk.exception.SdkException;
 
 /** Url's assistant method. */
 public final class UrlUtils {
@@ -62,9 +62,9 @@ public final class UrlUtils {
       String slug,
       String trackingNumber,
       String rootPath,
-      String action) throws ConstructorException {
+      String action) throws SdkException {
     if (StrUtils.isBlank(rootPath)) {
-      throw new ConstructorException(
+      throw new SdkException(
           ErrorType.ConstructorError.getName(), ErrorMessage.CONSTRUCTOR_REQUIRED_PATH);
     }
 

@@ -1,8 +1,8 @@
 package com.aftership.sdk.endpoint;
 
 import com.aftership.sdk.exception.ApiException;
-import com.aftership.sdk.exception.ConstructorException;
-import com.aftership.sdk.exception.InvalidRequestException;
+import com.aftership.sdk.exception.RequestException;
+import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.courier.CourierDetectList;
 import com.aftership.sdk.model.courier.CourierDetectTracking;
 import com.aftership.sdk.model.courier.CourierList;
@@ -13,19 +13,19 @@ public interface CourierEndpoint {
    * Return a list of couriers activated at your AfterShip account.
    *
    * @return CourierList
-   * @throws InvalidRequestException
+   * @throws RequestException
    * @throws ApiException
    */
-  CourierList listCouriers() throws InvalidRequestException, ApiException;
+  CourierList listCouriers() throws RequestException, ApiException;
 
   /**
    * Return a list of all couriers.
    *
    * @return CourierList
-   * @throws InvalidRequestException
+   * @throws RequestException
    * @throws ApiException
    */
-  CourierList listAllCouriers() throws InvalidRequestException, ApiException;
+  CourierList listAllCouriers() throws RequestException, ApiException;
 
   /**
    * Return a list of matched couriers based on tracking number format and selected couriers or a
@@ -33,10 +33,10 @@ public interface CourierEndpoint {
    *
    * @param detectTracking CourierDetectTracking
    * @return CourierDetectList
-   * @throws ConstructorException
-   * @throws InvalidRequestException
+   * @throws SdkException
+   * @throws RequestException
    * @throws ApiException
    */
   CourierDetectList detectCouriers(CourierDetectTracking detectTracking)
-      throws ConstructorException, InvalidRequestException, ApiException;
+      throws SdkException, RequestException, ApiException;
 }

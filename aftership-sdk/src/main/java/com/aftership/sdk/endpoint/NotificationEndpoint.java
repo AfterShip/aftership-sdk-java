@@ -1,8 +1,8 @@
 package com.aftership.sdk.endpoint;
 
 import com.aftership.sdk.exception.ApiException;
-import com.aftership.sdk.exception.ConstructorException;
-import com.aftership.sdk.exception.InvalidRequestException;
+import com.aftership.sdk.exception.RequestException;
+import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.notification.Notification;
 import com.aftership.sdk.model.tracking.SlugTrackingNumber;
 
@@ -16,12 +16,12 @@ public interface NotificationEndpoint {
    *
    * @param id id of a tracking
    * @return Notification
-   * @throws ConstructorException
-   * @throws InvalidRequestException
+   * @throws SdkException
+   * @throws RequestException
    * @throws ApiException
    */
   Notification getNotification(String id)
-      throws ConstructorException, InvalidRequestException, ApiException;
+      throws SdkException, RequestException, ApiException;
 
   /**
    * Get contact information for the users to notify when the tracking changes. Please note that
@@ -30,12 +30,12 @@ public interface NotificationEndpoint {
    *
    * @param identifier SlugTrackingNumber
    * @return Notification
-   * @throws ConstructorException
-   * @throws InvalidRequestException
+   * @throws SdkException
+   * @throws RequestException
    * @throws ApiException
    */
   Notification getNotification(SlugTrackingNumber identifier)
-      throws ConstructorException, InvalidRequestException, ApiException;
+      throws SdkException, RequestException, ApiException;
 
   /**
    * Add notification receivers to a tracking number
@@ -43,12 +43,12 @@ public interface NotificationEndpoint {
    * @param id id for a tracking
    * @param notification Notification
    * @return Notification
-   * @throws ConstructorException
-   * @throws InvalidRequestException
+   * @throws SdkException
+   * @throws RequestException
    * @throws ApiException
    */
   Notification addNotification(String id, Notification notification)
-      throws ConstructorException, InvalidRequestException, ApiException;
+      throws SdkException, RequestException, ApiException;
 
   /**
    * Add notification receivers to a tracking number
@@ -56,34 +56,34 @@ public interface NotificationEndpoint {
    * @param identifier identifier for a tracking
    * @param notification Notification
    * @return Notification
-   * @throws ConstructorException
-   * @throws InvalidRequestException
+   * @throws SdkException
+   * @throws RequestException
    * @throws ApiException
    */
   Notification addNotification(SlugTrackingNumber identifier, Notification notification)
-      throws ConstructorException, InvalidRequestException, ApiException;
+      throws SdkException, RequestException, ApiException;
 
   /**
    * Remove notification receivers from a tracking number
    * @param id id for a tracking
    * @param notification Notification
    * @return Notification
-   * @throws ConstructorException
-   * @throws InvalidRequestException
+   * @throws SdkException
+   * @throws RequestException
    * @throws ApiException
    */
   Notification removeNotification(String id, Notification notification)
-      throws ConstructorException, InvalidRequestException, ApiException;
+      throws SdkException, RequestException, ApiException;
 
   /**
    * Remove notification receivers from a tracking number
    * @param identifier identifier for a tracking
    * @param notification Notification
    * @return Notification
-   * @throws ConstructorException
-   * @throws InvalidRequestException
+   * @throws SdkException
+   * @throws RequestException
    * @throws ApiException
    */
   Notification removeNotification(SlugTrackingNumber identifier, Notification notification)
-      throws ConstructorException, InvalidRequestException, ApiException;
+      throws SdkException, RequestException, ApiException;
 }

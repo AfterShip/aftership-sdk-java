@@ -224,20 +224,20 @@ public class ApiRequestImpl implements ApiRequest {
             put("path", path);
           }
         };
-    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_KEY_REQUEST_CONFIG, map);
+    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_DATA_KEY_REQUEST_CONFIG, map);
   }
 
   private AbstractMap.SimpleEntry<String, Object> entryRequestHeaders(
       Map<String, String> requestHeaders) {
-    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_KEY_REQUEST_HEADERS, requestHeaders);
+    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_DATA_KEY_REQUEST_HEADERS, requestHeaders);
   }
 
   private <T> AbstractMap.SimpleEntry<String, Object> entryRequestData(T requestData) {
-    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_KEY_REQUEST_DATA, requestData);
+    return new AbstractMap.SimpleEntry<>(AftershipError.DEBUG_DATA_KEY_REQUEST_DATA, requestData);
   }
 
   private AbstractMap.SimpleEntry<String, Object> entryResponseBody(Response response) {
-    String tag = AftershipError.DEBUG_KEY_RESPONSE_BODY;
+    String tag = AftershipError.DEBUG_DATA_KEY_RESPONSE_BODY;
     try {
       if (StrUtils.isNotBlank(response.message())) {
         return new AbstractMap.SimpleEntry<>(tag, null);

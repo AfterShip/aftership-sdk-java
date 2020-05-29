@@ -3,8 +3,8 @@ package com.aftership.sdk.endpoint.impl;
 import com.aftership.sdk.endpoint.AfterShipEndpoint;
 import com.aftership.sdk.endpoint.NotificationEndpoint;
 import com.aftership.sdk.exception.ApiException;
-import com.aftership.sdk.exception.ConstructorException;
-import com.aftership.sdk.exception.InvalidRequestException;
+import com.aftership.sdk.exception.RequestException;
+import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.notification.Notification;
 import com.aftership.sdk.model.notification.NotificationWrapper;
 import com.aftership.sdk.model.tracking.SlugTrackingNumber;
@@ -27,7 +27,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
 
   @Override
   public Notification getNotification(String id)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
     String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.GET_NOTIFICATION, null);
@@ -40,7 +40,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
 
   @Override
   public Notification getNotification(SlugTrackingNumber identifier)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkSlugTrackingNumber(identifier);
 
     String path =
@@ -59,7 +59,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
 
   @Override
   public Notification addNotification(String id, Notification notification)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
     String path =
@@ -79,7 +79,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
 
   @Override
   public Notification addNotification(SlugTrackingNumber identifier, Notification notification)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkSlugTrackingNumber(identifier);
 
     String path =
@@ -103,7 +103,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
 
   @Override
   public Notification removeNotification(String id, Notification notification)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
     String path =
@@ -127,7 +127,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
 
   @Override
   public Notification removeNotification(SlugTrackingNumber identifier, Notification notification)
-      throws ConstructorException, InvalidRequestException, ApiException {
+      throws SdkException, RequestException, ApiException {
     checkSlugTrackingNumber(identifier);
 
     String path =
