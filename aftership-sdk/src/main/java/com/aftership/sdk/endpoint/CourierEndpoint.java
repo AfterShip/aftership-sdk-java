@@ -13,8 +13,9 @@ public interface CourierEndpoint {
    * Return a list of couriers activated at your AfterShip account.
    *
    * @return CourierList
-   * @throws RequestException
-   * @throws ApiException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
+   * @throws SdkException SdkException
    */
   CourierList listCouriers() throws RequestException, ApiException, SdkException;
 
@@ -22,8 +23,9 @@ public interface CourierEndpoint {
    * Return a list of all couriers.
    *
    * @return CourierList
-   * @throws RequestException
-   * @throws ApiException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
+   * @throws SdkException SdkException
    */
   CourierList listAllCouriers() throws RequestException, ApiException, SdkException;
 
@@ -33,9 +35,9 @@ public interface CourierEndpoint {
    *
    * @param detectTracking CourierDetectTracking
    * @return CourierDetectList
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   CourierDetectList detectCouriers(CourierDetectTracking detectTracking)
       throws SdkException, RequestException, ApiException;

@@ -1,4 +1,4 @@
-package com.aftership.sdk.endpoint.notification;
+package com.aftership.sdk.endpoint.tracking;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -11,12 +11,15 @@ import java.text.MessageFormat;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.exception.AftershipException;
-import com.aftership.sdk.model.notification.Notification;
+import com.aftership.sdk.model.tracking.CompletedStatus;
+import com.aftership.sdk.model.tracking.CompletedStatus.ReasonKind;
+import com.aftership.sdk.model.tracking.SlugTrackingNumber;
+import com.aftership.sdk.model.tracking.Tracking;
 import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-public class GetNotificationTest {
+public class MarkAsCompletedBySlugTest {
   public static MockWebServer server;
 
   @BeforeAll
@@ -24,7 +27,7 @@ public class GetNotificationTest {
     server = new MockWebServer();
     server.enqueue(
         TestUtil.createMockResponse()
-            .setBody(TestUtil.getJson("endpoint/notification/GetNotificationResult.json")));
+            .setBody(TestUtil.getJson("endpoint/tracking/MarkAsCompletedResult.json")));
     server.start();
   }
 
@@ -34,26 +37,30 @@ public class GetNotificationTest {
   }
 
   @Test
-  public void testGetNotification()
+  public void testMarkAsCompleted()
       throws IOException, InterruptedException, AftershipException, URISyntaxException {
     AfterShip afterShip = TestUtil.createAfterShip(server);
 
-    System.out.println(">>>>> getNotification(String id)");
-    String id = "100";
-    Notification notification = afterShip.getNotificationEndpoint().getNotification(id);
+    System.out.println(">>>>> markAsCompleted(SlugTrackingNumber identifier, CompletedStatus status)");
+    SlugTrackingNumber identifier = new SlugTrackingNumber("fedex", "111111111111");
+    Tracking tracking =
+        afterShip
+            .getTrackingEndpoint()
+            .markAsCompleted(identifier, new CompletedStatus(ReasonKind.LOST));
 
-    Assertions.assertNotNull(notification);
-    Assertions.assertEquals(2, notification.getEmails().length, "emails size mismatch.");
-    Assertions.assertEquals("+85291239123", notification.getSmses()[0], "smses mismatch.");
+    Assertions.assertNotNull(tracking);
+    Assertions.assertEquals("5b7658cec7c33c0e007de3c5", tracking.getId(), "id  mismatch.");
 
     RecordedRequest recordedRequest = server.takeRequest();
-    Assertions.assertEquals("GET", recordedRequest.getMethod(), "Method mismatch.");
+    Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        MessageFormat.format("/v4/notifications/{0}", id),
+        MessageFormat.format(
+            "/v4/trackings/{0}/{1}/mark-as-completed",
+            identifier.getSlug(), identifier.getTrackingNumber()),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 
-    TestUtil.printResponse(afterShip, notification);
+    TestUtil.printResponse(afterShip, tracking);
     TestUtil.printRequest(recordedRequest);
   }
 }

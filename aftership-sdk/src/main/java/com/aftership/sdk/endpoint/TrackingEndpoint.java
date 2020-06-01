@@ -19,9 +19,9 @@ public interface TrackingEndpoint {
    * Create a tracking
    * @param newTracking Tracking will be created
    * @return Tracking
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Tracking createTracking(NewTracking newTracking)
       throws SdkException, RequestException, ApiException;
@@ -30,9 +30,9 @@ public interface TrackingEndpoint {
    * Delete a tracking
    * @param id id of a tracking
    * @return deleted Tracking
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Tracking deleteTracking(String id)
       throws SdkException, RequestException, ApiException;
@@ -41,9 +41,9 @@ public interface TrackingEndpoint {
    * Delete a tracking
    * @param identifier identifier of a tracking
    * @return deleted Tracking
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Tracking deleteTracking(SlugTrackingNumber identifier)
       throws SdkException, RequestException, ApiException;
@@ -53,9 +53,9 @@ public interface TrackingEndpoint {
    * @param id id of a tracking
    * @param optionalParams GetTrackingParams
    * @return Tracking
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Tracking getTracking(String id, GetTrackingParams optionalParams)
       throws SdkException, RequestException, ApiException;
@@ -65,9 +65,9 @@ public interface TrackingEndpoint {
    * @param identifier identifier of a tracking
    * @param optionalParams GetTrackingParams
    * @return Tracking
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Tracking getTracking(SlugTrackingNumber identifier, GetTrackingParams optionalParams)
       throws SdkException, RequestException, ApiException;
@@ -77,6 +77,9 @@ public interface TrackingEndpoint {
    *
    * @param params GetTrackingsParams
    * @return DataEntity of PagedTrackings
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   PagedTrackings getTrackings(GetTrackingsParams params)
       throws SdkException, RequestException, ApiException;
@@ -86,9 +89,9 @@ public interface TrackingEndpoint {
    * @param id id of a tracking
    * @param update UpdateTrackingParams
    * @return Tracking
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Tracking updateTracking(String id, UpdateTracking update)
       throws SdkException, RequestException, ApiException;
@@ -98,9 +101,10 @@ public interface TrackingEndpoint {
    * @param identifier identifier of a tracking
    * @param update UpdateTrackingParams
    * @return Tracking
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
+   * @throws ApiException ApiException
    */
   Tracking updateTracking(SlugTrackingNumber identifier, UpdateTracking update)
       throws SdkException, RequestException, ApiException;
@@ -109,9 +113,9 @@ public interface TrackingEndpoint {
    * ReTrack an expired tracking once. Max. 3 times per tracking
    * @param id id of a tracking
    * @return Tracking
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Tracking reTrack(String id) throws SdkException, RequestException, ApiException;
 
@@ -119,9 +123,9 @@ public interface TrackingEndpoint {
    * ReTrack an expired tracking once. Max. 3 times per tracking
    * @param identifier identifier of a tracking
    * @return Tracking
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Tracking reTrack(SlugTrackingNumber identifier)
       throws SdkException, RequestException, ApiException;
@@ -131,9 +135,9 @@ public interface TrackingEndpoint {
    * @param id id of a tracking
    * @param status CompletedStatus
    * @return Tracking
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SDK Exception
+   * @throws RequestException Request Exception
+   * @throws ApiException Api Exception
    */
   Tracking markAsCompleted(String id, CompletedStatus status)
       throws SdkException, RequestException, ApiException;
@@ -143,9 +147,10 @@ public interface TrackingEndpoint {
    * @param identifier identifier of a tracking
    * @param status CompletedStatus
    * @return Tracking
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
+   * @throws ApiException ApiException
    */
   Tracking markAsCompleted(SlugTrackingNumber identifier, CompletedStatus status)
       throws SdkException, RequestException, ApiException;

@@ -20,9 +20,9 @@ public interface ApiRequest {
    * @param <T> Class of request Data
    * @param <R> Class of response type
    * @return AftershipResponse
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   <T, R> AftershipResponse<R> makeRequest(
       HttpMethod method,

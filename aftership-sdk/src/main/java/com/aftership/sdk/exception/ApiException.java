@@ -14,6 +14,9 @@ public class ApiException extends AftershipException {
   /**
    * Constructor
    *
+   * @param rateLimit You are limited to 10 reqs / sec per account. Practically, this means you
+   *     should (when possible) authenticate users so that limits are well outside the reach of a
+   *     given user
    * @param meta The meta key is used to communicate extra information about the response to the
    *     developer
    * @param data Debug information of error
@@ -23,5 +26,4 @@ public class ApiException extends AftershipException {
     super(meta.getType(), meta.getMessage(), meta.getCode(), MapUtils.toMap(data));
     this.rateLimit = rateLimit;
   }
-
 }

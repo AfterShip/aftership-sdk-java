@@ -12,11 +12,13 @@ import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.exception.AftershipException;
 import com.aftership.sdk.model.tracking.Tracking;
+import com.aftership.sdk.model.tracking.UpdateTrackingRequest;
+import com.aftership.sdk.utils.JsonUtils;
 import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-public class DeleteTrackingTest {
+public class UpdateTrackingByIdTest {
   public static MockWebServer server;
 
   @BeforeAll
@@ -24,7 +26,7 @@ public class DeleteTrackingTest {
     server = new MockWebServer();
     server.enqueue(
         TestUtil.createMockResponse()
-            .setBody(TestUtil.getJson("endpoint/tracking/DeleteTrackingResult.json")));
+            .setBody(TestUtil.getJson("endpoint/tracking/UpdateTrackingResult.json")));
     server.start();
   }
 
@@ -34,19 +36,25 @@ public class DeleteTrackingTest {
   }
 
   @Test
-  public void testDeleteTracking()
+  public void testTestUpdateTracking()
       throws IOException, InterruptedException, AftershipException, URISyntaxException {
     AfterShip afterShip = TestUtil.createAfterShip(server);
 
-    System.out.println(">>>>> deleteTracking(String id)");
+    System.out.println(">>>>> updateTracking(String id, UpdateTracking update)");
     String id = "100";
-    Tracking tracking = afterShip.getTrackingEndpoint().deleteTracking(id);
+    String requestBody = TestUtil.getJson("endpoint/tracking/UpdateTrackingRequest.json");
+    UpdateTrackingRequest updateTrackingRequest =
+        JsonUtils.create().fromJson(requestBody, UpdateTrackingRequest.class);
+    Tracking tracking =
+        afterShip.getTrackingEndpoint().updateTracking(id, updateTrackingRequest.getTracking());
 
     Assertions.assertNotNull(tracking);
-    Assertions.assertEquals("fedex", tracking.getSlug(), "slug mismatch.");
+    Assertions.assertEquals("fedex", tracking.getSlug(), "Slug mismatch.");
+    Assertions.assertEquals(
+        "InfoReceived", tracking.getCheckpoints().get(0).getTag(), "checkpoints::tag mismatch.");
 
     RecordedRequest recordedRequest = server.takeRequest();
-    Assertions.assertEquals("DELETE", recordedRequest.getMethod(), "Method mismatch.");
+    Assertions.assertEquals("PUT", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
         MessageFormat.format("/v4/trackings/{0}", id),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),

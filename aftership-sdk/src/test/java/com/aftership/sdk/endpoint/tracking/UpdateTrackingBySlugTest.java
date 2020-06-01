@@ -11,14 +11,15 @@ import java.text.MessageFormat;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.exception.AftershipException;
-import com.aftership.sdk.model.tracking.CompletedStatus;
-import com.aftership.sdk.model.tracking.CompletedStatus.ReasonKind;
+import com.aftership.sdk.model.tracking.SlugTrackingNumber;
 import com.aftership.sdk.model.tracking.Tracking;
+import com.aftership.sdk.model.tracking.UpdateTrackingRequest;
+import com.aftership.sdk.utils.JsonUtils;
 import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-public class MarkAsCompletedTest {
+public class UpdateTrackingBySlugTest {
   public static MockWebServer server;
 
   @BeforeAll
@@ -26,7 +27,7 @@ public class MarkAsCompletedTest {
     server = new MockWebServer();
     server.enqueue(
         TestUtil.createMockResponse()
-            .setBody(TestUtil.getJson("endpoint/tracking/MarkAsCompletedResult.json")));
+            .setBody(TestUtil.getJson("endpoint/tracking/UpdateTrackingResult.json")));
     server.start();
   }
 
@@ -36,22 +37,27 @@ public class MarkAsCompletedTest {
   }
 
   @Test
-  public void testMarkAsCompleted()
+  public void testTestUpdateTracking()
       throws IOException, InterruptedException, AftershipException, URISyntaxException {
     AfterShip afterShip = TestUtil.createAfterShip(server);
 
-    System.out.println(">>>>> markAsCompleted(String id, CompletedStatus status)");
-    String id = "5b7658cec7c33c0e007de3c5";
+    System.out.println(">>>>> updateTracking(SlugTrackingNumber identifier, UpdateTracking update)");
+    SlugTrackingNumber identifier = new SlugTrackingNumber("fedex", "111111111111");
+    String requestBody = TestUtil.getJson("endpoint/tracking/UpdateTrackingRequest.json");
+    UpdateTrackingRequest updateTrackingRequest =
+        JsonUtils.create().fromJson(requestBody, UpdateTrackingRequest.class);
     Tracking tracking =
-        afterShip.getTrackingEndpoint().markAsCompleted(id, new CompletedStatus(ReasonKind.LOST));
+        afterShip.getTrackingEndpoint().updateTracking(identifier, updateTrackingRequest.getTracking());
 
     Assertions.assertNotNull(tracking);
-    Assertions.assertEquals("5b7658cec7c33c0e007de3c5", tracking.getId(), "id  mismatch.");
+    Assertions.assertEquals("fedex", tracking.getSlug(), "Slug mismatch.");
+    Assertions.assertEquals(
+        "InfoReceived", tracking.getCheckpoints().get(0).getTag(), "checkpoints::tag mismatch.");
 
     RecordedRequest recordedRequest = server.takeRequest();
-    Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
+    Assertions.assertEquals("PUT", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        MessageFormat.format("/v4/trackings/{0}/mark-as-completed", id),
+        MessageFormat.format("/v4/trackings/{0}/{1}", identifier.getSlug(), identifier.getTrackingNumber()),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 

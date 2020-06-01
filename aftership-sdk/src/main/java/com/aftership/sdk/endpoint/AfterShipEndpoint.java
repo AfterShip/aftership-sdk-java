@@ -67,7 +67,7 @@ public abstract class AfterShipEndpoint {
    * @return Map
    */
   protected Map<String, String> merge(StringMap... items) {
-    if (items == null || items.length == 0) {
+    if (items.length == 0) {
       return new HashMap<>();
     }
 

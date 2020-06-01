@@ -18,7 +18,7 @@ import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-public class RemoveNotificationTest {
+public class RemoveNotificationByIdTest {
   public static MockWebServer server;
 
   @BeforeAll

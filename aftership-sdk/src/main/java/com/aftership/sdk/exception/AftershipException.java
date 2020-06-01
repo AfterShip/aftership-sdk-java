@@ -101,7 +101,7 @@ public class AftershipException extends Exception {
       additionalInfo.append("; code: ").append(code);
     }
 
-    if (data != null && data.size() > 0) {
+    if (data != null) {
       for (Map.Entry<String, Object> entry : data.entrySet()) {
         additionalInfo.append(
             MessageFormat.format("; DEBUG_DATA::{0}: {1}", entry.getKey(), entry.getValue()));
@@ -160,7 +160,7 @@ public class AftershipException extends Exception {
   /**
    * Pretty message in Json format
    *
-   * @return
+   * @return String
    */
   public String prettyMessage() {
     return prettyMessage(true);

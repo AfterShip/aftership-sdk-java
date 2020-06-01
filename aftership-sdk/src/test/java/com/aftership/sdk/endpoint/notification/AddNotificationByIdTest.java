@@ -1,8 +1,9 @@
-package com.aftership.sdk.endpoint.tracking;
+package com.aftership.sdk.endpoint.notification;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.net.URI;
@@ -11,14 +12,14 @@ import java.text.MessageFormat;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
 import com.aftership.sdk.exception.AftershipException;
-import com.aftership.sdk.model.tracking.Tracking;
-import com.aftership.sdk.model.tracking.UpdateTrackingRequest;
+import com.aftership.sdk.model.notification.Notification;
+import com.aftership.sdk.model.notification.NotificationWrapper;
 import com.aftership.sdk.utils.JsonUtils;
 import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-public class UpdateTrackingTest {
+public class AddNotificationByIdTest {
   public static MockWebServer server;
 
   @BeforeAll
@@ -26,7 +27,7 @@ public class UpdateTrackingTest {
     server = new MockWebServer();
     server.enqueue(
         TestUtil.createMockResponse()
-            .setBody(TestUtil.getJson("endpoint/tracking/UpdateTrackingResult.json")));
+            .setBody(TestUtil.getJson("endpoint/notification/AddNotificationResult.json")));
     server.start();
   }
 
@@ -35,32 +36,36 @@ public class UpdateTrackingTest {
     server.shutdown();
   }
 
+  @BeforeEach
+  void initialize() throws IOException {
+    System.out.println("....initialize....");
+  }
+
   @Test
-  public void testTestUpdateTracking()
+  public void testAddNotification()
       throws IOException, InterruptedException, AftershipException, URISyntaxException {
     AfterShip afterShip = TestUtil.createAfterShip(server);
 
-    System.out.println(">>>>> updateTracking(String id, UpdateTracking update)");
+    System.out.println(">>>>> addNotification(String id, Notification notification)");
     String id = "100";
-    String requestBody = TestUtil.getJson("endpoint/tracking/UpdateTrackingRequest.json");
-    UpdateTrackingRequest updateTrackingRequest =
-        JsonUtils.create().fromJson(requestBody, UpdateTrackingRequest.class);
-    Tracking tracking =
-        afterShip.getTrackingEndpoint().updateTracking(id, updateTrackingRequest.getTracking());
+    String requestBody = TestUtil.getJson("endpoint/notification/AddNotificationRequest.json");
+    NotificationWrapper wrapper =
+        JsonUtils.create().fromJson(requestBody, NotificationWrapper.class);
+    Notification notification =
+        afterShip.getNotificationEndpoint().addNotification(id, wrapper.getNotification());
 
-    Assertions.assertNotNull(tracking);
-    Assertions.assertEquals("fedex", tracking.getSlug(), "Slug mismatch.");
-    Assertions.assertEquals(
-        "InfoReceived", tracking.getCheckpoints().get(0).getTag(), "checkpoints::tag mismatch.");
+    Assertions.assertNotNull(notification);
+    Assertions.assertEquals(2, notification.getEmails().length, "emails size mismatch.");
 
     RecordedRequest recordedRequest = server.takeRequest();
-    Assertions.assertEquals("PUT", recordedRequest.getMethod(), "Method mismatch.");
+    Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        MessageFormat.format("/v4/trackings/{0}", id),
+        MessageFormat.format("/v4/notifications/{0}/add", id),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 
-    TestUtil.printResponse(afterShip, tracking);
+    TestUtil.printResponse(afterShip, notification);
     TestUtil.printRequest(recordedRequest);
   }
+
 }

@@ -48,6 +48,7 @@ public class AfterShip {
    * Constructor
    *
    * @param apiKey apiKey parameter in API request
+   * @throws SdkException SdkException
    */
   public AfterShip(String apiKey) throws SdkException {
     this(apiKey, null);
@@ -58,6 +59,7 @@ public class AfterShip {
    *
    * @param apiKey apiKey parameter in API request
    * @param options Optional parameters for API request
+   * @throws SdkException SdkException
    */
   public AfterShip(String apiKey, AftershipOption options) throws SdkException {
     if (StrUtils.isBlank(apiKey)) {

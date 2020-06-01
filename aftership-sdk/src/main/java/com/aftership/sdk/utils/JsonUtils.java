@@ -1,27 +1,17 @@
 package com.aftership.sdk.utils;
 
-import com.google.gson.*;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.Optional;
 
 /** Json's assistant method. */
 public final class JsonUtils {
-
-  /**
-   * Parsing a string as an object
-   *
-   * @param json json string
-   * @param tClass T.Class
-   * @param <T> Class
-   * @return Object
-   */
-  public static <T> T parseJson(String json, Class<T> tClass) {
-    if (StrUtils.isBlank(json)) {
-      return null;
-    }
-    return create().fromJson(json, tClass);
-  }
 
   /**
    * Creating a Gson object
@@ -76,5 +66,6 @@ public final class JsonUtils {
 
       return null;
     }
+
   }
 }

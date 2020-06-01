@@ -8,7 +8,7 @@ import com.aftership.sdk.model.AftershipOption;
 class AfterShipTest {
 
   @Test
-  void testAfterShipConstructor() throws SdkException {
+  void testAfterShipConstructorApiKeyAndAftershipOption() throws SdkException {
     AftershipOption options = new AftershipOption();
     options.setEndpoint("https://api.aftership.com/v4");
     options.setUserAgentPrefix("aftership-sdk-java");
@@ -19,25 +19,27 @@ class AfterShipTest {
   }
 
   @Test
-  void testAfterShipConstructor2() throws SdkException {
+  void testAfterShipConstructorApiKey() throws SdkException {
     AfterShip afterShip = new AfterShip("API key");
     Assertions.assertEquals("API key", afterShip.getApiKey());
   }
 
   @Test
-  void testAfterShipConstructor3() throws SdkException {
-    AftershipOption options = new AftershipOption();
-    options.setUserAgentPrefix("aftership-sdk-java");
-    AfterShip afterShip = new AfterShip("API key", options);
-    Assertions.assertEquals("https://api.aftership.com/v4", afterShip.getEndpoint());
-  }
-
-  @Test
-  void testAfterShipConstructor4() {
+  void testAfterShipConstructorNullApiKey() {
     Assertions.assertThrows(
         SdkException.class,
         () -> {
           new AfterShip("");
         });
   }
+
+  @Test
+  void testAfterShipConstructorEndpoint() throws SdkException {
+    AftershipOption options = new AftershipOption();
+    options.setUserAgentPrefix("aftership-sdk-java");
+    AfterShip afterShip = new AfterShip("API key", options);
+    Assertions.assertEquals("https://api.aftership.com/v4", afterShip.getEndpoint());
+  }
+
+
 }

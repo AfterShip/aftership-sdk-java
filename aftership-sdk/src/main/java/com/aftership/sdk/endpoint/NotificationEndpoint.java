@@ -16,9 +16,9 @@ public interface NotificationEndpoint {
    *
    * @param id id of a tracking
    * @return Notification
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Notification getNotification(String id)
       throws SdkException, RequestException, ApiException;
@@ -30,9 +30,9 @@ public interface NotificationEndpoint {
    *
    * @param identifier SlugTrackingNumber
    * @return Notification
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Notification getNotification(SlugTrackingNumber identifier)
       throws SdkException, RequestException, ApiException;
@@ -43,9 +43,9 @@ public interface NotificationEndpoint {
    * @param id id for a tracking
    * @param notification Notification
    * @return Notification
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Notification addNotification(String id, Notification notification)
       throws SdkException, RequestException, ApiException;
@@ -56,9 +56,9 @@ public interface NotificationEndpoint {
    * @param identifier identifier for a tracking
    * @param notification Notification
    * @return Notification
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Notification addNotification(SlugTrackingNumber identifier, Notification notification)
       throws SdkException, RequestException, ApiException;
@@ -68,9 +68,9 @@ public interface NotificationEndpoint {
    * @param id id for a tracking
    * @param notification Notification
    * @return Notification
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Notification removeNotification(String id, Notification notification)
       throws SdkException, RequestException, ApiException;
@@ -80,9 +80,9 @@ public interface NotificationEndpoint {
    * @param identifier identifier for a tracking
    * @param notification Notification
    * @return Notification
-   * @throws SdkException
-   * @throws RequestException
-   * @throws ApiException
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
   Notification removeNotification(SlugTrackingNumber identifier, Notification notification)
       throws SdkException, RequestException, ApiException;
