@@ -26,8 +26,5 @@ public class ListCouriersSample {
       System.out.println(e.getMessage());
     }
 
-    System.out.println(afterShip.getRateLimit().getReset());
-    System.out.println(afterShip.getRateLimit().getLimit());
-    System.out.println(afterShip.getRateLimit().getRemaining());
   }
 }

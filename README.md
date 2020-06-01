@@ -45,48 +45,69 @@ AfterShip afterShip = new AfterShip("YOUR_API_KEY",
 	new AftershipOption("https://api.aftership.com/v4"));
 ```
 
-2. Get the Endpoint Interface and call the method, then return the `DataEntity<T>` object.
+2. Get the Endpoint Interface and call the method, then return the object.
 
 ```java 
-DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
+CourierList courierList = afterShip.getCourierEndpoint().listCouriers();
 ```
 
-3. Handling `AftershipError` or Business `Data` or `RateLimit`
+3. Handling `Data` or `AftershipException`  or `RateLimit`
 
 ```java
-DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
-  if (entity.hasError()) {
-    // handle Error.
-  	System.out.println(entity.getError().getType());
-  } else {
-    // handle Data.
-  	System.out.println(entity.getData());
+try {
+  AfterShip afterShip =
+    new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+  CourierList courierList = afterShip.getCourierEndpoint().listCouriers();
+  // using data
+  System.out.println(courierList);
+} catch (SdkException | RequestException e) {
+  // handle SdkException, RequestException
+  System.out.println(e.getType());
+  System.out.println(e.getMessage());
+  System.out.println(e.getData());
+} catch (ApiException e) {
+  // handle ApiException
+  if (e.isTooManyRequests()) {
+    // Analyze RateLimit when TooManyRequests occur
+    System.out.println(e.getRateLimit().getReset());
+    System.out.println(e.getRateLimit().getLimit());
+    System.out.println(e.getRateLimit().getRemaining());
+    return;
+  }
+  System.out.println(e.getType());
+  System.out.println(e.getCode());
+  System.out.println(e.getMessage());
 }
-// handle Rate Limiter.
-System.out.println(afterShip.getRateLimit().getReset());
-System.out.println(afterShip.getRateLimit().getLimit());
-System.out.println(afterShip.getRateLimit().getRemaining());
 ```
 
-### Error Handling
+## Error Handling
+
+There are 4 kinds of exception
+
+- AftershipException
+- SdkException
+- RequestException
+- ApiException
 
 Error object of this SDK contain fields:
 
-- `type` - **Require** - type of the error, please handle each error by this field
-
-  If it's Aftership's API Error, get code to confirm the cause of the error:
-
-  ```java
-  if (entity.getError().isApiError()) {
-    System.out.println(entity.getError().getCode());
-  }
-  ```
+- `type` - **Require** - type of the error, **please handle each error by this field**
 
 - `message` - **Optional** - detail message of the error
 
 - `code` - **Optional** - error code for API Error
 
   You can find tips for Aftership's error codes in here: https://docs.aftership.com/api/4/errors
+
+  If it's Aftership's API Error, get code to confirm the cause of the error:
+
+  ```java
+  catch (AftershipException e){
+    if(e.isApiError()){
+      System.out.println(e.getCode());
+    }
+  }
+  ```
 
 - `data` - **Optional** - data lead to the error
 
@@ -95,37 +116,120 @@ Error object of this SDK contain fields:
   The following data may be available:
 
   ```java 
-  System.out.println(entity.getError().getData().get("requestConfig"));
-  System.out.println(entity.getError().getData().get("requestHeaders"));
-  System.out.println(entity.getError().getData().get("requestData"));
-  System.out.println(entity.getError().getData().get("responseBody"));
-  // or
-  entity.getError().getData().printData();
-  // or
-  entity.getError().getData().printData(s -> {});
+  catch (AftershipException e){
+    System.out.println(e.getData());
+    // or
+    System.out.println(e.getData().get(DEBUG_DATA_KEY_REQUEST_CONFIG));
+    System.out.println(e.getData().get(DEBUG_DATA_KEY_REQUEST_HEADERS));
+    System.out.println(e.getData().get(DEBUG_DATA_KEY_REQUEST_DATA));
+    System.out.println(e.getData().get(DEBUG_DATA_KEY_RESPONSE_BODY));
+  }
   ```
+### AftershipException
+
+AftershipException is the base class for all exception classes and can capture it for uniform handling.
+
+See the `Rate Limiter` section for TooManyRequests in ApiException.
+
+```java
+catch (AftershipException e){
+  if(e.isApiError()){
+    System.out.println(e.getCode());
+    if(e.isTooManyRequests() && e instanceof ApiException){
+      System.out.println(((ApiException)e).getRateLimit());
+    }
+  }
+  System.out.println(e.getType());
+  System.out.println(e.getMessage());
+  System.out.println(e.getData());
+}
+```
+
+### SdkException
+
+Exception return by the SDK instance, mostly invalid param type when calling constructor or endpoint method
+error.Type is one of [ErrorType](https://github.com/AfterShip/aftership-sdk-java/blob/v2/aftership-sdk/src/main/java/com/aftership/sdk/error/ErrorType.java)
+**Throw** by the SDK instance
+
+```java
+try {
+  AfterShip afterShip =
+      new AfterShip(null, new AftershipOption("https://api.aftership.com/v4"));
+} catch (SdkException e) {
+  System.out.println(e.getMessage());
+}
+
+/* ConstructorError: Invalid API key; type: ConstructorError */
+```
+
+**Throw** by endpoint method
+
+```java
+try {
+  AfterShip afterShip =
+      new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+  afterShip.getTrackingEndpoint().getTracking("", null);
+} catch (SdkException e) {
+  System.out.println(e.getMessage());
+}
+
+/* ConstructorError: Required tracking id; type: ConstructorError */
+```
+
+### RequestException
+
+Error return by the `request` module 
+`error.Type` could be `HandlerError`, etc.  
+
+```java
+try {
+  AfterShip afterShip =
+      new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+  afterShip.getTrackingEndpoint().getTracking("abc", null);
+} catch (RequestException e) {
+  System.out.println(e.getMessage());
+}
+
+/* null; type: HandlerError; */
+```
+
+### ApiException
+
+Error return by the AfterShip API  
+`error.Type` should be the same as https://www.aftership.com/docs/api/4/errors
+
+```java
+try {
+  AfterShip afterShip =
+      new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+  afterShip.getTrackingEndpoint().getTracking("abc", null);
+} catch (ApiException e) {
+  System.out.println(e.getMessage());
+}
+
+/* The value of `id` is invalid.; type: BadRequest; code: 4015; */
+```
 
 ### Rate Limiter
 
 To understand AfterShip rate limit policy, please see `limit` session in https://www.aftership.com/docs/api/4
 
-You can get the recent rate limit by `afterShip.getRateLimit()`. Initially all value are `null`.
-
-```java 
-AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
-System.out.println(afterShip.getRateLimit().getReset());
-System.out.println(afterShip.getRateLimit().getLimit());
-System.out.println(afterShip.getRateLimit().getRemaining());
-```
-
-After making an API call, it will be set.
+You can get the recent rate limit by `ApiException.getRateLimit()`. 
 
 ```java
-DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
-// handle Rate Limiter.
-System.out.println(afterShip.getRateLimit().getReset());
-System.out.println(afterShip.getRateLimit().getLimit());
-System.out.println(afterShip.getRateLimit().getRemaining());
+try {
+  AfterShip afterShip =
+    new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+  afterShip.getCourierEndpoint().listCouriers();
+} catch (SdkException | RequestException e) {
+  System.out.println(e.getType());
+} catch (ApiException e) {
+  if (e.isTooManyRequests()) {
+    System.out.println(e.getRateLimit().getReset());
+    System.out.println(e.getRateLimit().getLimit());
+    System.out.println(e.getRateLimit().getRemaining());
+  }
+}
 // 1589869159
 // 10
 // 9
@@ -138,24 +242,24 @@ System.out.println(afterShip.getRateLimit().getRemaining());
 - #### listCouriers [GET /couriers]
 
 ```java 
-DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listCouriers();
-if (entity.hasError()) {
-  System.out.println(entity.getError().getType());
-} else {
-  System.out.println(entity.getData().getTotal());
-  System.out.println(entity.getData().getCouriers());
+try {
+  CourierList courierList = afterShip.getCourierEndpoint().listCouriers();
+  System.out.println(courierList.getTotal());
+  System.out.println(courierList.getCouriers().get(0).getName());
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
 ```
 
 - #### listAllCouriers [GET /couriers/all]
 
 ```java 
-DataEntity<CourierList> entity = afterShip.getCourierEndpoint().listAllCouriers();
-if (entity.hasError()) {
-	System.out.println(entity.getError().getType());
-} else {
-	System.out.println(entity.getData().getTotal());
-	System.out.println(entity.getData().getCouriers());
+try {
+  CourierList courierList = afterShip.getCourierEndpoint().listAllCouriers();
+  System.out.println(courierList.getTotal());
+  System.out.println(courierList.getCouriers());
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
 ```
 
@@ -166,13 +270,14 @@ CourierDetectTracking tracking = new CourierDetectTracking();
 tracking.setTrackingNumber("906587618687");
 CourierDetectRequest courierDetectRequest = new CourierDetectRequest(tracking);
 
-DataEntity<CourierDetectList> entity =
-  afterShip.getCourierEndpoint().detectCouriers(courierDetectRequest);
-if (entity.hasError()) {
-  System.out.println(entity.getError().getType());
-} else {
-  System.out.println(entity.getData().getTotal());
-  System.out.println(entity.getData().getCouriers());
+try {
+  CourierDetectList courierDetectList =
+    afterShip.getCourierEndpoint().detectCouriers(courierDetectRequest.getTracking());
+
+  System.out.println(courierDetectList.getTotal());
+  System.out.println(courierDetectList.getCouriers());
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
 ```
 
@@ -181,14 +286,13 @@ if (entity.hasError()) {
 - #### createTracking [POST /trackings]
 
 ```java
-// build request object
 NewTracking newTracking = new NewTracking();
-newTracking.setSlug(new String[] {"dhl"});
-newTracking.setTrackingNumber("123456789");
+// slug from listAllCouriers()
+newTracking.setSlug(new String[] {"acommerce"});
+newTracking.setTrackingNumber("1234567890");
 newTracking.setTitle("Title Name");
 newTracking.setSmses(new String[] {"+18555072509", "+18555072501"});
-newTracking.setEmails(new String[] {
-  "email@yourdomain.com", "another_email@yourdomain.com"});
+newTracking.setEmails(new String[] {"email@yourdomain.com", "another_email@yourdomain.com"});
 newTracking.setOrderId("ID 1234");
 newTracking.setOrderIdPath("http://www.aftership.com/order_id=1234");
 newTracking.setCustomFields(
@@ -205,13 +309,11 @@ newTracking.setPickupLocation("Flagship Store");
 newTracking.setPickupNote(
   "Reach out to our staffs when you arrive our stores for shipment pickup");
 
-CreateTrackingRequest request = new CreateTrackingRequest(newTracking);
-
-DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().createTracking(request);
-if (entity.hasError()) {
-  System.out.println(entity.getError().getType());
-} else {
-  System.out.println(entity.getData().getTracking());
+try {
+  Tracking tracking = afterShip.getTrackingEndpoint().createTracking(newTracking);
+  System.out.println(tracking);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
 ```
 
@@ -220,33 +322,28 @@ if (entity.hasError()) {
 - #### deleteTracking [DELETE /trackings/:slug/:tracking_number]
 
 ```java 
-SingleTrackingParam param = new SingleTrackingParam();
-param.setId("abc");
-
-DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().deleteTracking(param);
-if (entity.hasError()) {
-  System.out.println(entity.getError().getType());
-} else {
-  Tracking tracking = entity.getData().getTracking();
+String id = "u2qm5uu9xqpwykaqm8d5l010";
+try {
+  Tracking tracking = afterShip.getTrackingEndpoint().deleteTracking(id);
   System.out.println(tracking);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
 ```
 
 - #### getTrackings [GET /trackings]
 
 ```java 
-MultiTrackingsParams optionalParams = new MultiTrackingsParams();
-optionalParams.setFields(FieldsKind.combine(FieldsKind.ORDER_ID, FieldsKind.TAG));
-optionalParams.setLimit(2);
+GetTrackingsParams optionalParams = new GetTrackingsParams();
+optionalParams.setFields("title,order_id");
+optionalParams.setLang("china-post");
+optionalParams.setLimit(10);
 
-DataEntity<MultiTrackingsData> entity =
-  afterShip.getTrackingEndpoint().getTrackings(optionalParams);
-if (entity.hasError()) {
-  System.out.println(entity.getError().getType());
-} else {
-  List<Tracking> trackings = entity.getData().getTrackings();
-  System.out.println("size: " + trackings.size());
-  System.out.println(trackings);
+try {
+  PagedTrackings pagedTrackings = afterShip.getTrackingEndpoint().getTrackings(optionalParams);
+  System.out.println(pagedTrackings);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
 ```
 
@@ -255,102 +352,68 @@ if (entity.hasError()) {
   - Get by id:
 
     ```java
-    SingleTrackingParam param = new SingleTrackingParam();
-    param.setId("vebix4hfu3sr3kac0epve01n");
-    
-    DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint()
-      .getTracking(param, null);
-    if (entity.hasError()) {
-      System.out.println(entity.getError().getType());
-    } else {
-      Tracking tracking = entity.getData().getTracking();
+    String id = "l389dilsluk9ckaqmetr901y";
+    try {
+      Tracking tracking = afterShip.getTrackingEndpoint().getTracking(id, null);
       System.out.println(tracking);
-      if (tracking != null) {
-        System.out.println(tracking.getSlug());
-        System.out.println(tracking.getTrackingNumber());
-      }
+    } catch (AftershipException e) {
+      System.out.println(e.getMessage());
     }
     ```
-
+    
   - Get by slug and tracking_number:
-
+  
     ```java 
-    SingleTrackingParam param = new SingleTrackingParam();
-    param.setSlug("dhl");
-    param.setTrackingNumber("1234567890");
-    
-    DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint()
-      .getTracking(param, null);
-    if (entity.hasError()) {
-      System.out.println(entity.getError().getType());
-    } else {
-      Tracking tracking = entity.getData().getTracking();
+    String slug = "acommerce";
+    String trackingNumber = "1234567890";
+    try {
+      Tracking tracking =
+      afterShip
+        .getTrackingEndpoint()
+      .getTracking(new SlugTrackingNumber(slug, trackingNumber), null);
       System.out.println(tracking);
-      if (tracking != null) {
-        System.out.println(tracking.getId());
-      }
+    } catch (AftershipException e) {
+      System.out.println(e.getMessage());
     }
     ```
-
+  
 - #### updateTracking [PUT /trackings/:slug/:tracking_number]
 
 ```java
-SingleTrackingParam param = new SingleTrackingParam();
-param.setId("vebix4hfu3sr3kac0epve01n");
-
+String id = "vebix4hfu3sr3kac0epve01n";
 UpdateTracking updateTracking = new UpdateTracking();
 updateTracking.setTitle("title123");
-UpdateTrackingRequest request = new UpdateTrackingRequest();
-request.setTracking(updateTracking);
 
-DataEntity<SingleTracking> entity =
-    afterShip.getTrackingEndpoint().updateTracking(param, request);
-if (entity.hasError()) {
-  System.out.println(entity.getError().getType());
-} else {
-  Tracking tracking = entity.getData().getTracking();
-  System.out.println(tracking);
-  if (tracking != null) {
-    System.out.println(tracking.getTitle());
-  }
+try {
+  Tracking tracking1 = afterShip.getTrackingEndpoint().updateTracking(id, updateTracking);
+  System.out.println(tracking1);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
 ```
 
 - #### reTrack [POST /trackings/:slug/:tracking_number/retrack]
 
 ```java
-  SingleTrackingParam param = new SingleTrackingParam();
-  param.setId("vebix4hfu3sr3kac0epve01n");
-
-  DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().reTrack(param);
-  if (entity.hasError()) {
-    System.out.println(entity.getError().getType());
-    System.out.println(entity.getError().getCode());
-    System.out.println(entity.getError().getMessage());
-  } else {
-    Tracking tracking = entity.getData().getTracking();
-    System.out.println(tracking);
-    if (tracking != null) {
-      System.out.println(tracking.isActive());
-    }
-  }
+String id = "l389dilsluk9ckaqmetr901y";
+try {
+  Tracking tracking = afterShip.getTrackingEndpoint().reTrack(id);
+  System.out.println(tracking);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
 ```
 
 - #### markAsCompleted [POST /trackings/:slug/:tracking_number/mark-as-completed]
 
 ```java 
-SingleTrackingParam param = new SingleTrackingParam();
-param.setId("wcwy86mie4o17kadedkcw029");
-MarkAsCompletedRequest request = new MarkAsCompletedRequest(ReasonKind.LOST);
-
-DataEntity<SingleTracking> entity =
-  afterShip.getTrackingEndpoint().markAsCompleted(param, request);
-if (entity.hasError()) {
-  System.out.println(entity.getError().getType());
-} else {
-  Tracking tracking = entity.getData().getTracking();
+String id = "5b7658cec7c33c0e007de3c5";
+try {
+  Tracking tracking =
+    afterShip.getTrackingEndpoint().markAsCompleted(id, new CompletedStatus(ReasonKind.LOST));
   System.out.println(tracking);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
 ```
 
@@ -359,21 +422,19 @@ if (entity.hasError()) {
 - #### getLastCheckpoint [GET /last_checkpoint/:slug/:tracking_number]
 
 ```java
-SingleTrackingParam param = new SingleTrackingParam();
-param.setId("wcwy86mie4o17kadedkcw029");
-GetLastCheckpointParam optionalParams = new GetLastCheckpointParam();
-optionalParams.setFields(FieldsKind.combine(FieldsKind.TAG, FieldsKind.ORDER_ID));
-optionalParams.setLang(LangKind.CHINA_EMS);
+String id = "vebix4hfu3sr3kac0epve01n";
+GetCheckpointParam optionalParam = new GetCheckpointParam();
+optionalParam.setFields(FieldsKind.combine(FieldsKind.TAG));
+optionalParam.setLang(LangKind.CHINA_EMS);
 
-DataEntity<LastCheckpoint> entity =
-    afterShip.getCheckpointEndpoint().getLastCheckpoint(param, optionalParams);
-if (entity.hasError()) {
-  System.out.println(entity.getError().getType());
-} else {
-  LastCheckpoint lastCheckpoint = entity.getData();
+try {
+  LastCheckpoint lastCheckpoint =
+    afterShip.getCheckpointEndpoint().getLastCheckpoint(id, optionalParam);
   System.out.println(lastCheckpoint.getSlug());
   System.out.println(lastCheckpoint.getTrackingNumber());
   System.out.println(lastCheckpoint.getCheckpoint());
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
 ```
 
@@ -382,59 +443,45 @@ if (entity.hasError()) {
 - #### getNotification [GET /notifications/:slug/:tracking_number]
 
 ```java 
-SingleTrackingParam param = new SingleTrackingParam();
-param.setId("wcwy86mie4o17kadedkcw029");
-DataEntity<NotificationWrapper> entity =
-  afterShip.getNotificationEndpoint().getNotification(param);
-if (entity.hasError()) {
-  System.out.println(entity.getError().getType());
-} else {
-  Notification notification = entity.getData().getNotification();
+String id = "vebix4hfu3sr3kac0epve01n";
+try {
+  Notification notification = afterShip.getNotificationEndpoint().getNotification(id);
   System.out.println(notification);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
 ```
 
 - #### addNotification [POST /notifications/:slug/:tracking_number/add]
 
 ```java
-Notification notification = new Notification();
-notification.setSmses(new String[] {"+85261236123", "Invalid Mobile Phone Number"});
-NotificationWrapper notificationWrapper = new NotificationWrapper(notification);
-SingleTrackingParam param = new SingleTrackingParam();
-param.setId("wcwy86mie4o17kadedkcw029");
+String id = "vebix4hfu3sr3kac0epve01n";
+Notification addNotification = new Notification();
+addNotification.setSmses(new String[] {"+85261236123", "Invalid Mobile Phone Number"});
 
-DataEntity<NotificationWrapper> entity =
-    afterShip.getNotificationEndpoint().addNotification(param, notificationWrapper);
-if (entity.hasError()) {
-  System.out.println(entity.getError().getType());
-  System.out.println(entity.getError().getCode());
-  System.out.println(entity.getError().getMessage());
-} else {
-  Notification result = entity.getData().getNotification();
-  System.out.println(result);
+try {
+  Notification notification =
+    afterShip.getNotificationEndpoint().addNotification(id, addNotification);
+  System.out.println(notification);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
-// Notification(emails=[another_email@yourdomain.com, email@yourdomain.com], smses=[+85291239123, +85261236123])
 ```
 
 - #### removeNotification [POST /notifications/:slug/:tracking_number/remove]
 
 ```java 
-Notification notification = new Notification();
-notification.setEmails(new String[] {"invalid EMail @ Gmail. com"});
-notification.setSmses(new String[] {"+85261236123"});
-NotificationWrapper removedNotification = new NotificationWrapper(notification);
-SingleTrackingParam param = new SingleTrackingParam();
-param.setId("wcwy86mie4o17kadedkcw029");
-
-DataEntity<NotificationWrapper> entity =
-    afterShip.getNotificationEndpoint().removeNotification(param, removedNotification);
-if (entity.hasError()) {
-  System.out.println(entity.getError().getType());
-} else {
-  Notification result = entity.getData().getNotification();
-  System.out.println(result);
+String id = "vebix4hfu3sr3kac0epve01n";
+Notification removeNotification = new Notification();
+removeNotification.setEmails(new String[] {"invalid EMail @ Gmail. com"});
+removeNotification.setSmses(new String[] {"+85261236123"});
+try {
+  Notification notification =
+    afterShip.getNotificationEndpoint().removeNotification(id, removeNotification);
+  System.out.println(notification);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
 }
-// Notification(emails=[email@yourdomain.com, another_email@yourdomain.com], smses=[+85291239123])
 ```
 
 
@@ -444,14 +491,11 @@ if (entity.hasError()) {
 - #### When specifying a tracking, the `id` is equivalent to the `slug and tracking_number`.
 
 ```java 
-SingleTrackingParam param = new SingleTrackingParam();
-param.setId("vebix4hfu3sr3kac0epve01n");
+getTracking("l389dilsluk9ckaqmetr901y", null);
 ```
 
 ```java 
-SingleTrackingParam param = new SingleTrackingParam();
-param.setSlug("dhl");
-param.setTrackingNumber("1234567890");
+getTracking(new SlugTrackingNumber("acommerce", "1234567890"), null);
 ```
 
 ## License

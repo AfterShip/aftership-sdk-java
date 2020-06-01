@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.exception.AftershipException;
 import com.aftership.sdk.exception.ApiException;
 import com.aftership.sdk.exception.SdkException;
 import okhttp3.mockwebserver.MockWebServer;
@@ -39,8 +38,9 @@ public class ErrorTest {
         () -> {
           try {
             afterShip.getCourierEndpoint().listCouriers();
-          } catch (AftershipException ex) {
+          } catch (ApiException ex) {
             System.out.println(ex.getMessage());
+            System.out.println(ex.getRateLimit());
             ex.printMessage();
             throw ex;
           }

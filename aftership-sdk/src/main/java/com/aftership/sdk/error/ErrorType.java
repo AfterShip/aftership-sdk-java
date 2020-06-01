@@ -32,6 +32,12 @@ public enum ErrorType {
     return name;
   }
 
+  /**
+   * String to ErrorType
+   *
+   * @param name String of ErrorType
+   * @return ErrorType
+   */
   public static ErrorType get(String name) {
     if (StrUtils.isNotBlank(name)) {
       for (ErrorType r : ErrorType.values()) {
@@ -41,5 +47,14 @@ public enum ErrorType {
       }
     }
     return null;
+  }
+
+  /**
+   * Determine if it is an ErrorType
+   * @param name String of ErrorType
+   * @return boolean
+   */
+  public static boolean isErrorType(String name) {
+    return get(name) != null;
   }
 }

@@ -1,7 +1,7 @@
 package com.aftership.sdk.exception;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import com.aftership.sdk.utils.JsonUtils;
@@ -133,15 +133,14 @@ public class AftershipException extends Exception {
     return this.getCode() != null && this.getCode() > 0;
   }
 
-  /**
-   * Print Message, Using System.out::print and Pretty message in Json format
-   */
+  /** Print Message, Using System.out::print and Pretty message in Json format */
   public void printMessage() {
     printMessage(true);
   }
 
   /**
    * Print Message, Using System.out::print
+   *
    * @param pretty is pretty message?
    */
   public void printMessage(boolean pretty) {
@@ -150,7 +149,8 @@ public class AftershipException extends Exception {
 
   /**
    * Print Message
-   * @param pretty  boolean
+   *
+   * @param pretty boolean
    * @param consumer Log output method
    */
   public void printMessage(boolean pretty, Consumer<String> consumer) {
@@ -159,15 +159,26 @@ public class AftershipException extends Exception {
 
   /**
    * Pretty message in Json format
+   *
+   * @return
+   */
+  public String prettyMessage() {
+    return prettyMessage(true);
+  }
+
+  /**
+   * Pretty message in Json format
+   *
    * @param pretty is pretty message?
    * @return String
    */
   public String prettyMessage(boolean pretty) {
-    Map<String, Object> map = new HashMap<>(4);
+    Map<String, Object> map = new LinkedHashMap<>(4);
     map.put("type", getType());
     map.put("message", this.message);
     map.put("code", getCode());
-    map.put("data", getData());
+    // TODO("need to optimize")
+    map.put("data", getData().toString());
     return JsonUtils.create(pretty).toJson(map);
   }
 }

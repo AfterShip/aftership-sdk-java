@@ -107,17 +107,16 @@ public class ApiRequestImpl implements ApiRequest {
     Call call = HttpClient.getClient().newCall(request);
     try (Response response = call.execute()) {
       // System.out.println("isSuccessful: "+ response.isSuccessful());
+      setRateLimiting(this.app, response);
       if (!response.isSuccessful()) {
-        setRateLimiting(this.app, response);
         throw new ApiException(
+            this.app.getRateLimit(),
             BodyParser.processMeta(requireResponseBodyNonNull(response.body()).string()),
             entryRequestConfig(method, path),
             entryRequestHeaders(requestHeaders),
             entryRequestData(requestData),
             entryResponseBody(response));
       }
-
-      setRateLimiting(this.app, response);
 
       String jsonBody = requireResponseBodyNonNull(response.body()).string();
       if (StrUtils.isBlank(jsonBody) || "{}".equals(jsonBody)) {
@@ -152,6 +151,7 @@ public class ApiRequestImpl implements ApiRequest {
       }
       if (!isSuccessful(result.getMeta().getCode())) {
         throw new ApiException(
+            this.app.getRateLimit(),
             result.getMeta(),
             entryRequestConfig(method, path),
             entryRequestHeaders(requestHeaders),

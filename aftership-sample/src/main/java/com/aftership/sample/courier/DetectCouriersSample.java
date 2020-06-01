@@ -29,7 +29,6 @@ public class DetectCouriersSample {
 
       System.out.println(courierDetectList.getTotal());
       System.out.println(courierDetectList.getCouriers());
-
     } catch (AftershipException e) {
       System.out.println(e.getMessage());
     }

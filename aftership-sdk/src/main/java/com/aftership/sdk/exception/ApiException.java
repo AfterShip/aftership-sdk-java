@@ -2,10 +2,14 @@ package com.aftership.sdk.exception;
 
 import java.util.Map;
 import com.aftership.sdk.model.Meta;
+import com.aftership.sdk.model.RateLimit;
 import com.aftership.sdk.utils.MapUtils;
+import lombok.Getter;
 
 /** Exception for API Server */
 public class ApiException extends AftershipException {
+
+  @Getter private final RateLimit rateLimit;
 
   /**
    * Constructor
@@ -15,7 +19,9 @@ public class ApiException extends AftershipException {
    * @param data Debug information of error
    */
   @SafeVarargs
-  public ApiException(Meta meta, Map.Entry<String, Object>... data) {
+  public ApiException(RateLimit rateLimit, Meta meta, Map.Entry<String, Object>... data) {
     super(meta.getType(), meta.getMessage(), meta.getCode(), MapUtils.toMap(data));
+    this.rateLimit = rateLimit;
   }
+
 }
