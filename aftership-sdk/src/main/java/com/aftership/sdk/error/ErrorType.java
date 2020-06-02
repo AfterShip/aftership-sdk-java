@@ -1,11 +1,13 @@
 package com.aftership.sdk.error;
 
-import com.aftership.sdk.lib.StrUtil;
+import com.aftership.sdk.utils.StrUtils;
 
 /** Types of errors */
 public enum ErrorType {
+
   /** Constructor Error */
   ConstructorError("ConstructorError"),
+
   /** Handler Error */
   HandlerError("HandlerError");
 
@@ -30,8 +32,14 @@ public enum ErrorType {
     return name;
   }
 
+  /**
+   * String to ErrorType
+   *
+   * @param name String of ErrorType
+   * @return ErrorType
+   */
   public static ErrorType get(String name) {
-    if (StrUtil.isNotBlank(name)) {
+    if (StrUtils.isNotBlank(name)) {
       for (ErrorType r : ErrorType.values()) {
         if (r.name.equals(name)) {
           return r;
@@ -39,5 +47,14 @@ public enum ErrorType {
       }
     }
     return null;
+  }
+
+  /**
+   * Determine if it is an ErrorType
+   * @param name String of ErrorType
+   * @return boolean
+   */
+  public static boolean isErrorType(String name) {
+    return get(name) != null;
   }
 }

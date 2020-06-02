@@ -2,17 +2,17 @@ package com.aftership.sample.checkpoint;
 
 import com.aftership.sample.SampleUtil;
 import com.aftership.sdk.AfterShip;
-import com.aftership.sdk.impl.EndpointPath;
-import com.aftership.sdk.model.checkpoint.GetLastCheckpointParam;
+import com.aftership.sdk.endpoint.impl.EndpointPath;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.exception.SdkException;
+import com.aftership.sdk.model.FieldsKind;
+import com.aftership.sdk.model.LangKind;
+import com.aftership.sdk.model.checkpoint.GetCheckpointParam;
 import com.aftership.sdk.model.checkpoint.LastCheckpoint;
-import com.aftership.sdk.model.tracking.MultiTrackingsParams.FieldsKind;
-import com.aftership.sdk.model.tracking.MultiTrackingsParams.LangKind;
-import com.aftership.sdk.model.tracking.SingleTrackingParam;
-import com.aftership.sdk.rest.DataEntity;
 
 /** Sample of getLastCheckpoint method in CheckpointEndpoint */
 public class GetLastCheckpointSample {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws SdkException {
     AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
     getLastCheckpoint(afterShip);
   }
@@ -20,21 +20,19 @@ public class GetLastCheckpointSample {
   public static void getLastCheckpoint(AfterShip afterShip) {
     System.out.println(EndpointPath.GET_LAST_CHECKPOINT);
 
-    SingleTrackingParam param = new SingleTrackingParam();
-    param.setId("wcwy86mie4o17kadedkcw029");
-    GetLastCheckpointParam optionalParams = new GetLastCheckpointParam();
-    optionalParams.setFields(FieldsKind.combine(FieldsKind.TAG, FieldsKind.ORDER_ID));
-    optionalParams.setLang(LangKind.CHINA_EMS);
+    String id = "vebix4hfu3sr3kac0epve01n";
+    GetCheckpointParam optionalParam = new GetCheckpointParam();
+    optionalParam.setFields(FieldsKind.combine(FieldsKind.TAG));
+    optionalParam.setLang(LangKind.CHINA_EMS);
 
-    DataEntity<LastCheckpoint> entity =
-        afterShip.getCheckpointEndpoint().getLastCheckpoint(param, optionalParams);
-    if (entity.hasError()) {
-      System.out.println(entity.getError().getType());
-    } else {
-      LastCheckpoint lastCheckpoint = entity.getData();
+    try {
+      LastCheckpoint lastCheckpoint =
+          afterShip.getCheckpointEndpoint().getLastCheckpoint(id, optionalParam);
       System.out.println(lastCheckpoint.getSlug());
       System.out.println(lastCheckpoint.getTrackingNumber());
       System.out.println(lastCheckpoint.getCheckpoint());
+    } catch (AftershipException e) {
+      System.out.println(e.getMessage());
     }
   }
 }

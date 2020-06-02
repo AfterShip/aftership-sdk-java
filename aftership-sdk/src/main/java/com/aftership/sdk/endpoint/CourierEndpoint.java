@@ -1,32 +1,44 @@
 package com.aftership.sdk.endpoint;
 
+import com.aftership.sdk.exception.ApiException;
+import com.aftership.sdk.exception.RequestException;
+import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.courier.CourierDetectList;
-import com.aftership.sdk.model.courier.CourierDetectRequest;
+import com.aftership.sdk.model.courier.CourierDetectTracking;
 import com.aftership.sdk.model.courier.CourierList;
-import com.aftership.sdk.rest.DataEntity;
 
 /** Endpoint provides the interface for all Courier API calls */
 public interface CourierEndpoint {
   /**
    * Return a list of couriers activated at your AfterShip account.
    *
-   * @return DataEntity of CourierList
+   * @return CourierList
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
+   * @throws SdkException SdkException
    */
-  DataEntity<CourierList> listCouriers();
+  CourierList listCouriers() throws RequestException, ApiException, SdkException;
 
   /**
    * Return a list of all couriers.
    *
-   * @return DataEntity of CourierList
+   * @return CourierList
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
+   * @throws SdkException SdkException
    */
-  DataEntity<CourierList> listAllCouriers();
+  CourierList listAllCouriers() throws RequestException, ApiException, SdkException;
 
   /**
    * Return a list of matched couriers based on tracking number format and selected couriers or a
    * list of couriers.
    *
-   * @param requestData CourierDetectRequest
-   * @return DataEntity of CourierDetectList
+   * @param detectTracking CourierDetectTracking
+   * @return CourierDetectList
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
-  DataEntity<CourierDetectList> detectCouriers(CourierDetectRequest requestData);
+  CourierDetectList detectCouriers(CourierDetectTracking detectTracking)
+      throws SdkException, RequestException, ApiException;
 }

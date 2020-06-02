@@ -2,52 +2,46 @@ package com.aftership.sample.tracking;
 
 import com.aftership.sample.SampleUtil;
 import com.aftership.sdk.AfterShip;
-import com.aftership.sdk.model.tracking.SingleTracking;
-import com.aftership.sdk.model.tracking.SingleTrackingParam;
+import com.aftership.sdk.endpoint.impl.EndpointPath;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.exception.SdkException;
+import com.aftership.sdk.model.tracking.SlugTrackingNumber;
 import com.aftership.sdk.model.tracking.Tracking;
-import com.aftership.sdk.rest.DataEntity;
 
 /** Sample of getTracking method in TrackingEndpoint */
 public class GetTrackingSample {
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws SdkException {
     AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
     getTracking(afterShip);
     getTracking2(afterShip);
   }
 
   public static void getTracking(AfterShip afterShip) {
-    SingleTrackingParam param = new SingleTrackingParam();
-    param.setId("vebix4hfu3sr3kac0epve01n");
+    System.out.println(EndpointPath.GET_TRACKING + " by id");
 
-    DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().getTracking(param, null);
-    if (entity.hasError()) {
-      System.out.println(entity.getError().getType());
-    } else {
-      Tracking tracking = entity.getData().getTracking();
+    String id = "l389dilsluk9ckaqmetr901y";
+    try {
+      Tracking tracking = afterShip.getTrackingEndpoint().getTracking(id, null);
       System.out.println(tracking);
-      if (tracking != null) {
-        System.out.println(tracking.getSlug());
-        System.out.println(tracking.getTrackingNumber());
-        System.out.println("title:" + tracking.getTitle());
-      }
+    } catch (AftershipException e) {
+      System.out.println(e.getMessage());
     }
   }
 
   public static void getTracking2(AfterShip afterShip) {
-    SingleTrackingParam param = new SingleTrackingParam();
-    param.setSlug("mx-cargo");
-    param.setTrackingNumber("1234567890");
+    System.out.println(EndpointPath.GET_TRACKING + " by slug and trackingNumber");
 
-    DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().getTracking(param, null);
-    if (entity.hasError()) {
-      System.out.println(entity.getError().getType());
-    } else {
-      Tracking tracking = entity.getData().getTracking();
+    String slug = "acommerce";
+    String trackingNumber = "1234567890";
+    try {
+      Tracking tracking =
+          afterShip
+              .getTrackingEndpoint()
+              .getTracking(new SlugTrackingNumber(slug, trackingNumber), null);
       System.out.println(tracking);
-      if (tracking != null) {
-        System.out.println(tracking.getId());
-      }
+    } catch (AftershipException e) {
+      System.out.println(e.getMessage());
     }
   }
 }

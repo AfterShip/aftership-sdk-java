@@ -1,68 +1,157 @@
 package com.aftership.sdk.endpoint;
 
-import com.aftership.sdk.model.tracking.*;
-import com.aftership.sdk.rest.DataEntity;
+import com.aftership.sdk.exception.ApiException;
+import com.aftership.sdk.exception.RequestException;
+import com.aftership.sdk.exception.SdkException;
+import com.aftership.sdk.model.tracking.CompletedStatus;
+import com.aftership.sdk.model.tracking.GetTrackingParams;
+import com.aftership.sdk.model.tracking.GetTrackingsParams;
+import com.aftership.sdk.model.tracking.NewTracking;
+import com.aftership.sdk.model.tracking.PagedTrackings;
+import com.aftership.sdk.model.tracking.SlugTrackingNumber;
+import com.aftership.sdk.model.tracking.Tracking;
+import com.aftership.sdk.model.tracking.UpdateTracking;
 
 /** Endpoint provides the interface for all trackings API calls */
 public interface TrackingEndpoint {
 
   /**
-   * Create a tracking.
-   *
-   * @param request CreateTrackingRequest
-   * @return DataEntity of SingleTracking
+   * Create a tracking
+   * @param newTracking Tracking will be created
+   * @return Tracking
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
-  DataEntity<SingleTracking> createTracking(CreateTrackingRequest request);
+  Tracking createTracking(NewTracking newTracking)
+      throws SdkException, RequestException, ApiException;
 
   /**
-   * Delete a tracking.
-   *
-   * @param param SingleTrackingParam
-   * @return DataEntity of SingleTracking
+   * Delete a tracking
+   * @param id id of a tracking
+   * @return deleted Tracking
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
-  DataEntity<SingleTracking> deleteTracking(SingleTrackingParam param);
+  Tracking deleteTracking(String id)
+      throws SdkException, RequestException, ApiException;
 
   /**
-   * Get tracking results of multiple trackings.
-   *
-   * @param param SingleTrackingParam
+   * Delete a tracking
+   * @param identifier identifier of a tracking
+   * @return deleted Tracking
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
+   */
+  Tracking deleteTracking(SlugTrackingNumber identifier)
+      throws SdkException, RequestException, ApiException;
+
+  /**
+   * Get a tracking
+   * @param id id of a tracking
    * @param optionalParams GetTrackingParams
-   * @return DataEntity of SingleTracking
+   * @return Tracking
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
-  DataEntity<SingleTracking> getTracking(
-      SingleTrackingParam param, GetTrackingParams optionalParams);
+  Tracking getTracking(String id, GetTrackingParams optionalParams)
+      throws SdkException, RequestException, ApiException;
+
+  /**
+   * Get a tracking
+   * @param identifier identifier of a tracking
+   * @param optionalParams GetTrackingParams
+   * @return Tracking
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
+   */
+  Tracking getTracking(SlugTrackingNumber identifier, GetTrackingParams optionalParams)
+      throws SdkException, RequestException, ApiException;
 
   /**
    * GetTrackings Gets tracking results of multiple trackings.
    *
-   * @param optionalParams MultiTrackingsParams
-   * @return DataEntity of MultiTrackingsData
+   * @param params GetTrackingsParams
+   * @return DataEntity of PagedTrackings
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
-  DataEntity<MultiTrackingsData> getTrackings(MultiTrackingsParams optionalParams);
+  PagedTrackings getTrackings(GetTrackingsParams params)
+      throws SdkException, RequestException, ApiException;
 
   /**
-   * UpdateTracking Updates a tracking.
-   *
-   * @param param SingleTrackingParam
-   * @param update UpdateTrackingRequest
-   * @return DataEntity of SingleTracking
+   * Updates a tracking
+   * @param id id of a tracking
+   * @param update UpdateTrackingParams
+   * @return Tracking
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
-  DataEntity<SingleTracking> updateTracking(
-      SingleTrackingParam param, UpdateTrackingRequest update);
+  Tracking updateTracking(String id, UpdateTracking update)
+      throws SdkException, RequestException, ApiException;
 
   /**
-   * ReTrack an expired tracking once. Max. 3 times per tracking.
-   *
-   * @param param SingleTrackingParam
-   * @return DataEntity of SingleTracking
+   * Updates a tracking
+   * @param identifier identifier of a tracking
+   * @param update UpdateTrackingParams
+   * @return Tracking
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
+   * @throws ApiException ApiException
    */
-  DataEntity<SingleTracking> reTrack(SingleTrackingParam param);
+  Tracking updateTracking(SlugTrackingNumber identifier, UpdateTracking update)
+      throws SdkException, RequestException, ApiException;
 
   /**
-   * Mark a tracking as completed. The tracking won't auto update until retrack it.
-   * @param param SingleTrackingParam
-   * @param request MarkAsCompletedRequest
-   * @return DataEntity of SingleTracking
+   * ReTrack an expired tracking once. Max. 3 times per tracking
+   * @param id id of a tracking
+   * @return Tracking
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
    */
-  DataEntity<SingleTracking> markAsCompleted(SingleTrackingParam param, MarkAsCompletedRequest request);
+  Tracking reTrack(String id) throws SdkException, RequestException, ApiException;
+
+  /**
+   * ReTrack an expired tracking once. Max. 3 times per tracking
+   * @param identifier identifier of a tracking
+   * @return Tracking
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
+   */
+  Tracking reTrack(SlugTrackingNumber identifier)
+      throws SdkException, RequestException, ApiException;
+
+  /**
+   * Mark a tracking as completed. The tracking won't auto update until retrack it
+   * @param id id of a tracking
+   * @param status CompletedStatus
+   * @return Tracking
+   * @throws SdkException SDK Exception
+   * @throws RequestException Request Exception
+   * @throws ApiException Api Exception
+   */
+  Tracking markAsCompleted(String id, CompletedStatus status)
+      throws SdkException, RequestException, ApiException;
+
+  /**
+   * Mark a tracking as completed. The tracking won't auto update until retrack it
+   * @param identifier identifier of a tracking
+   * @param status CompletedStatus
+   * @return Tracking
+   * @throws SdkException SdkException
+   * @throws RequestException RequestException
+   * @throws ApiException ApiException
+   * @throws ApiException ApiException
+   */
+  Tracking markAsCompleted(SlugTrackingNumber identifier, CompletedStatus status)
+      throws SdkException, RequestException, ApiException;
 }

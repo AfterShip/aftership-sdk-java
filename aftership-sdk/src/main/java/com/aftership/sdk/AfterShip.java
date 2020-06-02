@@ -4,17 +4,18 @@ import com.aftership.sdk.endpoint.CheckpointEndpoint;
 import com.aftership.sdk.endpoint.CourierEndpoint;
 import com.aftership.sdk.endpoint.NotificationEndpoint;
 import com.aftership.sdk.endpoint.TrackingEndpoint;
-import com.aftership.sdk.error.AftershipException;
+import com.aftership.sdk.endpoint.impl.CheckpointImpl;
+import com.aftership.sdk.endpoint.impl.CourierImpl;
+import com.aftership.sdk.endpoint.impl.NotificationImpl;
+import com.aftership.sdk.endpoint.impl.TrackingImpl;
 import com.aftership.sdk.error.ErrorMessage;
-import com.aftership.sdk.impl.CheckpointImpl;
-import com.aftership.sdk.impl.CourierImpl;
-import com.aftership.sdk.impl.NotificationImpl;
-import com.aftership.sdk.impl.TrackingImpl;
-import com.aftership.sdk.lib.StrUtil;
+import com.aftership.sdk.error.ErrorType;
+import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.RateLimit;
-import com.aftership.sdk.rest.ApiRequest;
-import com.aftership.sdk.rest.ApiRequestImpl;
+import com.aftership.sdk.request.ApiRequest;
+import com.aftership.sdk.request.ApiRequestImpl;
+import com.aftership.sdk.utils.StrUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,8 +48,9 @@ public class AfterShip {
    * Constructor
    *
    * @param apiKey apiKey parameter in API request
+   * @throws SdkException SdkException
    */
-  public AfterShip(String apiKey) {
+  public AfterShip(String apiKey) throws SdkException {
     this(apiKey, null);
   }
 
@@ -57,10 +59,11 @@ public class AfterShip {
    *
    * @param apiKey apiKey parameter in API request
    * @param options Optional parameters for API request
+   * @throws SdkException SdkException
    */
-  public AfterShip(String apiKey, AftershipOption options) {
-    if (StrUtil.isBlank(apiKey)) {
-      throw new AftershipException(ErrorMessage.CONSTRUCTOR_INVALID_API_KEY);
+  public AfterShip(String apiKey, AftershipOption options) throws SdkException {
+    if (StrUtils.isBlank(apiKey)) {
+      throw new SdkException(ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_API_KEY_IS_NULL);
     }
 
     this.apiKey = apiKey;
@@ -68,9 +71,9 @@ public class AfterShip {
     // Setup
     if (options != null) {
       this.endpoint =
-          StrUtil.isNotBlank(options.getEndpoint()) ? options.getEndpoint() : DEFAULT_ENDPOINT;
+          StrUtils.isNotBlank(options.getEndpoint()) ? options.getEndpoint() : DEFAULT_ENDPOINT;
       this.userAgentPrefix =
-          StrUtil.isNotBlank(options.getUserAgentPrefix())
+          StrUtils.isNotBlank(options.getUserAgentPrefix())
               ? options.getUserAgentPrefix()
               : DEFAULT_USER_AGENT;
     } else {

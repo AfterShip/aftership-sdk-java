@@ -3,15 +3,15 @@ package com.aftership.sample.tracking;
 import java.util.HashMap;
 import com.aftership.sample.SampleUtil;
 import com.aftership.sdk.AfterShip;
-import com.aftership.sdk.impl.EndpointPath;
-import com.aftership.sdk.model.tracking.CreateTrackingRequest;
+import com.aftership.sdk.endpoint.impl.EndpointPath;
+import com.aftership.sdk.exception.AftershipException;
+import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.tracking.NewTracking;
-import com.aftership.sdk.model.tracking.SingleTracking;
-import com.aftership.sdk.rest.DataEntity;
+import com.aftership.sdk.model.tracking.Tracking;
 
 /** Sample of createTracking method in TrackingEndpoint */
 public class CreateTrackingSample {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws SdkException {
     AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
     createTracking(afterShip);
   }
@@ -20,7 +20,8 @@ public class CreateTrackingSample {
     System.out.println(EndpointPath.CREATE_TRACKING);
 
     NewTracking newTracking = new NewTracking();
-    newTracking.setSlug(new String[] {"mx-cargo"});
+    // slug from listAllCouriers()
+    newTracking.setSlug(new String[] {"acommerce"});
     newTracking.setTrackingNumber("1234567890");
     newTracking.setTitle("Title Name");
     newTracking.setSmses(new String[] {"+18555072509", "+18555072501"});
@@ -40,15 +41,12 @@ public class CreateTrackingSample {
     newTracking.setPickupLocation("Flagship Store");
     newTracking.setPickupNote(
         "Reach out to our staffs when you arrive our stores for shipment pickup");
-    CreateTrackingRequest request = new CreateTrackingRequest(newTracking);
 
-    DataEntity<SingleTracking> entity = afterShip.getTrackingEndpoint().createTracking(request);
-    if (entity.hasError()) {
-      System.out.println(entity.getError().getType());
-      System.out.println(entity.getError().getCode());
-      System.out.println(entity.getError().getMessage());
-    } else {
-      System.out.println(entity.getData().getTracking());
+    try {
+      Tracking tracking = afterShip.getTrackingEndpoint().createTracking(newTracking);
+      System.out.println(tracking);
+    } catch (AftershipException e) {
+      System.out.println(e.getMessage());
     }
   }
 }
