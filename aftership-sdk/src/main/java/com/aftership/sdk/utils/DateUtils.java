@@ -11,6 +11,7 @@ public class DateUtils {
   public static final String FORMAT_WITH_Z = "yyyy-MM-dd'T'HH:mm:ssZ";
   public static final String FORMAT_WITH_X = "yyyy-MM-dd'T'HH:mm:ssXXX";
   public static final String FORMAT_WITHOUT_T = "yyyy-MM-dd HH:mm:ss";
+  public static final String FORMAT_MILLISECONDS = "yyyy-MM-dd HH:mm:ss,SSS";
 
   /**
    * Convert to date type according to date format

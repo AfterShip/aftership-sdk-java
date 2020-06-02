@@ -23,7 +23,12 @@ class DateUtilsTest {
 
   @Test
   void format() {
+    Date now = new Date(1590998804815L);
     Assertions.assertEquals(
-        "2020-06-01 16:06:44", DateUtils.format(DateUtils.FORMAT_WITHOUT_T, new Date(1590998804815L)));
+        now.getTime(),
+        DateUtils.parse(
+                DateUtils.FORMAT_MILLISECONDS, DateUtils.format(DateUtils.FORMAT_MILLISECONDS, now))
+            .get()
+            .getTime());
   }
 }

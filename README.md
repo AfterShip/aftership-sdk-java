@@ -10,8 +10,6 @@ The Java SDK of `AfterShip API`, please see API documentation in: https://www.af
 Requirements:
 
 - JDK 1.8 or superior.
-- Lombok Plugin `for source code build by IDE` . Example: [lombok-intellij-plugin](https://github.com/mplushnikov/lombok-intellij-plugin) 
-
 
 ## Installation
 
