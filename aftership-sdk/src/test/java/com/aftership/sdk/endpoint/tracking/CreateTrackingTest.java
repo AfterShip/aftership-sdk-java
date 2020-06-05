@@ -46,7 +46,7 @@ public class CreateTrackingTest {
         afterShip
             .getTrackingEndpoint()
             .createTracking(
-                JsonUtils.create().fromJson(requestBody, NewTrackingRequest.class).getTracking());
+                JsonUtils.GSON.fromJson(requestBody, NewTrackingRequest.class).getTracking());
 
     Assertions.assertNotNull(tracking);
     Assertions.assertEquals("fedex", tracking.getSlug(), "Slug mismatch.");

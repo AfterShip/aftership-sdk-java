@@ -52,13 +52,6 @@ class AftershipExceptionTest {
   }
 
   @Test
-  void prettyMessage() {
-    AftershipException aftershipException =
-        new AftershipException("Unauthorized", "Invalid API Key.", 401, new HashMap<>());
-    Assertions.assertNotNull(aftershipException.prettyMessage());
-  }
-
-  @Test
   void getMessage() {
     AftershipException aftershipException =
         new AftershipException("", "Invalid API Key.", null, null);

@@ -89,7 +89,7 @@ public class ApiRequestImpl implements ApiRequest {
     // build request
     RequestBody requestBody = null;
     if (requestData != null) {
-      requestBody = RequestBody.create(JsonUtils.create().toJson(requestData), JSON);
+      requestBody = RequestBody.create(JsonUtils.GSON.toJson(requestData), JSON);
     }
     Request request =
         new Request.Builder()
