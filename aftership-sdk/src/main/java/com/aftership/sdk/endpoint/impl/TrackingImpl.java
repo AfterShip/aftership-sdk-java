@@ -78,7 +78,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         this.request.makeRequest(
             HttpMethod.DELETE,
             path,
-            this.merge(identifier.getOptionalParams()),
+            takeMap(identifier.getOptionalParams()),
             null,
             SingleTracking.class);
 
@@ -94,7 +94,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
 
     AftershipResponse<SingleTracking> response =
         this.request.makeRequest(
-            HttpMethod.GET, path, merge(optionalParams), null, SingleTracking.class);
+            HttpMethod.GET, path, mergeMap(optionalParams), null, SingleTracking.class);
 
     return extractData(response).getTracking();
   }
@@ -116,7 +116,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         this.request.makeRequest(
             HttpMethod.GET,
             path,
-            this.merge(optionalParams, identifier.getOptionalParams()),
+            this.mergeMap(optionalParams, identifier.getOptionalParams()),
             null,
             SingleTracking.class);
 
@@ -166,7 +166,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         this.request.makeRequest(
             HttpMethod.PUT,
             path,
-            this.merge(identifier.getOptionalParams()),
+            this.mergeMap(identifier.getOptionalParams()),
             new UpdateTrackingRequest(update),
             SingleTracking.class);
 
@@ -204,7 +204,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         this.request.makeRequest(
             HttpMethod.POST,
             path,
-            this.merge(identifier.getOptionalParams()),
+            this.mergeMap(identifier.getOptionalParams()),
             new Object(),
             SingleTracking.class);
 
@@ -243,7 +243,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         this.request.makeRequest(
             HttpMethod.POST,
             path,
-            this.merge(identifier.getOptionalParams()),
+            this.mergeMap(identifier.getOptionalParams()),
             status,
             SingleTracking.class);
 

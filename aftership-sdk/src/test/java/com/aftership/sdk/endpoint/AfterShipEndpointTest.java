@@ -59,6 +59,6 @@ class AfterShipEndpointTest {
   @Test
   void merge() {
     TrackingImpl tracking = new TrackingImpl(null);
-    Assertions.assertEquals(0, tracking.merge().size());
+    Assertions.assertEquals(0, tracking.mergeMap().size());
   }
 }

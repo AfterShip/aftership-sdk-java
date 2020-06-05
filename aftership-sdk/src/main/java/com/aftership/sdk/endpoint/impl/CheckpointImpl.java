@@ -33,7 +33,7 @@ public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpo
 
     AftershipResponse<LastCheckpoint> response =
         this.request.makeRequest(
-            HttpMethod.GET, path, this.merge(optionalParam), null, LastCheckpoint.class);
+            HttpMethod.GET, path, takeMap(optionalParam), null, LastCheckpoint.class);
 
     return extractData(response);
   }
@@ -54,7 +54,7 @@ public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpo
 
     AftershipResponse<LastCheckpoint> response =
         this.request.makeRequest(
-            HttpMethod.GET, path, this.merge(optionalParam), null, LastCheckpoint.class);
+            HttpMethod.GET, path, takeMap(optionalParam), null, LastCheckpoint.class);
 
     return extractData(response);
   }

@@ -69,7 +69,7 @@ public abstract class AfterShipEndpoint {
    * @param items Merge multiple StringMap interfaces
    * @return Map
    */
-  protected Map<String, String> merge(StringMap... items) {
+  protected Map<String, String> mergeMap(StringMap... items) {
     if (items.length == 0) {
       return new HashMap<>();
     }
@@ -82,6 +82,18 @@ public abstract class AfterShipEndpoint {
     }
 
     return query;
+  }
+
+  /**
+   * take map from StringMap interface
+   * @param item StringMap
+   * @return Map<String, String>
+   */
+  protected Map<String, String> takeMap(StringMap item){
+    if (item == null) {
+      return new HashMap<>(0);
+    }
+    return item.toMap();
   }
 
   protected String buildTrackingPath(
