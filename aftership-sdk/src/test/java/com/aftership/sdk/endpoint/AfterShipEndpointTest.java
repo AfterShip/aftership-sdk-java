@@ -3,7 +3,7 @@ package com.aftership.sdk.endpoint;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import com.aftership.sdk.endpoint.impl.TrackingImpl;
-import com.aftership.sdk.error.ErrorMessage;
+import com.aftership.sdk.exception.ErrorMessage;
 import com.aftership.sdk.exception.SdkException;
 
 class AfterShipEndpointTest {

@@ -1,7 +1,5 @@
 package com.aftership.sdk.exception;
 
-import com.aftership.sdk.error.ErrorType;
-
 /** Exception for constructed parameter */
 public class SdkException extends AftershipException {
 

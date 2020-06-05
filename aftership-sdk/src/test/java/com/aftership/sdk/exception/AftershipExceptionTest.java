@@ -1,10 +1,8 @@
 package com.aftership.sdk.exception;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
-import com.aftership.sdk.error.ErrorType;
 
 class AftershipExceptionTest {
 

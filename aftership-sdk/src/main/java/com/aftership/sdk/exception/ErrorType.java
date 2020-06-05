@@ -1,4 +1,4 @@
-package com.aftership.sdk.error;
+package com.aftership.sdk.exception;
 
 import com.aftership.sdk.utils.StrUtils;
 

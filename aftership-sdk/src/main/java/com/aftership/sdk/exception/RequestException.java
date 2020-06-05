@@ -1,7 +1,6 @@
 package com.aftership.sdk.exception;
 
 import java.util.Map;
-import com.aftership.sdk.error.ErrorType;
 import com.aftership.sdk.utils.MapUtils;
 
 /** Exception for request api interface */

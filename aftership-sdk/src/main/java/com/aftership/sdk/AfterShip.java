@@ -8,7 +8,7 @@ import com.aftership.sdk.endpoint.impl.CheckpointImpl;
 import com.aftership.sdk.endpoint.impl.CourierImpl;
 import com.aftership.sdk.endpoint.impl.NotificationImpl;
 import com.aftership.sdk.endpoint.impl.TrackingImpl;
-import com.aftership.sdk.error.ErrorMessage;
+import com.aftership.sdk.exception.ErrorMessage;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.RateLimit;
 import com.aftership.sdk.request.ApiRequest;
