@@ -13,7 +13,6 @@ import com.aftership.sdk.error.ErrorType;
 import com.aftership.sdk.exception.AftershipException;
 import com.aftership.sdk.exception.ApiException;
 import com.aftership.sdk.exception.RequestException;
-import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.AftershipResponse;
 import com.aftership.sdk.model.Meta;
 import com.aftership.sdk.model.RateLimit;
@@ -63,17 +62,13 @@ public class ApiRequestImpl implements ApiRequest {
       Map<String, String> queryParams,
       T requestData,
       Class<R> responseType)
-      throws SdkException, RequestException, ApiException {
+      throws RequestException, ApiException {
     // parameter check
     if (StrUtils.isBlank(path)) {
-      throw new SdkException(ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_PATH_IS_EMPTY);
-    }
-    if (StrUtils.isBlank(app.getApiKey())) {
-      throw new SdkException(ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_API_KEY_IS_NULL);
+      throw new IllegalArgumentException(ErrorMessage.CONSTRUCTOR_PATH_IS_EMPTY);
     }
     if (responseType == null) {
-      throw new SdkException(
-          ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_RESPONSE_TYPE_IS_NULL);
+      throw new IllegalArgumentException(ErrorMessage.CONSTRUCTOR_RESPONSE_TYPE_IS_NULL);
     }
 
     // build url

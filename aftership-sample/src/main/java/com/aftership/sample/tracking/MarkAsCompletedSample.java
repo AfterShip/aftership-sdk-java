@@ -4,14 +4,13 @@ import com.aftership.sample.SampleUtil;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.endpoint.impl.EndpointPath;
 import com.aftership.sdk.exception.AftershipException;
-import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.tracking.CompletedStatus;
 import com.aftership.sdk.model.tracking.CompletedStatus.ReasonKind;
 import com.aftership.sdk.model.tracking.Tracking;
 
 /** Sample of markAsCompleted method in TrackingEndpoint */
 public class MarkAsCompletedSample {
-  public static void main(String[] args) throws SdkException {
+  public static void main(String[] args) {
     AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
     markAsCompleted(afterShip);
   }

@@ -27,7 +27,7 @@ class AfterShipTest {
   @Test
   void testAfterShipConstructorNullApiKey() {
     Assertions.assertThrows(
-        SdkException.class,
+        IllegalArgumentException.class,
         () -> {
           new AfterShip("");
         });

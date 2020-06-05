@@ -11,7 +11,6 @@ import com.aftership.sdk.model.notification.NotificationWrapper;
 import com.aftership.sdk.model.tracking.SlugTrackingNumber;
 import com.aftership.sdk.request.ApiRequest;
 import com.aftership.sdk.request.HttpMethod;
-import com.aftership.sdk.utils.UrlUtils;
 
 /** NotificationEndpoint's implementation class */
 public class NotificationImpl extends AfterShipEndpoint implements NotificationEndpoint {
@@ -30,7 +29,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
       throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
-    String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.GET_NOTIFICATION, null);
+    String path = buildTrackingPath(id, null, null, EndpointPath.GET_NOTIFICATION, null);
 
     AftershipResponse<NotificationWrapper> response =
         this.request.makeRequest(HttpMethod.GET, path, null, null, NotificationWrapper.class);
@@ -44,7 +43,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
     checkSlugTrackingNumber(identifier);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             null,
             identifier.getSlug(),
             identifier.getTrackingNumber(),
@@ -63,7 +62,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
     checkTrackingId(id);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             id, null, null, EndpointPath.ADD_NOTIFICATION, EndpointPath.ADD_NOTIFICATION_ACTION);
 
     AftershipResponse<NotificationWrapper> response =
@@ -83,7 +82,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
     checkSlugTrackingNumber(identifier);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             null,
             identifier.getSlug(),
             identifier.getTrackingNumber(),
@@ -107,7 +106,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
     checkTrackingId(id);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             id,
             null,
             null,
@@ -131,7 +130,7 @@ public class NotificationImpl extends AfterShipEndpoint implements NotificationE
     checkSlugTrackingNumber(identifier);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             null,
             identifier.getSlug(),
             identifier.getTrackingNumber(),

@@ -8,7 +8,7 @@ import com.aftership.sdk.utils.JsonUtils;
 import com.aftership.sdk.utils.StrUtils;
 
 /** Parsing the response message body */
-public class BodyParser {
+class BodyParser {
 
   /**
    * Get the Meta object from the message body
@@ -16,7 +16,7 @@ public class BodyParser {
    * @param jsonBody the response message body
    * @return Object of Meta
    */
-  public static Meta processMeta(String jsonBody) {
+   static Meta processMeta(String jsonBody) {
     return processMeta(
         JsonParser.parseString(StrUtils.isNotBlank(jsonBody) ? jsonBody : "{}").getAsJsonObject());
   }
@@ -27,7 +27,7 @@ public class BodyParser {
    * @param jsonObject the response message body
    * @return Object of Meta
    */
-  public static Meta processMeta(JsonObject jsonObject) {
+   static Meta processMeta(JsonObject jsonObject) {
     JsonElement metaJson = jsonObject.get("meta");
     if (metaJson == null) {
       return null;
@@ -44,7 +44,7 @@ public class BodyParser {
    * @param <T> Class
    * @return T object
    */
-  public static <T> T processData(JsonObject jsonObject, Class<T> responseType) {
+   static <T> T processData(JsonObject jsonObject, Class<T> responseType) {
     JsonElement dataJson = jsonObject.get("data");
     if (dataJson == null) {
       return null;

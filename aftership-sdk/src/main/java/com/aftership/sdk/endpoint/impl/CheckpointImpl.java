@@ -11,7 +11,6 @@ import com.aftership.sdk.model.checkpoint.LastCheckpoint;
 import com.aftership.sdk.model.tracking.SlugTrackingNumber;
 import com.aftership.sdk.request.ApiRequest;
 import com.aftership.sdk.request.HttpMethod;
-import com.aftership.sdk.utils.UrlUtils;
 
 /** CheckpointEndpoint's implementation class */
 public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpoint {
@@ -30,8 +29,7 @@ public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpo
       throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
-    String path =
-        UrlUtils.buildTrackingPath(id, null, null, EndpointPath.GET_LAST_CHECKPOINT, null);
+    String path = buildTrackingPath(id, null, null, EndpointPath.GET_LAST_CHECKPOINT, null);
 
     AftershipResponse<LastCheckpoint> response =
         this.request.makeRequest(
@@ -47,7 +45,7 @@ public class CheckpointImpl extends AfterShipEndpoint implements CheckpointEndpo
     checkSlugTrackingNumber(identifier);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             null,
             identifier.getSlug(),
             identifier.getTrackingNumber(),

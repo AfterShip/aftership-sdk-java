@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 
 /** Create OkHttpClient */
-public class HttpClient {
+class HttpClient {
   private static final long TIMEOUT = 50 * 1000L;
 
   private static final OkHttpClient client;
