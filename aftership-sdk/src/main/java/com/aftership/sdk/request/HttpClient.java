@@ -1,6 +1,8 @@
 package com.aftership.sdk.request;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
 /** Create OkHttpClient */
@@ -17,6 +19,15 @@ class HttpClient {
             .readTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
             .writeTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
             .build();
+
+    // register a hook for shutdown OkHttpClient.
+    Runtime.getRuntime()
+        .addShutdownHook(
+            new Thread(
+                () -> {
+                  HttpClient.shutdown();
+                  System.out.println("OkHttpClient has been Shutdown");
+                }));
   }
 
   private HttpClient() {}
@@ -28,5 +39,21 @@ class HttpClient {
    */
   public static OkHttpClient getClient() {
     return client;
+  }
+
+  /** Close network connection. */
+  public static void shutdown() {
+    if (client != null) {
+      client.dispatcher().executorService().shutdown();
+      client.connectionPool().evictAll();
+      try {
+        Cache cache = client.cache();
+        if (cache != null) {
+          cache.close();
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
   }
 }
