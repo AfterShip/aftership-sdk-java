@@ -19,7 +19,6 @@ import com.aftership.sdk.model.tracking.UpdateTracking;
 import com.aftership.sdk.model.tracking.UpdateTrackingRequest;
 import com.aftership.sdk.request.ApiRequest;
 import com.aftership.sdk.request.HttpMethod;
-import com.aftership.sdk.utils.UrlUtils;
 
 /** TrackingEndpoint's implementation class */
 public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint {
@@ -51,11 +50,10 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
   }
 
   @Override
-  public Tracking deleteTracking(String id)
-      throws SdkException, RequestException, ApiException {
+  public Tracking deleteTracking(String id) throws SdkException, RequestException, ApiException {
     checkTrackingSlug(id);
 
-    String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.DELETE_TRACKING, null);
+    String path = buildTrackingPath(id, null, null, EndpointPath.DELETE_TRACKING, null);
 
     AftershipResponse<SingleTracking> response =
         this.request.makeRequest(HttpMethod.DELETE, path, null, null, SingleTracking.class);
@@ -69,7 +67,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     checkSlugTrackingNumber(identifier);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             null,
             identifier.getSlug(),
             identifier.getTrackingNumber(),
@@ -80,7 +78,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         this.request.makeRequest(
             HttpMethod.DELETE,
             path,
-            this.merge(identifier.getOptionalParams()),
+            takeMap(identifier.getOptionalParams()),
             null,
             SingleTracking.class);
 
@@ -92,11 +90,11 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
       throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
-    String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.GET_TRACKING, null);
+    String path = buildTrackingPath(id, null, null, EndpointPath.GET_TRACKING, null);
 
     AftershipResponse<SingleTracking> response =
         this.request.makeRequest(
-            HttpMethod.GET, path, merge(optionalParams), null, SingleTracking.class);
+            HttpMethod.GET, path, mergeMap(optionalParams), null, SingleTracking.class);
 
     return extractData(response).getTracking();
   }
@@ -107,7 +105,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     checkSlugTrackingNumber(identifier);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             null,
             identifier.getSlug(),
             identifier.getTrackingNumber(),
@@ -118,7 +116,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         this.request.makeRequest(
             HttpMethod.GET,
             path,
-            this.merge(optionalParams, identifier.getOptionalParams()),
+            this.mergeMap(optionalParams, identifier.getOptionalParams()),
             null,
             SingleTracking.class);
 
@@ -129,7 +127,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
   public PagedTrackings getTrackings(GetTrackingsParams params)
       throws SdkException, RequestException, ApiException {
 
-    String path = UrlUtils.buildTrackingPath(null, null, null, EndpointPath.GET_TRACKINGS, null);
+    String path = buildTrackingPath(null, null, null, EndpointPath.GET_TRACKINGS, null);
 
     AftershipResponse<PagedTrackings> response =
         this.request.makeRequest(HttpMethod.GET, path, params.toMap(), null, PagedTrackings.class);
@@ -142,7 +140,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
       throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
-    String path = UrlUtils.buildTrackingPath(id, null, null, EndpointPath.UPDATE_TRACKING, null);
+    String path = buildTrackingPath(id, null, null, EndpointPath.UPDATE_TRACKING, null);
 
     AftershipResponse<SingleTracking> response =
         this.request.makeRequest(
@@ -157,7 +155,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     checkSlugTrackingNumber(identifier);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             null,
             identifier.getSlug(),
             identifier.getTrackingNumber(),
@@ -168,7 +166,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         this.request.makeRequest(
             HttpMethod.PUT,
             path,
-            this.merge(identifier.getOptionalParams()),
+            this.mergeMap(identifier.getOptionalParams()),
             new UpdateTrackingRequest(update),
             SingleTracking.class);
 
@@ -176,12 +174,11 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
   }
 
   @Override
-  public Tracking reTrack(String id)
-      throws SdkException, RequestException, ApiException {
+  public Tracking reTrack(String id) throws SdkException, RequestException, ApiException {
     checkTrackingId(id);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             id, null, null, EndpointPath.UPDATE_RETRACK, EndpointPath.UPDATE_RETRACK_ACTION);
 
     AftershipResponse<SingleTracking> response =
@@ -196,7 +193,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     checkSlugTrackingNumber(identifier);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             null,
             identifier.getSlug(),
             identifier.getTrackingNumber(),
@@ -207,7 +204,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         this.request.makeRequest(
             HttpMethod.POST,
             path,
-            this.merge(identifier.getOptionalParams()),
+            this.mergeMap(identifier.getOptionalParams()),
             new Object(),
             SingleTracking.class);
 
@@ -220,7 +217,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     checkTrackingId(id);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             id, null, null, EndpointPath.MARK_AS_COMPLETED, EndpointPath.MARK_AS_COMPLETED_ACTION);
 
     AftershipResponse<SingleTracking> response =
@@ -235,7 +232,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
     checkSlugTrackingNumber(identifier);
 
     String path =
-        UrlUtils.buildTrackingPath(
+        buildTrackingPath(
             null,
             identifier.getSlug(),
             identifier.getTrackingNumber(),
@@ -246,7 +243,7 @@ public class TrackingImpl extends AfterShipEndpoint implements TrackingEndpoint 
         this.request.makeRequest(
             HttpMethod.POST,
             path,
-            this.merge(identifier.getOptionalParams()),
+            this.mergeMap(identifier.getOptionalParams()),
             status,
             SingleTracking.class);
 

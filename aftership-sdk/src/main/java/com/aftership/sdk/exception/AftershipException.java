@@ -135,26 +135,15 @@ public class AftershipException extends Exception {
 
   /** Print Message, Using System.out::print and Pretty message in Json format */
   public void printMessage() {
-    printMessage(true);
-  }
-
-  /**
-   * Print Message, Using System.out::print
-   *
-   * @param pretty is pretty message?
-   */
-  public void printMessage(boolean pretty) {
-    printMessage(pretty, System.out::print);
+    printMessage(System.out::print);
   }
 
   /**
    * Print Message
-   *
-   * @param pretty boolean
    * @param consumer Log output method
    */
-  public void printMessage(boolean pretty, Consumer<String> consumer) {
-    consumer.accept(prettyMessage(pretty));
+  public void printMessage(Consumer<String> consumer) {
+    consumer.accept(prettyMessage());
   }
 
   /**
@@ -162,23 +151,13 @@ public class AftershipException extends Exception {
    *
    * @return String
    */
-  public String prettyMessage() {
-    return prettyMessage(true);
-  }
-
-  /**
-   * Pretty message in Json format
-   *
-   * @param pretty is pretty message?
-   * @return String
-   */
-  public String prettyMessage(boolean pretty) {
+  private String prettyMessage() {
     Map<String, Object> map = new LinkedHashMap<>(4);
     map.put("type", getType());
     map.put("message", this.message);
     map.put("code", getCode());
     // TODO("need to optimize")
     map.put("data", getData().toString());
-    return JsonUtils.create(pretty).toJson(map);
+    return JsonUtils.GSON.toJson(map);
   }
 }

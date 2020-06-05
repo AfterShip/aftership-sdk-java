@@ -51,7 +51,7 @@ public class AddNotificationBySlugTest {
     SlugTrackingNumber identifier = new SlugTrackingNumber("fedex", "111111111111");
     String requestBody = TestUtil.getJson("endpoint/notification/AddNotificationRequest.json");
     NotificationWrapper wrapper =
-        JsonUtils.create().fromJson(requestBody, NotificationWrapper.class);
+        JsonUtils.GSON.fromJson(requestBody, NotificationWrapper.class);
     Notification notification =
         afterShip.getNotificationEndpoint().addNotification(identifier, wrapper.getNotification());
 

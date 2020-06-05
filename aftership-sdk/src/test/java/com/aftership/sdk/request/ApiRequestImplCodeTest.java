@@ -31,7 +31,7 @@ class ApiRequestImplCodeTest {
   }
 
   @Test
-  void makeRequest() throws SdkException, ApiException {
+  void makeRequest() throws SdkException {
     AfterShip afterShip = TestUtil.createAfterShip(server);
 
     Assertions.assertThrows(

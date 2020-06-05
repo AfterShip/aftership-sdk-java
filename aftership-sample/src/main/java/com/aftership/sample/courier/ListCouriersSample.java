@@ -4,13 +4,12 @@ import com.aftership.sample.SampleUtil;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.endpoint.impl.EndpointPath;
 import com.aftership.sdk.exception.AftershipException;
-import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.courier.CourierList;
 
 /** Sample of listCouriers method in CourierEndpoint */
 public class ListCouriersSample {
 
-  public static void main(String[] args) throws SdkException {
+  public static void main(String[] args) {
     AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), SampleUtil.getAftershipOption());
     listCouriers(afterShip);
   }
@@ -25,6 +24,5 @@ public class ListCouriersSample {
     } catch (AftershipException e) {
       System.out.println(e.getMessage());
     }
-
   }
 }

@@ -13,27 +13,14 @@ import java.util.Optional;
 /** Json's assistant method. */
 public final class JsonUtils {
 
-  /**
-   * Creating a Gson object
-   *
-   * @return Gson object
-   */
-  public static Gson create() {
-    return create(false);
-  }
+  private JsonUtils() {}
 
-  /**
-   * Creating a Gson object
-   *
-   * @param pretty Does it print in a nice format
-   * @return Gson object
-   */
-  public static Gson create(boolean pretty) {
+  /** instance of Gson */
+  public static final Gson GSON = createGson();
+
+  private static Gson createGson() {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(Date.class, new GsonDateDeSerializer());
-    if (pretty) {
-      builder.setPrettyPrinting();
-    }
     builder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
     return builder.create();
   }
@@ -66,6 +53,6 @@ public final class JsonUtils {
 
       return null;
     }
-
   }
+
 }

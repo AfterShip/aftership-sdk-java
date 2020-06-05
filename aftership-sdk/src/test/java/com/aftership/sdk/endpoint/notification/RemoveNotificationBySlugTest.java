@@ -47,7 +47,7 @@ public class RemoveNotificationBySlugTest {
 
     String requestBody = TestUtil.getJson("endpoint/notification/RemoveNotificationRequest.json");
     NotificationWrapper wrapper =
-        JsonUtils.create().fromJson(requestBody, NotificationWrapper.class);
+        JsonUtils.GSON.fromJson(requestBody, NotificationWrapper.class);
     Notification notification =
         afterShip
             .getNotificationEndpoint()

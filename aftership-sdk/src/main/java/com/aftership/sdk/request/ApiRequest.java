@@ -30,5 +30,5 @@ public interface ApiRequest {
       Map<String, String> queryParams,
       T requestData,
       Class<R> responseType)
-      throws SdkException, RequestException, ApiException;
+      throws RequestException, ApiException;
 }

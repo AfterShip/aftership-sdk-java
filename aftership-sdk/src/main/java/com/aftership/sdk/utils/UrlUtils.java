@@ -5,9 +5,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.Map;
-import com.aftership.sdk.error.ErrorMessage;
-import com.aftership.sdk.error.ErrorType;
-import com.aftership.sdk.exception.SdkException;
 
 /** Url's assistant method. */
 public final class UrlUtils {
@@ -55,29 +52,6 @@ public final class UrlUtils {
     } catch (UnsupportedEncodingException e) {
       return StrUtils.EMPTY;
     }
-  }
-
-  public static String buildTrackingPath(
-      String id, String slug, String trackingNumber, String rootPath, String action)
-      throws SdkException {
-    if (StrUtils.isBlank(rootPath)) {
-      throw new SdkException(ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_REQUIRED_PATH);
-    }
-
-    String trackingUrl = rootPath;
-
-    if (StrUtils.isNotBlank(id)) {
-      trackingUrl = MessageFormat.format("{0}/{1}", rootPath, encode(id));
-    } else if (StrUtils.isNotBlank(slug) && StrUtils.isNotBlank(trackingNumber)) {
-      trackingUrl =
-          MessageFormat.format("{0}/{1}/{2}", rootPath, encode(slug), encode(trackingNumber));
-    }
-
-    if (StrUtils.isNotBlank(action)) {
-      trackingUrl = MessageFormat.format("{0}/{1}", trackingUrl, encode(action));
-    }
-
-    return trackingUrl;
   }
 
   public static String fillPathWithQuery(String path, Map<String, String> query) {

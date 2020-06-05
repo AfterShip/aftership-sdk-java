@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.TestUtil;
-import com.aftership.sdk.error.ErrorMessage;
 import com.aftership.sdk.exception.ApiException;
+import com.aftership.sdk.exception.ErrorMessage;
 import com.aftership.sdk.exception.RequestException;
 import com.aftership.sdk.exception.SdkException;
 import okhttp3.mockwebserver.MockWebServer;
@@ -35,8 +35,8 @@ class ApiRequestImplJsonBody2Test {
     try {
       afterShip.getCourierEndpoint().listCouriers();
     } catch (RequestException e) {
-      Assertions.assertTrue(e.getMessage().startsWith(ErrorMessage.HANDLER_RESPONSE_BODY_IS_NOT_JSON_OBJECT));
+      Assertions.assertTrue(
+          e.getMessage().startsWith(ErrorMessage.HANDLER_RESPONSE_BODY_IS_NOT_JSON_OBJECT));
     }
   }
-
 }

@@ -1,10 +1,8 @@
 package com.aftership.sdk.exception;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
-import com.aftership.sdk.error.ErrorType;
 
 class AftershipExceptionTest {
 
@@ -51,13 +49,6 @@ class AftershipExceptionTest {
     Assertions.assertFalse(
         (new AftershipException("-1", "-1", -1, new HashMap<>()))
             .isApiError());
-  }
-
-  @Test
-  void prettyMessage() {
-    AftershipException aftershipException =
-        new AftershipException("Unauthorized", "Invalid API Key.", 401, new HashMap<>());
-    Assertions.assertNotNull(aftershipException.prettyMessage());
   }
 
   @Test

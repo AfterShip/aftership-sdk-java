@@ -1,4 +1,4 @@
-package com.aftership.sdk.error;
+package com.aftership.sdk.exception;
 
 /** Definition of ErrorMessage */
 public class ErrorMessage {

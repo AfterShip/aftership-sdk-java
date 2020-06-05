@@ -2,6 +2,7 @@ package com.aftership.sdk.error;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import com.aftership.sdk.exception.ErrorType;
 
 class ErrorTypeTest {
   @Test

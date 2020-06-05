@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import com.aftership.sdk.endpoint.impl.EndpointPath;
-import com.aftership.sdk.exception.AftershipException;
-import com.aftership.sdk.exception.SdkException;
 import lombok.SneakyThrows;
 
 class UrlUtilsTest {
@@ -41,25 +39,6 @@ class UrlUtilsTest {
     Assertions.assertEquals("%", UrlUtils.decode("%25", null));
     Assertions.assertEquals(StrUtils.EMPTY, UrlUtils.decode("", UrlUtils.UTF8));
     Assertions.assertEquals(StrUtils.EMPTY, UrlUtils.decode("%25", "UTF64"));
-  }
-
-  @Test
-  void buildTrackingPath() throws SdkException {
-    Assertions.assertThrows(
-        AftershipException.class,
-        () -> {
-          UrlUtils.buildTrackingPath("id", "slug", "trackingNumber", null, null);
-        });
-
-    Assertions.assertEquals(
-        "/couriers/slug/trackingNumber",
-        UrlUtils.buildTrackingPath(
-            "", "slug", "trackingNumber", EndpointPath.COURIERS, ""));
-
-    Assertions.assertEquals(
-        "/couriers",
-        UrlUtils.buildTrackingPath(
-            "", "", "trackingNumber", EndpointPath.COURIERS, ""));
   }
 
   @Test
