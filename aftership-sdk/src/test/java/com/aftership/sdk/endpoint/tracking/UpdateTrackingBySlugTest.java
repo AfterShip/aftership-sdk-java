@@ -45,7 +45,7 @@ public class UpdateTrackingBySlugTest {
     SlugTrackingNumber identifier = new SlugTrackingNumber("fedex", "111111111111");
     String requestBody = TestUtil.getJson("endpoint/tracking/UpdateTrackingRequest.json");
     UpdateTrackingRequest updateTrackingRequest =
-        JsonUtils.GSON.fromJson(requestBody, UpdateTrackingRequest.class);
+        JsonUtils.getGson().fromJson(requestBody, UpdateTrackingRequest.class);
     Tracking tracking =
         afterShip.getTrackingEndpoint().updateTracking(identifier, updateTrackingRequest.getTracking());
 

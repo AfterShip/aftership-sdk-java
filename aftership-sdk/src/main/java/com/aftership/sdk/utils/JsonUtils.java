@@ -12,11 +12,18 @@ import java.util.Optional;
 
 /** Json's assistant method. */
 public final class JsonUtils {
-
   private JsonUtils() {}
 
   /** instance of Gson */
-  public static final Gson GSON = createGson();
+  private static final Gson INSTANCE;
+
+  static {
+    INSTANCE = createGson();
+  }
+
+  public static final Gson getGson(){
+    return INSTANCE;
+  }
 
   private static Gson createGson() {
     GsonBuilder builder = new GsonBuilder();

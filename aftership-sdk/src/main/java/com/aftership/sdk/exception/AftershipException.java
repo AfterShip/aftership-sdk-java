@@ -158,6 +158,6 @@ public class AftershipException extends Exception {
     map.put("code", getCode());
     // TODO("need to optimize")
     map.put("data", getData().toString());
-    return JsonUtils.GSON.toJson(map);
+    return JsonUtils.getGson().toJson(map);
   }
 }

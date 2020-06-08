@@ -42,7 +42,7 @@ public class DetectCouriersTest {
     System.out.println(">>>>> detectCouriers(CourierDetectTracking detectTracking)");
     String requestBody = TestUtil.getJson("endpoint/courier/CourierDetectRequest.json");
     CourierDetectRequest courierDetectRequest =
-        JsonUtils.GSON.fromJson(requestBody, CourierDetectRequest.class);
+        JsonUtils.getGson().fromJson(requestBody, CourierDetectRequest.class);
 
     CourierDetectList courierDetectList =
         afterShip.getCourierEndpoint().detectCouriers(courierDetectRequest.getTracking());

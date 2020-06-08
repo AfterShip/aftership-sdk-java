@@ -33,7 +33,7 @@ class BodyParser {
       return null;
     }
 
-    return JsonUtils.GSON.fromJson(metaJson, Meta.class);
+    return JsonUtils.getGson().fromJson(metaJson, Meta.class);
   }
 
   /**
@@ -49,6 +49,6 @@ class BodyParser {
     if (dataJson == null) {
       return null;
     }
-    return JsonUtils.GSON.fromJson(dataJson, responseType);
+    return JsonUtils.getGson().fromJson(dataJson, responseType);
   }
 }
