@@ -99,7 +99,7 @@ public class ApiRequestImpl implements ApiRequest {
             .build();
 
     // call api
-    Call call = HttpClient.getClient().newCall(request);
+    Call call = app.getClient().newCall(request);
     try (Response response = call.execute()) {
       // System.out.println("isSuccessful: "+ response.isSuccessful());
       setRateLimiting(this.app, response);

@@ -86,10 +86,11 @@ public abstract class AfterShipEndpoint {
 
   /**
    * take map from StringMap interface
+   *
    * @param item StringMap
-   * @return Map<String, String>
+   * @return Map
    */
-  protected Map<String, String> takeMap(StringMap item){
+  protected Map<String, String> takeMap(StringMap item) {
     if (item == null) {
       return new HashMap<>(0);
     }

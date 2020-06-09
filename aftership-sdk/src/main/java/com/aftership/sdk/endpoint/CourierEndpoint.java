@@ -15,7 +15,6 @@ public interface CourierEndpoint {
    * @return CourierList
    * @throws RequestException RequestException
    * @throws ApiException ApiException
-   * @throws SdkException SdkException
    */
   CourierList listCouriers() throws RequestException, ApiException;
 
@@ -25,7 +24,6 @@ public interface CourierEndpoint {
    * @return CourierList
    * @throws RequestException RequestException
    * @throws ApiException ApiException
-   * @throws SdkException SdkException
    */
   CourierList listAllCouriers() throws RequestException, ApiException;
 

@@ -233,6 +233,38 @@ try {
 // 9
 ```
 
+### Timeout
+
+When creating an Aftership object, you can define the timeout time for http requests, Of course, use the default value of 20 seconds when not set. The unit is milliseconds.
+
+```java 
+AftershipOption option = new AftershipOption();
+option.setEndpoint("https://api.aftership.com/v4");
+option.setCallTimeout(10 * 1000);
+option.setConnectTimeout(10 * 1000);
+option.setReadTimeout(10 * 1000);
+option.setWriteTimeout(10 * 1000);
+AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), option);
+```
+
+### Shutdown
+
+We recommend using only one AfterShip object to request interfaces of the API, and calling the `shutdown` method if you want to completely clean up all network resources when you shut down your system. In other cases, not running shutdown method has no effect.
+
+```java
+try {
+  afterShip.getCourierEndpoint().listCouriers();
+} catch (RequestException | ApiException e) {
+  e.printStackTrace();
+} finally {
+  try {
+    afterShip.shutdown();
+  } catch (IOException e) {
+    e.printStackTrace();
+  }
+}
+```
+
 ## Examples
 
 ### /couriers

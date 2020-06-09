@@ -1,5 +1,7 @@
 package com.aftership.sdk;
 
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import com.aftership.sdk.endpoint.CheckpointEndpoint;
 import com.aftership.sdk.endpoint.CourierEndpoint;
 import com.aftership.sdk.endpoint.NotificationEndpoint;
@@ -16,12 +18,16 @@ import com.aftership.sdk.request.ApiRequestImpl;
 import com.aftership.sdk.utils.StrUtils;
 import lombok.Getter;
 import lombok.Setter;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 
 /** Entry class Of API function */
 @Getter
 public class AfterShip {
   private static final String DEFAULT_ENDPOINT = "https://api.aftership.com/v4";
   private static final String DEFAULT_USER_AGENT = "aftership-sdk-java";
+  /** instance of OkHttpClient */
+  private final OkHttpClient client;
 
   /** apiKey parameter in API request */
   private final String apiKey;
@@ -64,6 +70,9 @@ public class AfterShip {
 
     this.apiKey = apiKey;
 
+    // http_client
+    this.client = createClient(options);
+
     // Setup
     if (options != null) {
       this.endpoint =
@@ -86,5 +95,72 @@ public class AfterShip {
     this.trackingEndpoint = new TrackingImpl(request);
     this.checkpointEndpoint = new CheckpointImpl(request);
     this.notificationEndpoint = new NotificationImpl(request);
+  }
+
+  /**
+   * create a instance of OkHttpClient
+   *
+   * @param options AftershipOption
+   * @return OkHttpClient
+   */
+  private OkHttpClient createClient(AftershipOption options) {
+    return new OkHttpClient.Builder()
+        .callTimeout(getCallTimeout(options), TimeUnit.MILLISECONDS)
+        .connectTimeout(getConnectTimeout(options), TimeUnit.MILLISECONDS)
+        .readTimeout(getReadTimeout(options), TimeUnit.MILLISECONDS)
+        .writeTimeout(getWriteTimeout(options), TimeUnit.MILLISECONDS)
+        .build();
+  }
+
+  private long getCallTimeout(AftershipOption options) {
+    if (options == null) {
+      return AftershipOption.DEFAULT_TIMEOUT;
+    }
+    return options.getCallTimeout() >= 0
+        ? options.getCallTimeout()
+        : AftershipOption.DEFAULT_TIMEOUT;
+  }
+
+  private long getConnectTimeout(AftershipOption options) {
+    if (options == null) {
+      return AftershipOption.DEFAULT_TIMEOUT;
+    }
+    return options.getConnectTimeout() >= 0
+        ? options.getConnectTimeout()
+        : AftershipOption.DEFAULT_TIMEOUT;
+  }
+
+  private long getReadTimeout(AftershipOption options) {
+    if (options == null) {
+      return AftershipOption.DEFAULT_TIMEOUT;
+    }
+    return options.getReadTimeout() >= 0
+        ? options.getReadTimeout()
+        : AftershipOption.DEFAULT_TIMEOUT;
+  }
+
+  private long getWriteTimeout(AftershipOption options) {
+    if (options == null) {
+      return AftershipOption.DEFAULT_TIMEOUT;
+    }
+    return options.getWriteTimeout() >= 0
+        ? options.getWriteTimeout()
+        : AftershipOption.DEFAULT_TIMEOUT;
+  }
+
+  /**
+   * Shutdown the OkHttpClient.
+   *
+   * @throws IOException when close the client cache.
+   */
+  public void shutdown() throws IOException {
+    if (this.client != null) {
+      this.client.dispatcher().executorService().shutdown();
+      this.client.connectionPool().evictAll();
+      Cache cache = this.client.cache();
+      if (cache != null) {
+        cache.close();
+      }
+    }
   }
 }
