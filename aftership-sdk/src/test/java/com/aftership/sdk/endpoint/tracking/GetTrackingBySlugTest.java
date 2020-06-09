@@ -47,7 +47,7 @@ public class GetTrackingBySlugTest {
     Tracking tracking =
         afterShip
             .getTrackingEndpoint()
-            .getTracking(identifier, JsonUtils.GSON.fromJson(query, GetTrackingParams.class));
+            .getTracking(identifier, JsonUtils.getGson().fromJson(query, GetTrackingParams.class));
 
     Assertions.assertNotNull(tracking);
     Assertions.assertEquals("fedex", tracking.getSlug(), "Slug mismatch.");

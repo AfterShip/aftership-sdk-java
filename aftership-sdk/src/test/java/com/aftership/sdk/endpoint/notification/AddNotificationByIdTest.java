@@ -50,7 +50,7 @@ public class AddNotificationByIdTest {
     String id = "100";
     String requestBody = TestUtil.getJson("endpoint/notification/AddNotificationRequest.json");
     NotificationWrapper wrapper =
-        JsonUtils.GSON.fromJson(requestBody, NotificationWrapper.class);
+        JsonUtils.getGson().fromJson(requestBody, NotificationWrapper.class);
     Notification notification =
         afterShip.getNotificationEndpoint().addNotification(id, wrapper.getNotification());
 

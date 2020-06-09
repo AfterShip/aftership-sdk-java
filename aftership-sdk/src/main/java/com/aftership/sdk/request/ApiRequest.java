@@ -3,7 +3,6 @@ package com.aftership.sdk.request;
 import java.util.Map;
 import com.aftership.sdk.exception.ApiException;
 import com.aftership.sdk.exception.RequestException;
-import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.AftershipResponse;
 
 /** Request for Aftership's API interface */
@@ -20,7 +19,6 @@ public interface ApiRequest {
    * @param <T> Class of request Data
    * @param <R> Class of response type
    * @return AftershipResponse
-   * @throws SdkException SdkException
    * @throws RequestException RequestException
    * @throws ApiException ApiException
    */

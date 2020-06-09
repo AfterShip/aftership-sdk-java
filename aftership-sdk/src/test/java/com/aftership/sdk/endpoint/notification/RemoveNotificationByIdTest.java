@@ -45,7 +45,7 @@ public class RemoveNotificationByIdTest {
 
     String requestBody = TestUtil.getJson("endpoint/notification/RemoveNotificationRequest.json");
     NotificationWrapper wrapper =
-        JsonUtils.GSON.fromJson(requestBody, NotificationWrapper.class);
+        JsonUtils.getGson().fromJson(requestBody, NotificationWrapper.class);
     Notification notification =
         afterShip.getNotificationEndpoint().removeNotification(id, wrapper.getNotification());
 

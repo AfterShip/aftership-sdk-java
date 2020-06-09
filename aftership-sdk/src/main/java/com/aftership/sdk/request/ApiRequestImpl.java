@@ -89,7 +89,7 @@ public class ApiRequestImpl implements ApiRequest {
     // build request
     RequestBody requestBody = null;
     if (requestData != null) {
-      requestBody = RequestBody.create(JsonUtils.GSON.toJson(requestData), JSON);
+      requestBody = RequestBody.create(JsonUtils.getGson().toJson(requestData), JSON);
     }
     Request request =
         new Request.Builder()
@@ -99,7 +99,7 @@ public class ApiRequestImpl implements ApiRequest {
             .build();
 
     // call api
-    Call call = HttpClient.getClient().newCall(request);
+    Call call = app.getClient().newCall(request);
     try (Response response = call.execute()) {
       // System.out.println("isSuccessful: "+ response.isSuccessful());
       setRateLimiting(this.app, response);

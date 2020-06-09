@@ -44,7 +44,7 @@ public class UpdateTrackingByIdTest {
     String id = "100";
     String requestBody = TestUtil.getJson("endpoint/tracking/UpdateTrackingRequest.json");
     UpdateTrackingRequest updateTrackingRequest =
-        JsonUtils.GSON.fromJson(requestBody, UpdateTrackingRequest.class);
+        JsonUtils.getGson().fromJson(requestBody, UpdateTrackingRequest.class);
     Tracking tracking =
         afterShip.getTrackingEndpoint().updateTracking(id, updateTrackingRequest.getTracking());
 
