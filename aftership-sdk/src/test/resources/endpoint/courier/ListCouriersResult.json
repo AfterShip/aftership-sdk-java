@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "data": {
+    "total": 2,
+    "couriers": [
+      {
+        "slug": "dhl",
+        "name": "DHL",
+        "phone": "+1 800 225 5345",
+        "other_name": "DHL Express",
+        "web_url": "http://www.dhl.com/",
+        "required_fields": [],
+        "optional_fields": []
+      },
+      {
+        "slug": "deutsch-post",
+        "name": "Deutsche Post Mail",
+        "phone": "+49 (0) 180 2 000221",
+        "other_name": "dpdhl",
+        "web_url": "http://www.deutschepost.de/",
+        "required_fields": [
+          "tracking_ship_date"
+        ],
+        "optional_fields": []
+      }
+    ]
+  }
+}

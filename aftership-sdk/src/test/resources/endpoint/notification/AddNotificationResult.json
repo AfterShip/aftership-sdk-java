@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "code": 200
+  },
+  "data": {
+    "notification": {
+      "emails": ["user1@gmail.com","user2@gmail.com"],
+      "smses": ["+85291239123", "+85261236123"]
+    }
+  }
+}

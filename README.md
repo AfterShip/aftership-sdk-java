@@ -1,221 +1,536 @@
-aftership-java
-==============
+# aftership-sdk-java
 
-The Java SDK of AfterShip API
+[![Maven Central](https://img.shields.io/maven-central/v/com.slack.api/slack-api-client.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:com.aftership%20a:aftership-sdk)
+[![AfterShip SDKs channel](https://aftership-sdk-slackin.herokuapp.com/badge.svg)](https://aftership-sdk-slackin.herokuapp.com/)
+[![Build Status](https://api.travis-ci.org/chenjunbiao/aftership-sdk-java.svg?branch=v2)](https://travis-ci.org/github/chenjunbiao/aftership-sdk-java)
+[![codecov.io](https://codecov.io/github/chenjunbiao/aftership-sdk-java/coverage.svg?branch=v2)](https://codecov.io/github/chenjunbiao/aftership-sdk-java/branch/v2)
+
+The Java SDK of `AfterShip API`, please see API documentation in: https://www.aftership.com/docs/api/4
 
 Requirements:
 
-- JDK 1.5 or superior.
-- org.json .jar, you can download it from: http://www.json.org/
-- Junit (only if you want to run the tests).
+- JDK 1.8 or superior.
 
-Quick Start
---------------
+## Installation
 
+### Maven
 
-**Get a list of supported couriers**
-
-	//Create a connectionAPI with your API Key (you will link it to your account)
-  	ConnectionAPI connection = new ConnectionAPI(“?????-6477-?????-93ec-86c4f872fb6b");
-
-   	List<Courier> couriers = connection.getAllCouriers();
-
-	//Now we can get information of each element
-	couriers.get(0).getSlug();
-	couriers.get(0).getName();
-	couriers.get(0).getWeb_url();
-	//etc
-
-	//If we want to iterate in the list, we can do
-	for(int i=0;i<couriers.size();i++)
-		couriers.get(i).getSlug();//Get slug of each element
-		
-**Get a list of the couriers in your account**
-
-	//Create a connectionAPI with your API Key (you will link it to your account)
-  	ConnectionAPI connection = new ConnectionAPI(“?????-6477-?????-93ec-86c4f872fb6b");
-
-   	List<Courier> couriers = connection.getCouriers();
-
-	//Now we can get information of each element
-	couriers.get(0).getSlug();
-	couriers.get(0).getName();
-	couriers.get(0).getWeb_url();
-	//etc
-
-	//If we want to iterate in the list, we can do
-	for(int i=0;i<couriers.size();i++)
-		couriers.get(i).getSlug();//Get slug of each element
-		
-
-
-**Detect which couriers defined in your account match a tracking number**
-
-	List<Courier> couriers = connection.detectCouriers(“09445246482536”);
-	//Now in couriers we have the Couriers that match
-
-
-**Post a tracking to your account**
-
-	//First we have to create a Tracking
-	Tracking tracking1 = new Tracking("05167019264110");
-
-	//Then we can add information;
-    tracking1.setSlug("dpd");
-    tracking1.setTitle("this title");
-    tracking1.addEmails("email@yourdomain.com");
-    tracking1.addEmails("another_email@yourdomain.com");
-    tracking1.addSmses("+85292345678");
-    tracking1.addSmses("+85292345679");
-
-	//Even add customer fields
-    tracking1.addCustomFields(“product_name”,"iPhone Case");
-    tracking1.addCustomFields(“product_price”,"USD19.99");
-
-	//Finally we add the tracking to our account
-    Tracking trackingPosted = connection.postTracking(tracking1);
-
-	//In the response we will have exactly the information of the server
-	trackingPosted.getTrackingNumber();
-	trackingPosted.getSlug();
-	//Etc.
-
-
-**Delete a tracking of your account**
-
-	//Return true if everything is correct, false or exception otherwise
-	
-	Tracking trackingDelete = new Tracking("123456789");//tracking number
-	trackingDelete.setSlug("dhl");
-	connection.deleteTracking(trackingDelete);
-
-
-**Get trackings of your account, there is two ways**
-
-	//1- Simplest way, with the page you want to get
-
-	List<Tracking> listTrackings100 = connection.getTrackings(1);//get first 100
-	List<Tracking> listTrackings200 = connection.getTrackings(2);//get 100-200
-	//If you delete tracings right before, you may get less number.
-
-	//2- Using Parameters tracking
-
-	//Create a new Parameter
-	ParametersTracking param = new ParametersTracking();
-
-	//Add the information we want in the parameter
-	param.addSlug("dhl");//Add slug to our parameters
-	Date date = new Date();//Create a date with value of now
-	Calendar c = Calendar.getInstance();
-	c.setTime(date);
-    c.add(Calendar.MONTH,-1); //Substract a Month to the date
-    date = c.getTime();
-    param.setCreatedAtMin(date);//SetCreadtedMin to the date of one month ago
-
-	//Return the first page of trackings in your account from dhl and created less than a month ago.
-	List <Tracking> totalDHL =connection.getTrackings(param);
-
-
-	//if the get has several pages, you can either modify the page you want in your get with param.setPage(page), or
-	call getTrackingsNext(param1) instead, it automatically increase the page , example:
-
-	//Get trackings with destination Spain, total 23
-	ParametersTracking param1 = new ParametersTracking();
-    param1.addDestination(ISO3Country.ESP);
-    param1.setLimit(20);//set limit of the page to 20
-    List<Tracking> totalSpain =connection.getTrackings(param1);//we will receive the 20 first
-    List<Tracking> totalSpain2 =connection.getTrackingsNext(param1); //we will receive the next 3
-    int total = param1.getTotal(); // we will receive the total 23;
-
-	//Get trackings that are OutForDelivery
-    ParametersTracking param2 = new ParametersTracking();
-    param2.addTag(StatusTag.OutForDelivery);
-    int totalOutDelivery=connection.getTrackings(param2);
-
-**Export trackings of your account**
-```java
- // setup request
- ParametersTrackingExport params = new ParametersTrackingExport();
- params.setCursor("cursor-id"); // OPTIONAL. Pass in the previous response's cursor data to retrieve the next tracking batch
- ExportTrackingResponse trackings =  api.exportTrackings(params);
+```text
+<dependency>
+  <groupId>com.aftership</groupId>
+  <artifactId>aftership-sdk</artifactId>
+  <version>2.0.7</version>
+</dependency>
 ```
 
-Parameters
+### Gradle
 
-cursor - [OPTIONAL] - will return the next batch of trackings starting from this offset
-
-See the [API documentation](https://www.aftership.com/docs/api/4/trackings/get-trackings-export) for a complete list of parameters
-
-Response Content(```ExportTrackingResponse```)
-
-```cursor``` - Pass the cursor returned in the previous response for retrieve next page. When the browsing reaches the end of the index, the returned cursor will be an empty string.
-
-```trackings``` - list of trackings
+```text
+implementation "com.aftership:aftership-sdk:2.0.0"
+```
 
 
-**Get a tracking from your account**
+## Quick Examples
 
-	Tracking trackingToGet = new Tracking("RC328021065CN");
-	trackingToGet.setSlug("canada-post");
+### Main Steps
 
-	Tracking tracking = connection.getTrackingByNumber(trackingToGet);
+The following code example shows the `three main steps` to use aftership-sdk-java:
+
+1. Create `AfterShip` Object.
+
+```java
+AfterShip afterShip = new AfterShip("YOUR_API_KEY", 
+	new AftershipOption("https://api.aftership.com/v4"));
+```
+
+2. Get the Endpoint Interface and call the method, then return the object.
+
+```java 
+CourierList courierList = afterShip.getCourierEndpoint().listCouriers();
+```
+
+3. Handling `Data` or `AftershipException`  or `RateLimit`
+
+```java
+try {
+  AfterShip afterShip =
+    new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+  CourierList courierList = afterShip.getCourierEndpoint().listCouriers();
+  // using data
+  System.out.println(courierList);
+} catch (SdkException | RequestException e) {
+  // handle SdkException, RequestException
+  System.out.println(e.getType());
+  System.out.println(e.getMessage());
+  System.out.println(e.getData());
+} catch (ApiException e) {
+  // handle ApiException
+  if (e.isTooManyRequests()) {
+    // Analyze RateLimit when TooManyRequests occur
+    System.out.println(e.getRateLimit().getReset());
+    System.out.println(e.getRateLimit().getLimit());
+    System.out.println(e.getRateLimit().getRemaining());
+    return;
+  }
+  System.out.println(e.getType());
+  System.out.println(e.getCode());
+  System.out.println(e.getMessage());
+}
+```
+
+## Error Handling
+
+There are 4 kinds of exception
+
+- AftershipException
+- SdkException
+- RequestException
+- ApiException
+
+Error object of this SDK contain fields:
+
+- `type` - **Require** - type of the error, **please handle each error by this field**
+
+- `message` - **Optional** - detail message of the error
+
+- `code` - **Optional** - error code for API Error
+
+  You can find tips for Aftership's error codes in here: https://docs.aftership.com/api/4/errors
+
+  If it's Aftership's API Error, get code to confirm the cause of the error:
+
+  ```java
+  catch (AftershipException e){
+    if(e.isApiError()){
+      System.out.println(e.getCode());
+    }
+  }
+  ```
+
+- `data` - **Optional** - data lead to the error
+
+  The debug Data is a `Map<String, Object>` object that can get the call parameters. 
+
+  The following data may be available:
+
+  ```java 
+  catch (AftershipException e){
+    System.out.println(e.getData());
+    // or
+    System.out.println(e.getData().get(DEBUG_DATA_KEY_REQUEST_CONFIG));
+    System.out.println(e.getData().get(DEBUG_DATA_KEY_REQUEST_HEADERS));
+    System.out.println(e.getData().get(DEBUG_DATA_KEY_REQUEST_DATA));
+    System.out.println(e.getData().get(DEBUG_DATA_KEY_RESPONSE_BODY));
+  }
+  ```
+### AftershipException
+
+AftershipException is the base class for all exception classes and can capture it for uniform handling.
+
+See the `Rate Limiter` section for TooManyRequests in ApiException.
+
+```java
+catch (AftershipException e){
+  if(e.isApiError()){
+    System.out.println(e.getCode());
+    if(e.isTooManyRequests() && e instanceof ApiException){
+      System.out.println(((ApiException)e).getRateLimit());
+    }
+  }
+  System.out.println(e.getType());
+  System.out.println(e.getMessage());
+  System.out.println(e.getData());
+}
+```
+
+### SdkException
+
+Exception return by the SDK instance, mostly invalid param type when calling constructor or endpoint method
+error.Type is one of [ErrorType](https://github.com/AfterShip/aftership-sdk-java/blob/v2/aftership-sdk/src/main/java/com/aftership/sdk/error/ErrorType.java)
+**Throw** by the SDK instance
+
+```java
+try {
+  AfterShip afterShip =
+      new AfterShip(null, new AftershipOption("https://api.aftership.com/v4"));
+} catch (SdkException e) {
+  System.out.println(e.getMessage());
+}
+
+/* ConstructorError: Invalid API key; type: ConstructorError */
+```
+
+**Throw** by endpoint method
+
+```java
+try {
+  AfterShip afterShip =
+      new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+  afterShip.getTrackingEndpoint().getTracking("", null);
+} catch (SdkException e) {
+  System.out.println(e.getMessage());
+}
+
+/* ConstructorError: Required tracking id; type: ConstructorError */
+```
+
+### RequestException
+
+Error return by the `request` module 
+`error.Type` could be `HandlerError`, etc.  
+
+```java
+try {
+  AfterShip afterShip =
+      new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+  afterShip.getTrackingEndpoint().getTracking("abc", null);
+} catch (RequestException e) {
+  System.out.println(e.getMessage());
+}
+
+/* null; type: HandlerError; */
+```
+
+### ApiException
+
+Error return by the AfterShip API  
+`error.Type` should be the same as https://www.aftership.com/docs/api/4/errors
+
+```java
+try {
+  AfterShip afterShip =
+      new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+  afterShip.getTrackingEndpoint().getTracking("abc", null);
+} catch (ApiException e) {
+  System.out.println(e.getMessage());
+}
+
+/* The value of `id` is invalid.; type: BadRequest; code: 4015; */
+```
+
+### Rate Limiter
+
+To understand AfterShip rate limit policy, please see `limit` session in https://www.aftership.com/docs/api/4
+
+You can get the recent rate limit by `ApiException.getRateLimit()`. 
+
+```java
+try {
+  AfterShip afterShip =
+    new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+  afterShip.getCourierEndpoint().listCouriers();
+} catch (SdkException | RequestException e) {
+  System.out.println(e.getType());
+} catch (ApiException e) {
+  if (e.isTooManyRequests()) {
+    System.out.println(e.getRateLimit().getReset());
+    System.out.println(e.getRateLimit().getLimit());
+    System.out.println(e.getRateLimit().getRemaining());
+  }
+}
+// 1589869159
+// 10
+// 9
+```
+
+### Timeout
+
+When creating an Aftership object, you can define the timeout time for http requests, Of course, use the default value of 20 seconds when not set. The unit is milliseconds.
+
+```java 
+AftershipOption option = new AftershipOption();
+option.setEndpoint("https://api.aftership.com/v4");
+option.setCallTimeout(10 * 1000);
+option.setConnectTimeout(10 * 1000);
+option.setReadTimeout(10 * 1000);
+option.setWriteTimeout(10 * 1000);
+AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), option);
+```
+
+### Shutdown
+
+We recommend using only one AfterShip object to request interfaces of the API, and calling the `shutdown` method if you want to completely clean up all network resources when you shut down your system. In other cases, not running shutdown method has no effect.
+
+```java
+try {
+  afterShip.getCourierEndpoint().listCouriers();
+} catch (RequestException | ApiException e) {
+  e.printStackTrace();
+} finally {
+  try {
+    afterShip.shutdown();
+  } catch (IOException e) {
+    e.printStackTrace();
+  }
+}
+```
+
+## Examples
+
+### /couriers
+
+- #### listCouriers [GET /couriers]
+
+```java 
+try {
+  CourierList courierList = afterShip.getCourierEndpoint().listCouriers();
+  System.out.println(courierList.getTotal());
+  System.out.println(courierList.getCouriers().get(0).getName());
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
+
+- #### listAllCouriers [GET /couriers/all]
+
+```java 
+try {
+  CourierList courierList = afterShip.getCourierEndpoint().listAllCouriers();
+  System.out.println(courierList.getTotal());
+  System.out.println(courierList.getCouriers());
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
+
+- #### detectCouriers [POST /couriers/detect]
+
+```java
+CourierDetectTracking tracking = new CourierDetectTracking();
+tracking.setTrackingNumber("906587618687");
+CourierDetectRequest courierDetectRequest = new CourierDetectRequest(tracking);
+
+try {
+  CourierDetectList courierDetectList =
+    afterShip.getCourierEndpoint().detectCouriers(courierDetectRequest.getTracking());
+
+  System.out.println(courierDetectList.getTotal());
+  System.out.println(courierDetectList.getCouriers());
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
+
+### /trackings
+
+- #### createTracking [POST /trackings]
+
+```java
+NewTracking newTracking = new NewTracking();
+// slug from listAllCouriers()
+newTracking.setSlug(new String[] {"acommerce"});
+newTracking.setTrackingNumber("1234567890");
+newTracking.setTitle("Title Name");
+newTracking.setSmses(new String[] {"+18555072509", "+18555072501"});
+newTracking.setEmails(new String[] {"email@yourdomain.com", "another_email@yourdomain.com"});
+newTracking.setOrderId("ID 1234");
+newTracking.setOrderIdPath("http://www.aftership.com/order_id=1234");
+newTracking.setCustomFields(
+  new HashMap<String, String>(2) {
+    {
+      put("product_name", "iPhone Case");
+      put("product_price", "USD19.99");
+    }
+  });
+newTracking.setLanguage("en");
+newTracking.setOrderPromisedDeliveryDate("2019-05-20");
+newTracking.setDeliveryType("pickup_at_store");
+newTracking.setPickupLocation("Flagship Store");
+newTracking.setPickupNote(
+  "Reach out to our staffs when you arrive our stores for shipment pickup");
+
+try {
+  Tracking tracking = afterShip.getTrackingEndpoint().createTracking(newTracking);
+  System.out.println(tracking);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
 
 
-**Modify a tracking from your account**
 
-	//Create a tracking
-	Tracking tracking = new Tracking("RC328021065CN");
-    tracking.setSlug("canada-post");
-    //Add the fields we want to modify
-    tracking.setTitle("another title");
+- #### deleteTracking [DELETE /trackings/:slug/:tracking_number]
 
-	//Returns a tracking with exactly the information of the server
-	Tracking tracking2 = connection.putTracking(tracking);
-	tracking2.getTitle();//Value “another title”
+```java 
+String id = "u2qm5uu9xqpwykaqm8d5l010";
+try {
+  Tracking tracking = afterShip.getTrackingEndpoint().deleteTracking(id);
+  System.out.println(tracking);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
 
+- #### getTrackings [GET /trackings]
 
-**Retrack a tracking of your account**
+```java 
+GetTrackingsParams optionalParams = new GetTrackingsParams();
+optionalParams.setFields("title,order_id");
+optionalParams.setLang("china-post");
+optionalParams.setLimit(10);
 
-	Tracking tracking = new Tracking("RT224265042HK");
-    tracking.setSlug("hong-kong-post");
+try {
+  PagedTrackings pagedTrackings = afterShip.getTrackingEndpoint().getTrackings(optionalParams);
+  System.out.println(pagedTrackings);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
+
+- #### getTracking [GET /trackings/:slug/:tracking_number]
+
+  - Get by id:
+
+    ```java
+    String id = "l389dilsluk9ckaqmetr901y";
+    try {
+      Tracking tracking = afterShip.getTrackingEndpoint().getTracking(id, null);
+      System.out.println(tracking);
+    } catch (AftershipException e) {
+      System.out.println(e.getMessage());
+    }
+    ```
     
-	connection.retrack(tracking);
-	//You can only retrack an expired tracking and only once
+  - Get by slug and tracking_number:
+  
+    ```java 
+    String slug = "acommerce";
+    String trackingNumber = "1234567890";
+    try {
+      Tracking tracking =
+      afterShip
+        .getTrackingEndpoint()
+      .getTracking(new SlugTrackingNumber(slug, trackingNumber), null);
+      System.out.println(tracking);
+    } catch (AftershipException e) {
+      System.out.println(e.getMessage());
+    }
+    ```
+  
+- #### updateTracking [PUT /trackings/:slug/:tracking_number]
+
+```java
+String id = "vebix4hfu3sr3kac0epve01n";
+UpdateTracking updateTracking = new UpdateTracking();
+updateTracking.setTitle("title123");
+
+try {
+  Tracking tracking1 = afterShip.getTrackingEndpoint().updateTracking(id, updateTracking);
+  System.out.println(tracking1);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
+
+- #### reTrack [POST /trackings/:slug/:tracking_number/retrack]
+
+```java
+String id = "l389dilsluk9ckaqmetr901y";
+try {
+  Tracking tracking = afterShip.getTrackingEndpoint().reTrack(id);
+  System.out.println(tracking);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
+
+- #### markAsCompleted [POST /trackings/:slug/:tracking_number/mark-as-completed]
+
+```java 
+String id = "5b7658cec7c33c0e007de3c5";
+try {
+  Tracking tracking =
+    afterShip.getTrackingEndpoint().markAsCompleted(id, new CompletedStatus(ReasonKind.LOST));
+  System.out.println(tracking);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
+
+### /last_checkpoint
+
+- #### getLastCheckpoint [GET /last_checkpoint/:slug/:tracking_number]
+
+```java
+String id = "vebix4hfu3sr3kac0epve01n";
+GetCheckpointParam optionalParam = new GetCheckpointParam();
+optionalParam.setFields(FieldsKind.combine(FieldsKind.TAG));
+optionalParam.setLang(LangKind.CHINA_EMS);
+
+try {
+  LastCheckpoint lastCheckpoint =
+    afterShip.getCheckpointEndpoint().getLastCheckpoint(id, optionalParam);
+  System.out.println(lastCheckpoint.getSlug());
+  System.out.println(lastCheckpoint.getTrackingNumber());
+  System.out.println(lastCheckpoint.getCheckpoint());
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
+
+### /notifications
+
+- #### getNotification [GET /notifications/:slug/:tracking_number]
+
+```java 
+String id = "vebix4hfu3sr3kac0epve01n";
+try {
+  Notification notification = afterShip.getNotificationEndpoint().getNotification(id);
+  System.out.println(notification);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
+
+- #### addNotification [POST /notifications/:slug/:tracking_number/add]
+
+```java
+String id = "vebix4hfu3sr3kac0epve01n";
+Notification addNotification = new Notification();
+addNotification.setSmses(new String[] {"+85261236123", "Invalid Mobile Phone Number"});
+
+try {
+  Notification notification =
+    afterShip.getNotificationEndpoint().addNotification(id, addNotification);
+  System.out.println(notification);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
+
+- #### removeNotification [POST /notifications/:slug/:tracking_number/remove]
+
+```java 
+String id = "vebix4hfu3sr3kac0epve01n";
+Notification removeNotification = new Notification();
+removeNotification.setEmails(new String[] {"invalid EMail @ Gmail. com"});
+removeNotification.setSmses(new String[] {"+85261236123"});
+try {
+  Notification notification =
+    afterShip.getNotificationEndpoint().removeNotification(id, removeNotification);
+  System.out.println(notification);
+} catch (AftershipException e) {
+  System.out.println(e.getMessage());
+}
+```
 
 
-**Get the last checkpoint of a tracking of your account**
 
-	Tracking tracking = new Tracking("GM605112270084510370");
-    tracking.setSlug("dhl-global-mail");
-    
-	Checkpoint newCheckpoint = connection.getLastCheckpoint(tracking);
-	newCheckpoint.getMessage()//"Delivered"
-	newCheckpoint.getCountryName()//"BUDERIM QLD, AU"
-	newCheckpoint.getTag()//"Delivered"
+## Notes
 
+- #### When specifying a tracking, the `id` is equivalent to the `slug and tracking_number`.
 
-**Be careful, all the operations that use tracking use the ID if it is informed**
+```java 
+getTracking("l389dilsluk9ckaqmetr901y", null);
+```
 
-
-	//Post a tracking in your account
-	Tracking tracking1 = new Tracking("05167019264110");
-    tracking1.setSlug("dpd");
-	Tracking trackingPosted =  connection.postTracking(tracking1);
-	
-	trackingPosted.getId();// this is the ID of the tracking in the Aftership system
-
-## Release History
-####2016-04-26-v1.2.0
-* Properties added in Checkpoint class
- 1. slug
- 2. location
-
-####2016-02-02-v1.1.1
-* Solving issue at Checkpoint.java, typo in ```country_iso3```
+```java 
+getTracking(new SlugTrackingNumber("acommerce", "1234567890"), null);
+```
 
 ## License
-Copyright (c) 2015 Aftership  
+Copyright (c) 2015-2020 Aftership  
 Licensed under the MIT license.
 
-	
+​	
 

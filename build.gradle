@@ -1,0 +1,123 @@
+buildscript {
+    ext {
+        jvmVersion = '1.8'
+        junitPlatformVersion = '1.6.2'
+        junitEngineVersion = '5.6.2'
+        mockitoVersion = '3.3.3'
+        okhttpVersion = '4.6.0'
+        gsonVersion = '2.8.6'
+
+        lombokVersion = '1.18.10'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+    }
+}
+
+allprojects {
+    group 'com.aftership'
+    version '2.0.7'
+
+    repositories {
+        mavenCentral()
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        sourceCompatibility = jvmVersion
+        targetCompatibility = jvmVersion
+    }
+}
+
+subprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        toolVersion = "8.8"
+        ignoreFailures = false
+        showViolations = true
+
+        configFile = file("${project.rootDir}/checkstyle.xml")
+    }
+
+    dependencies {
+        testCompile "org.junit.platform:junit-platform-launcher:${junitPlatformVersion}"
+        testCompile "org.junit.jupiter:junit-jupiter-engine:${junitEngineVersion}"
+        testCompile "org.junit.vintage:junit-vintage-engine:${junitEngineVersion}"
+        testCompile "org.mockito:mockito-core:${mockitoVersion}"
+
+        testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
+
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    }
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        classifier = 'sources'
+    }
+
+    task javadocJar(type: Jar) {
+        from javadoc
+        classifier = 'javadoc'
+    }
+
+    javadoc {
+        options.encoding = "UTF-8"
+    }
+
+    test.useTestNG()
+    test {
+        useJUnitPlatform()
+    }
+}
+
+project(':aftership-sdk') {
+    apply from: "${project.rootDir}/publishing.gradle"
+    apply plugin: 'jacoco'
+
+    dependencies {
+        implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+        implementation "com.google.code.gson:gson:${gsonVersion}"
+    }
+
+    jar {
+        archivesBaseName = "aftership-sdk"
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+            xml.destination file("${buildDir}/reports/jacoco/report.xml")
+            html.enabled true
+            html.destination file("${buildDir}/jacocoHtml")
+            csv.enabled false
+        }
+        afterEvaluate {
+            classDirectories.from = files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: ['com/aftership/sdk/model/**'])
+            })
+        }
+    }
+}
+
+project(':aftership-sample'){
+    dependencies {
+        //compile project(':aftership-sdk')
+        implementation "com.github.chenjunbiao:aftership-sdk:2.0.7"
+    }
+
+    jar {
+        archivesBaseName = "aftership-sample"
+    }
+}
+
+
+
+

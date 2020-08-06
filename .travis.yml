@@ -1,0 +1,29 @@
+language: java
+
+branches:
+  only:
+    - v2
+
+notifications:
+  email:
+    - jb.chen@aftership.net
+
+before_install: chmod +x gradlew
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+script:
+  - ./gradlew --version
+  - ./gradlew clean
+  - ./gradlew check
+  - ./gradlew jacocoTestReport
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
