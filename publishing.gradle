@@ -8,7 +8,7 @@ if (file("${publishConfigFilePath}").exists()) {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                groupId = 'com.github.chenjunbiao'
+                groupId = 'com.aftership'
                 artifactId = 'aftership-sdk'
                 version = project.version
 
@@ -32,9 +32,9 @@ if (file("${publishConfigFilePath}").exists()) {
                         }
                     }
                     scm {
-                        url = 'https://github.com/chenjunbiao/aftership-sdk-java'
-                        connection = 'scm:git:git@github.com:chenjunbiao/aftership-sdk-java.git'
-                        developerConnection = 'scm:git:ssh://git@github.com:chenjunbiao/aftership-sdk-java.git'
+                        url = 'https://github.com/AfterShip/aftership-sdk-java.git'
+                        connection = 'scm:git:git@github.com:AfterShip/aftership-sdk-java.git'
+                        developerConnection = 'scm:git:ssh://git@github.com:AfterShip/aftership-sdk-java.git'
                     }
                 }
             }
