@@ -26,7 +26,7 @@ Requirements:
 ### Gradle
 
 ```text
-implementation "com.aftership:aftership-sdk:2.0.0"
+implementation "com.aftership:aftership-sdk:2.0.7"
 ```
 
 

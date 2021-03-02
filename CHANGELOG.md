@@ -2,6 +2,10 @@
 
 ## Change log
 
+### 2.0.8 
+- Bug fixes
+ - [API response failed to throw IllegalStateException](https://github.com/AfterShip/aftership-sdk-java/issues/18)
+
 ### 2.0.0-alpha (2020-05-28)
 - New features
 	- Support latest features in v4 API
