@@ -101,20 +101,20 @@ public class ApiRequestImpl implements ApiRequest {
     // call api
     Call call = app.getClient().newCall(request);
     try (Response response = call.execute()) {
-      // System.out.println("isSuccessful: "+ response.isSuccessful());
       setRateLimiting(this.app, response);
+      String message = response.message();
+      String bodyString = response.body() == null ? null : response.body().string();
       if (!response.isSuccessful()) {
         throw new ApiException(
             this.app.getRateLimit(),
-            BodyParser.processMeta(requireResponseBodyNonNull(response.body()).string()),
+            BodyParser.processMeta(bodyString),
             entryRequestConfig(method, path),
             entryRequestHeaders(requestHeaders),
             entryRequestData(requestData),
-            entryResponseBody(response));
+            entryResponseBody(message, bodyString));
       }
 
-      String jsonBody = requireResponseBodyNonNull(response.body()).string();
-      if (StrUtils.isBlank(jsonBody) || "{}".equals(jsonBody)) {
+      if (StrUtils.isBlank(bodyString) || "{}".equals(bodyString)) {
         throw new RequestException(
             ErrorType.HandlerError,
             ErrorMessage.HANDLER_RESPONSE_BODY_IS_EMPTY,
@@ -123,7 +123,7 @@ public class ApiRequestImpl implements ApiRequest {
             entryRequestData(requestData));
       }
 
-      JsonElement jsonElement = JsonParser.parseString(jsonBody);
+      JsonElement jsonElement = JsonParser.parseString(bodyString);
       if (!jsonElement.isJsonObject()) {
         throw new RequestException(
             ErrorType.HandlerError,
@@ -131,7 +131,7 @@ public class ApiRequestImpl implements ApiRequest {
             entryRequestConfig(method, path),
             entryRequestHeaders(requestHeaders),
             entryRequestData(requestData),
-            entryResponseBody(response));
+            entryResponseBody(message, bodyString));
       }
 
       AftershipResponse<R> result = processResponse(jsonElement, responseType);
@@ -142,7 +142,7 @@ public class ApiRequestImpl implements ApiRequest {
             entryRequestConfig(method, path),
             entryRequestHeaders(requestHeaders),
             entryRequestData(requestData),
-            entryResponseBody(response));
+            entryResponseBody(message, bodyString));
       }
       if (!isSuccessful(result.getMeta().getCode())) {
         throw new ApiException(
@@ -151,7 +151,7 @@ public class ApiRequestImpl implements ApiRequest {
             entryRequestConfig(method, path),
             entryRequestHeaders(requestHeaders),
             entryRequestData(requestData),
-            entryResponseBody(response));
+            entryResponseBody(message, bodyString));
       }
 
       return result;
@@ -229,18 +229,12 @@ public class ApiRequestImpl implements ApiRequest {
         AftershipException.DEBUG_DATA_KEY_REQUEST_DATA, requestData);
   }
 
-  private AbstractMap.SimpleEntry<String, Object> entryResponseBody(Response response) {
+  private AbstractMap.SimpleEntry<String, Object> entryResponseBody(String message, String bodyString) {
     String tag = AftershipException.DEBUG_DATA_KEY_RESPONSE_BODY;
-    try {
-      if (StrUtils.isNotBlank(response.message())) {
-        return new AbstractMap.SimpleEntry<>(tag, null);
-      }
-      String jsonBody = Objects.requireNonNull(response.body()).string();
-      return new AbstractMap.SimpleEntry<>(tag, jsonBody);
-    } catch (IOException e) {
-      e.printStackTrace();
+    if (StrUtils.isNotBlank(message)) {
       return new AbstractMap.SimpleEntry<>(tag, null);
     }
+    return new AbstractMap.SimpleEntry<>(tag, bodyString);
   }
 
   private String buildUrl(String path, Map<String, String> query) {
