@@ -18,7 +18,7 @@ buildscript {
 
 allprojects {
     group 'com.aftership'
-    version '2.0.7'
+    version '2.0.8'
 
     repositories {
         mavenCentral()
@@ -110,7 +110,7 @@ project(':aftership-sdk') {
 project(':aftership-sample'){
     dependencies {
         //compile project(':aftership-sdk')
-        implementation "com.aftership:aftership-sdk:2.0.7"
+        implementation "com.aftership:aftership-sdk:2.0.8"
     }
 
     jar {
