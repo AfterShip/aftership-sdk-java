@@ -3,7 +3,6 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.slack.api/slack-api-client.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:com.aftership%20a:aftership-sdk)
 [![AfterShip SDKs channel](https://aftership-sdk-slackin.herokuapp.com/badge.svg)](https://aftership-sdk-slackin.herokuapp.com/)
 [![Build Status](https://api.travis-ci.org/chenjunbiao/aftership-sdk-java.svg?branch=v2)](https://travis-ci.org/github/chenjunbiao/aftership-sdk-java)
-[![codecov.io](https://codecov.io/github/chenjunbiao/aftership-sdk-java/coverage.svg?branch=v2)](https://codecov.io/github/chenjunbiao/aftership-sdk-java/branch/v2)
 
 The Java SDK of `AfterShip API`, please see API documentation in: https://www.aftership.com/docs/api/4
 
