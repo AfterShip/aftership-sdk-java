@@ -2,6 +2,10 @@
 
 ## Change log
 
+### 2.1.0
+- Add some fields of tracking object. [tracking object](https://developers.aftership.com/reference/object-tracking)
+- Add more request parameters for get trackings interface. 
+
 ### 2.0.8 (2021-03-08)
 - Bug fixes
  - [API response failed to throw IllegalStateException](https://github.com/AfterShip/aftership-sdk-java/issues/18)

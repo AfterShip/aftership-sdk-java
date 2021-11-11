@@ -29,6 +29,7 @@ public final class JsonUtils {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(Date.class, new GsonDateDeSerializer());
     builder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
+    builder.serializeNulls();
     return builder.create();
   }
 
