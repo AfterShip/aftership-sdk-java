@@ -529,7 +529,7 @@ getTracking(new SlugTrackingNumber("acommerce", "1234567890"), null);
 ```
 
 ## License
-Copyright (c) 2015-2020 Aftership  
+Copyright (c) 2015-2021 Aftership  
 Licensed under the MIT license.
 
 ​	
