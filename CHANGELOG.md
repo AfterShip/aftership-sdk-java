@@ -2,6 +2,9 @@
 
 ## Change log
 
+### 2.1.1
+- update README and build.gradle
+
 ### 2.1.0
 - Add some fields of tracking object. [tracking object](https://developers.aftership.com/reference/object-tracking)
 - Add more request parameters for get trackings interface. 
