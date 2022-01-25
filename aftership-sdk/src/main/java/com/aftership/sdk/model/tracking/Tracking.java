@@ -202,9 +202,9 @@ public class Tracking {
     /**
      * Shipment weight provied by carrier (if any)
      *
-     * <p>Number
+     * <p>Float
      */
-    private Integer shipmentWeight;
+    private Float shipmentWeight;
 
     /**
      * Weight unit provied by carrier, either in kg or lb (if any)
