@@ -18,14 +18,14 @@ Requirements:
 <dependency>
   <groupId>com.aftership</groupId>
   <artifactId>aftership-sdk</artifactId>
-  <version>2.1.0</version>
+  <version>2.1.2</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```text
-implementation "com.aftership:aftership-sdk:2.1.0"
+implementation "com.aftership:aftership-sdk:2.1.2"
 ```
 
 
@@ -528,7 +528,7 @@ getTracking(new SlugTrackingNumber("acommerce", "1234567890"), null);
 ```
 
 ## License
-Copyright (c) 2015-2021 Aftership  
+Copyright (c) 2015-2022 Aftership  
 Licensed under the MIT license.
 
 ​	
