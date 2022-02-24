@@ -23,6 +23,8 @@
       "note": null,
       "order_id": null,
       "order_id_path": null,
+      "order_date": null,
+      "order_number": null,
       "origin_country_iso3": null,
       "shipment_package_count": 0,
       "shipment_pickup_date": null,

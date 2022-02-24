@@ -1,5 +1,6 @@
 package com.aftership.sdk.model.tracking;
 
+import java.util.Date;
 import java.util.Map;
 
 import lombok.Data;
@@ -125,6 +126,20 @@ public class NewTracking {
      * Text field for order path
      */
     private String orderIdPath;
+
+    /**
+     * Text field for order number
+     *
+     * <p>String
+     */
+    private String orderNumber;
+
+    /**
+     * Date and time of the order created
+     *
+     * <p>Date
+     */
+    private Date orderDate;
 
     /**
      * Custom fields that accept a hash with string, boolean or number fields
