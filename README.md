@@ -18,14 +18,14 @@ Requirements:
 <dependency>
   <groupId>com.aftership</groupId>
   <artifactId>aftership-sdk</artifactId>
-  <version>2.1.2</version>
+  <version>2.1.3</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```text
-implementation "com.aftership:aftership-sdk:2.1.2"
+implementation "com.aftership:aftership-sdk:2.1.3"
 ```
 
 

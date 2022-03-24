@@ -1,6 +1,9 @@
 ## Release History
 
 ## Change log
+### 2.1.3
+- fix: mask aftership api key in exception message
+
 ### 2.1.2
 - fix: change shipmentWeight from Integer to Float #26
 
