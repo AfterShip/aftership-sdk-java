@@ -76,6 +76,28 @@ try {
   System.out.println(e.getMessage());
 }
 ```
+## Troubleshoot
+### Received fatal alert: handshake_failure
+
+> The SSL Protocol of `api.aftership.com` is TLSV1.2, and the Cipher is AES256-SHA.
+It is a known issue due to this reason:
+
+#### The Cipher Suite of your JVM not include `TLS_AES_256_GCM_SHA384`
+
+You can check the CipherSuite according to this [article](https://help.mulesoft.com/s/article/How-to-list-the-Cipher-Suite-of-JVM-and-the-Cipher-used-on-a-handshake-with-endpoint)
+
+Execute `java CipherSuite api.aftership.com:443`, under normal circumstances, it should output
+```
+CipherSuite used on the handshake:TLS_AES_256_GCM_SHA384
+```
+
+Otherwise, you should check the cipherSuite of your JVM.
+1. Make sure `crypto.policy=unlimited` is effective in the jre/lib/securityjava.security
+2. If your JDK version number is lower than 7u171 or 8u161, please follow this [oracle article](https://docs.oracle.com/cd/E60058_01/PDF/8.0.6.x/8.0.6.0.0/AG_HTML/Enabling_Unlimited_Cryptographic_Policy_for_Java.htm) to download JCE.
+
+#### SSL protocol of your client is lower than TLSV1.2
+
+You can check the protocol version used during the SSL negotiation by capturing transport packet
 
 ## Error Handling
 
