@@ -31,6 +31,12 @@ public class GetTrackingsParams {
   private String keyword;
 
   /**
+   * Tracking number of shipments. Use comma to separate multiple values
+   * Example: RA123456789US,LE123456789US
+   */
+  private String trackingNumbers;
+
+  /**
    * Unique courier code Use comma for multiple values. (Example: dhl,ups,usps)
    */
   private String slug;
@@ -136,6 +142,7 @@ public class GetTrackingsParams {
     // Example: 2013-04-15T16:41:56+08:00
     map.put("updated_at_max", DateUtils.format(DateUtils.FORMAT_WITH_X, this.getUpdatedAtMax()));
     map.put("fields", this.getFields());
+    map.put("tracking_numbers", this.getTrackingNumbers());
     map.put("lang", this.getLang());
     map.put("last_updated_at", DateUtils.format(DateUtils.FORMAT_WITH_X, this.getLastUpdatedAt()));
     map.put("return_to_sender", this.getReturnToSender() != null ?
