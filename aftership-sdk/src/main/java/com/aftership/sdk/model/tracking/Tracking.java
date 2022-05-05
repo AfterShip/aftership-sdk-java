@@ -159,9 +159,16 @@ public class Tracking {
     private String orderIdPath;
 
     /**
-     * Date and time of the order created
+     * Text field for order number
      *
      * <p>String
+     */
+    private String orderNumber;
+
+    /**
+     * Date and time of the order created
+     *
+     * <p>Date
      */
     private Date orderDate;
 
