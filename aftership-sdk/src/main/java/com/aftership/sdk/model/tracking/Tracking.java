@@ -1,11 +1,12 @@
 package com.aftership.sdk.model.tracking;
 
+import com.aftership.sdk.model.checkpoint.Checkpoint;
+import com.aftership.sdk.model.estimateddeliverydate.EstimatedDeliveryDate;
+import lombok.Data;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import com.aftership.sdk.model.checkpoint.Checkpoint;
-import lombok.Data;
 
 /**
  * Tracking Object
@@ -453,4 +454,10 @@ public class Tracking {
      */
     private String onTimeStatus;
 
+    /**
+     * Array of Hash describes the checkpoint information.
+     *
+     * <p>EstimatedDeliveryDate
+     */
+    private EstimatedDeliveryDate aftershipEstimatedDeliveryDate;
 }

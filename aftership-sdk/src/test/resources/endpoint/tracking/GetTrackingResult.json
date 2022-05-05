@@ -297,7 +297,8 @@
       "pickup_note": null,
       "courier_tracking_link": "https://www.fedex.com/fedextrack/?tracknumbers=111111111111&cntry_code=us",
       "courier_redirect_link": "https://www.fedex.com/track?loc=en_US&tracknum=111111111111&requester=WT/trackdetails",
-      "first_attempted_at": "2018-07-25T10:10:00+09:00"
+      "first_attempted_at": "2018-07-25T10:10:00+09:00",
+      "aftership_estimated_delivery_date": null
     }
   }
 }

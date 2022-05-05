@@ -261,7 +261,13 @@
         "pickup_note": null,
         "courier_tracking_link": "https://www.fedex.com/fedextrack/?tracknumbers=111111111111&cntry_code=us",
         "courier_redirect_link": "https://www.fedex.com/track?loc=en_US&tracknum=111111111111&requester=WT/trackdetails",
-        "first_attempted_at": "2018-08-01T13:19:47-04:00"
+        "first_attempted_at": "2018-08-01T13:19:47-04:00",
+        "aftership_estimated_delivery_date": {
+          "estimated_delivery_date": "2018-08-01",
+          "confidence_score": 0.8,
+          "estimated_delivery_date_min": "2018-08-01",
+          "estimated_delivery_date_max": "2018-08-05"
+        }
       },
       {
         "id": "5b0516676a810a1400eb5c1c",
@@ -329,7 +335,8 @@
         "pickup_note": null,
         "courier_tracking_link": "https://www.fedex.com/fedextrack/?tracknumbers=2222222222222&cntry_code=us",
         "courier_redirect_link": "https://www.fedex.com/track?loc=en_US&tracknum=2222222222222&requester=WT/trackdetails",
-        "first_attempted_at": null
+        "first_attempted_at": null,
+        "aftership_estimated_delivery_date": null
       },
       {
         "id": "5b04e2cbd560281400b70284",
@@ -396,7 +403,8 @@
         "pickup_note": null,
         "courier_tracking_link": "https://www.fedex.com/fedextrack/?tracknumbers=1231231231231&cntry_code=us",
         "courier_redirect_link": "https://www.fedex.com/track?loc=en_US&tracknum=1231231231231&requester=WT/trackdetails",
-        "first_attempted_at": null
+        "first_attempted_at": null,
+        "aftership_estimated_delivery_date": null
       }
     ]
   }
