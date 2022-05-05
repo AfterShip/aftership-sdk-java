@@ -107,6 +107,13 @@ public class Tracking {
   private String destinationCountryIso3;
 
   /**
+   * Shipping address that the shipment is shipping to.
+   *
+   * <p>String
+   */
+  private String destinationRawLocation;
+
+  /**
    * Destination country of the tracking detected from the courier. ISO Alpha-3 (three letters).
    * Value will be null if the courier doesn't provide the destination country.
    *
@@ -467,4 +474,11 @@ public class Tracking {
    * <p>EstimatedDeliveryDate
    */
   private EstimatedDeliveryDate aftershipEstimatedDeliveryDate;
+
+  /**
+   * The tags of the order.
+   *
+   * <p>Array
+   */
+  private List<String> orderTags;
 }
