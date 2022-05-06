@@ -1,6 +1,10 @@
 ## Release History
 
 ## Change log
+### 2.1.4
+- Add some fields of tracking object. [tracking object](https://developers.aftership.com/reference/object-tracking)
+- Add more request parameters for get trackings interface.
+
 ### 2.1.3
 - fix: mask aftership api key in exception message
 
