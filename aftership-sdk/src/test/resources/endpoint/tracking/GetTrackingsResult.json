@@ -269,7 +269,9 @@
           "confidence_score": 0.8,
           "estimated_delivery_date_min": "2018-08-01",
           "estimated_delivery_date_max": "2018-08-05"
-        }
+        },
+        "order_tags": null,
+        "destination_raw_location": "Sydney, Australia"
       },
       {
         "id": "5b0516676a810a1400eb5c1c",
@@ -340,7 +342,9 @@
         "courier_tracking_link": "https://www.fedex.com/fedextrack/?tracknumbers=2222222222222&cntry_code=us",
         "courier_redirect_link": "https://www.fedex.com/track?loc=en_US&tracknum=2222222222222&requester=WT/trackdetails",
         "first_attempted_at": null,
-        "aftership_estimated_delivery_date": null
+        "aftership_estimated_delivery_date": null,
+        "order_tags": null,
+        "destination_raw_location": null
       },
       {
         "id": "5b04e2cbd560281400b70284",
@@ -410,7 +414,9 @@
         "courier_tracking_link": "https://www.fedex.com/fedextrack/?tracknumbers=1231231231231&cntry_code=us",
         "courier_redirect_link": "https://www.fedex.com/track?loc=en_US&tracknum=1231231231231&requester=WT/trackdetails",
         "first_attempted_at": null,
-        "aftership_estimated_delivery_date": null
+        "aftership_estimated_delivery_date": null,
+        "order_tags": null,
+        "destination_raw_location": null
       }
     ]
   }
