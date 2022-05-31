@@ -10,98 +10,143 @@ import java.util.Map;
  */
 @Data
 public class UpdateTracking {
-    /**
-     * Email address(es) to receive email notifications. Accept either array or comma separated as
-     * input.
-     */
-    private String[] emails;
+  /**
+   * Phone number(s) to receive sms notifications. Enter+ andarea code before phone number. Accept
+   * either array or comma separated as input.
+   */
+  private String[] smses;
 
-    /**
-     * Phone number(s) to receive sms notifications. Enter+ andarea code before phone number. Accept
-     * either array or comma separated as input.
-     */
-    private String[] smses;
+  /**
+   * Email address(es) to receive email notifications. Accept either array or comma separated as
+   * input.
+   */
+  private String[] emails;
 
-    /**
-     * Title of the tracking. Default value astracking_numbers
-     */
-    private String title;
+  /**
+   * Title of the tracking. Default value astracking_numbers
+   */
+  private String title;
 
-    /**
-     * Customer name of the tracking.
-     */
-    private String customerName;
+  /**
+   * Customer name of the tracking.
+   */
+  private String customerName;
 
-    /**
-     * Enter ISO Alpha-3 (three letters) to specify the destination of the shipment (e.g. USA for
-     * United States). If you use postal service to send international shipments, AfterShip will
-     * automatically get tracking results at destination courier as well.
-     */
-    private String destinationCountryIso3;
+  /**
+   * Text field for order ID
+   */
+  private String orderId;
 
-    /**
-     * Text field for order ID
-     */
-    private String orderId;
+  /**
+   * Text field for order path
+   */
+  private String orderIdPath;
 
-    /**
-     * Text field for order path
-     */
-    private String orderIdPath;
+  /**
+   * Custom fields that accept a hash with string, boolean or number fields
+   */
+  private Map<String, String> customFields;
 
-    /**
-     * Text field for order number
-     *
-     * <p>String
-     */
-    private String orderNumber;
+  /**
+   * ext field for the note
+   */
+  private String note;
 
-    /**
-     * Date and time of the order created
-     *
-     * <p>Date
-     */
-    private Date orderDate;
+  /**
+   * Enter ISO 639-1 Language Code to specify the store, customer or order language.
+   */
+  private String language;
 
-    /**
-     * Custom fields that accept a hash with string, boolean or number fields
-     */
-    private Map<String, String> customFields;
+  /**
+   * Promised delivery date of an order inYYYY-MM-DDformat.
+   */
+  private String orderPromisedDeliveryDate;
 
-    /**
-     * ext field for the note
-     */
-    private String note;
+  /**
+   * Shipment delivery type
+   *
+   * <p>pickup_at_store pickup_at_courier door_to_door
+   */
+  private String deliveryType;
 
-    /**
-     * Enter ISO 639-1 Language Code to specify the store, customer or order language.
-     */
-    private String language;
+  /**
+   * Shipment pickup location for receiver
+   */
+  private String pickupLocation;
 
-    /**
-     * Promised delivery date of an order inYYYY-MM-DDformat.
-     */
-    private String orderPromisedDeliveryDate;
+  /**
+   * Shipment pickup note for receiver
+   */
+  private String pickupNote;
 
-    /**
-     * Shipment delivery type
-     *
-     * <p>pickup_at_store pickup_at_courier door_to_door
-     */
-    private String deliveryType;
+  /**
+   * Unique code of each courier. Provide a single courier.
+   */
+  private String slug;
 
-    /**
-     * Shipment pickup location for receiver
-     */
-    private String pickupLocation;
+  /**
+   * Account number of the shipper for a specific courier. Required by some couriers, such
+   * asdynamic-logistics
+   *
+   * <p>String
+   */
+  private String trackingAccountNumber;
 
-    /**
-     * Shipment pickup note for receiver
-     */
-    private String pickupNote;
+  /**
+   * Origin Country of the shipment for a specific courier. Required by some couriers, such asdhl
+   *
+   * <p>String
+   */
+  private String trackingOriginCountry;
 
-    /**
-     * The carrier’s shipment type. When you input this field, AfterShip will not get updates from the carrier.
-     */
-    private String shipmentType;
+  /**
+   * Destination Country of the shipment for a specific courier. Required by some couriers, such
+   * aspostnl-3s
+   *
+   * <p>String
+   */
+  private String trackingDestinationCountry;
+
+  /**
+   * Key of the shipment for a specific courier. Required by some couriers, such assic-teliway
+   *
+   * <p>String>
+   */
+  private String trackingKey;
+
+  /**
+   * The postal code of receiver's address. Required by some couriers, such asdeutsch-post
+   *
+   * <p>String
+   */
+  private String trackingPostalCode;
+
+  /**
+   * Shipping date inYYYYMMDDformat. Required by some couriers, such asdeutsch-post
+   *
+   * <p>String
+   */
+  private String trackingShipDate;
+
+  /**
+   * Located state of the shipment for a specific courier. Required by some couriers, such
+   * asstar-track-courier
+   *
+   * <p>String
+   */
+  private String trackingState;
+
+  /**
+   * Text field for order number
+   *
+   * <p>String
+   */
+  private String orderNumber;
+
+  /**
+   * Date and time of the order created
+   *
+   * <p>Date
+   */
+  private Date orderDate;
 }
