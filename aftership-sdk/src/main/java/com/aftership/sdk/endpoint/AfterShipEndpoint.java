@@ -1,6 +1,7 @@
 package com.aftership.sdk.endpoint;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import com.aftership.sdk.exception.ErrorMessage;
@@ -55,6 +56,12 @@ public abstract class AfterShipEndpoint {
 
   protected void checkNullParam(Object param) throws SdkException {
     if (param == null) {
+      throw new SdkException(ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_PARAM_IS_NULL);
+    }
+  }
+
+  protected void checkEmptyCollection(Collection<?> c) throws SdkException {
+    if (c == null || c.isEmpty()) {
       throw new SdkException(ErrorType.ConstructorError, ErrorMessage.CONSTRUCTOR_PARAM_IS_NULL);
     }
   }

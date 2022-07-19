@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import com.aftership.sdk.endpoint.CheckpointEndpoint;
 import com.aftership.sdk.endpoint.CourierEndpoint;
+import com.aftership.sdk.endpoint.EstimatedDeliveryDateEndpoint;
 import com.aftership.sdk.endpoint.NotificationEndpoint;
 import com.aftership.sdk.endpoint.TrackingEndpoint;
 import com.aftership.sdk.endpoint.impl.CheckpointImpl;
 import com.aftership.sdk.endpoint.impl.CourierImpl;
+import com.aftership.sdk.endpoint.impl.EstimatedDeliveryDateImpl;
 import com.aftership.sdk.endpoint.impl.NotificationImpl;
 import com.aftership.sdk.endpoint.impl.TrackingImpl;
 import com.aftership.sdk.exception.ErrorMessage;
@@ -47,6 +49,8 @@ public class AfterShip {
   private final CheckpointEndpoint checkpointEndpoint;
   /** Endpoint of Notification */
   private final NotificationEndpoint notificationEndpoint;
+  /** Endpoint of EstimatedDeliveryDate */
+  private final EstimatedDeliveryDateEndpoint estimatedDeliveryDateEndpoint;
 
   /**
    * Constructor
@@ -95,6 +99,7 @@ public class AfterShip {
     this.trackingEndpoint = new TrackingImpl(request);
     this.checkpointEndpoint = new CheckpointImpl(request);
     this.notificationEndpoint = new NotificationImpl(request);
+    this.estimatedDeliveryDateEndpoint = new EstimatedDeliveryDateImpl(request);
   }
 
   /**
