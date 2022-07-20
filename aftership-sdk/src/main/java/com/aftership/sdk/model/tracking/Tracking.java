@@ -2,6 +2,7 @@ package com.aftership.sdk.model.tracking;
 
 import com.aftership.sdk.model.checkpoint.Checkpoint;
 import com.aftership.sdk.model.estimateddeliverydate.EstimatedDeliveryDate;
+import com.aftership.sdk.model.latestestimateddelivery.LatestEstimatedDelivery;
 import lombok.Data;
 
 import java.util.Date;
@@ -481,4 +482,14 @@ public class Tracking {
    * <p>Array
    */
   private List<String> orderTags;
+
+  /**
+   * The latest estimated delivery date.
+   * May come from the carrier, AfterShip AI, or based on your custom settings.
+   * This can appear in 1 of 3 formats based on the data received.
+   * 1. Date only: `YYYY-MM-DD`
+   * 2. Date and time: `YYYY-MM-DDTHH:mm:ss`
+   * 3. Date, time, and time zone: `YYYY-MM-DDTHH:mm:ssZ`
+   */
+  private LatestEstimatedDelivery latestEstimatedDelivery;
 }

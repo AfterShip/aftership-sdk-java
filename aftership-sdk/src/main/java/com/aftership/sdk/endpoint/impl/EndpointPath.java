@@ -26,4 +26,6 @@ public class EndpointPath {
   public static final String ADD_NOTIFICATION_ACTION = "add";
   public static final String REMOVE_NOTIFICATION = NOTIFICATION;
   public static final String REMOVE_NOTIFICATION_ACTION = "remove";
+  public static final String ESTIMATED_DELIVERY_DATE = "/estimated-delivery-date";
+  public static final String BATCH_PREDICT_ESTIMATED_DELIVERY_DATE = ESTIMATED_DELIVERY_DATE + "/predict-batch";
 }
