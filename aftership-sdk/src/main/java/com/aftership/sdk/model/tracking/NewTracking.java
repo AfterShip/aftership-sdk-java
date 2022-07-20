@@ -11,175 +11,180 @@ import lombok.Data;
 @Data
 public class NewTracking {
 
-    /**
-     * Tracking number of a shipment.
-     *
-     * <p>Duplicated tracking numbers, tracking numbers with invalid tracking number format will not
-     * be accepted.
-     *
-     * <p>We only accept tracking numbers with length from 4 to 100
-     *
-     * <p>We currently support the following characters in a tracking number:
-     *
-     * <p>A - Z 0 - 9 - (Hyphen) . (Period) _ (Underscore) / (Slash)
-     */
-    private String trackingNumber;
+  /**
+   * Tracking number of a shipment.
+   *
+   * <p>Duplicated tracking numbers, tracking numbers with invalid tracking number format will not
+   * be accepted.
+   *
+   * <p>We only accept tracking numbers with length from 4 to 100
+   *
+   * <p>We currently support the following characters in a tracking number:
+   *
+   * <p>A - Z 0 - 9 - (Hyphen) . (Period) _ (Underscore) / (Slash)
+   */
+  private String trackingNumber;
 
-    /**
-     * Unique code of each courier. Provide a single courier or array for a list of couriers. If you
-     * do not specify a slug, Aftership will automatically detect the courier based on the tracking
-     * number format and your selected couriers. Get a list of courier slug using GET /couriers
-     */
-    private String[] slug;
+  /**
+   * Unique code of each courier. Provide a single courier or array for a list of couriers. If you
+   * do not specify a slug, Aftership will automatically detect the courier based on the tracking
+   * number format and your selected couriers. Get a list of courier slug using GET /couriers
+   */
+  private String[] slug;
 
-    /**
-     * The postal code of receiver's address. Required by some couriers, such asdeutsch-post
-     */
-    private String trackingPostalCode;
+  /**
+   * Title of the tracking. Default value astracking_numbers
+   */
+  private String title;
 
-    /**
-     * Shipping date inYYYYMMDDformat. Required by some couriers, such asdeutsch-post
-     */
-    private String trackingShipDate;
+  /**
+   * Text field for order ID
+   */
+  private String orderId;
 
-    /**
-     * Account number of the shipper for a specific courier. Required by some couriers, such
-     * asdynamic-logistics
-     */
-    private String trackingAccountNumber;
+  /**
+   * Text field for order path
+   */
+  private String orderIdPath;
 
-    /**
-     * Key of the shipment for a specific courier. Required by some couriers, such assic-teliway
-     */
-    private String trackingKey;
+  /**
+   * Custom fields that accept a hash with string, boolean or number fields
+   */
+  private Map<String, String> customFields;
 
-    /**
-     * Origin Country of the shipment for a specific courier. Required by some couriers, such asdhl
-     */
-    private String trackingOriginCountry;
+  /**
+   * Enter ISO 639-1 Language Code to specify the store, customer or order language.
+   */
+  private String language;
 
-    /**
-     * Destination Country of the shipment for a specific courier. Required by some couriers, such
-     * aspostnl-3s
-     */
-    private String trackingDestinationCountry;
+  /**
+   * Promised delivery date of an order inYYYY-MM-DDformat.
+   */
+  private String orderPromisedDeliveryDate;
 
-    /**
-     * Located state of the shipment for a specific courier. Required by some couriers, such
-     * asstar-track-courier
-     */
-    private String trackingState;
+  /**
+   * Shipment delivery type
+   *
+   * <p>pickup_at_store pickup_at_courier door_to_door
+   */
+  private String deliveryType;
 
-    /**
-     * Google cloud message registration IDs to receive the push notifications. Accept either array or
-     * comma separated as input.
-     */
-    private String[] android;
+  /**
+   * Shipment pickup location for receiver
+   */
+  private String pickupLocation;
 
-    /**
-     * Apple iOS device IDs to receive the push notifications. Accept either array or comma separated
-     * as input.
-     */
-    private String[] ios;
+  /**
+   * Shipment pickup note for receiver
+   */
+  private String pickupNote;
 
-    /**
-     * Email address(es) to receive email notifications. Accept either array or comma separated as
-     * input.
-     */
-    private String[] emails;
+  /**
+   * Account number of the shipper for a specific courier. Required by some couriers, such
+   * asdynamic-logistics
+   */
+  private String trackingAccountNumber;
 
-    /**
-     * Phone number(s) to receive sms notifications. Enter+ andarea code before phone number. Accept
-     * either array or comma separated as input.
-     */
-    private String[] smses;
+  /**
+   * Origin Country of the shipment for a specific courier. Required by some couriers, such asdhl
+   */
+  private String trackingOriginCountry;
 
-    /**
-     * Title of the tracking. Default value astracking_numbers
-     */
-    private String title;
+  /**
+   * Destination Country of the shipment for a specific courier. Required by some couriers, such
+   * aspostnl-3s
+   */
+  private String trackingDestinationCountry;
 
-    /**
-     * Customer name of the tracking.
-     */
-    private String customerName;
+  /**
+   * Key of the shipment for a specific courier. Required by some couriers, such assic-teliway
+   */
+  private String trackingKey;
 
-    /**
-     * Enter ISO Alpha-3 (three letters) to specify the origin of the shipment (e.g. USA for United
-     * States).
-     */
-    private String originCountryIso3;
+  /**
+   * The postal code of receiver's address. Required by some couriers, such asdeutsch-post
+   */
+  private String trackingPostalCode;
 
-    /**
-     * Enter ISO Alpha-3 (three letters) to specify the destination of the shipment (e.g. USA for
-     * United States). If you use postal service to send international shipments, AfterShip will
-     * automatically get tracking results at destination courier as well.
-     */
-    private String destinationCountryIso3;
+  /**
+   * Shipping date inYYYYMMDDformat. Required by some couriers, such asdeutsch-post
+   */
+  private String trackingShipDate;
 
-    /**
-     * Text field for order ID
-     */
-    private String orderId;
+  /**
+   * Located state of the shipment for a specific courier. Required by some couriers, such
+   * asstar-track-courier
+   */
+  private String trackingState;
 
-    /**
-     * Text field for order path
-     */
-    private String orderIdPath;
+  /**
+   * Apple iOS device IDs to receive the push notifications. Accept either array or comma separated
+   * as input.
+   */
+  private String[] ios;
 
-    /**
-     * Text field for order number
-     *
-     * <p>String
-     */
-    private String orderNumber;
+  /**
+   * Google cloud message registration IDs to receive the push notifications. Accept either array or
+   * comma separated as input.
+   */
+  private String[] android;
 
-    /**
-     * Date and time of the order created
-     *
-     * <p>Date
-     */
-    private Date orderDate;
+  /**
+   * Email address(es) to receive email notifications. Accept either array or comma separated as
+   * input.
+   */
+  private String[] emails;
 
-    /**
-     * Custom fields that accept a hash with string, boolean or number fields
-     */
-    private Map<String, String> customFields;
+  /**
+   * Phone number(s) to receive sms notifications. Enter+ andarea code before phone number. Accept
+   * either array or comma separated as input.
+   */
+  private String[] smses;
 
-    /**
-     * ext field for the note
-     */
-    private String note;
+  /**
+   * Customer name of the tracking.
+   */
+  private String customerName;
 
-    /**
-     * Enter ISO 639-1 Language Code to specify the store, customer or order language.
-     */
-    private String language;
+  /**
+   * Enter ISO Alpha-3 (three letters) to specify the origin of the shipment (e.g. USA for United
+   * States).
+   */
+  private String originCountryIso3;
 
-    /**
-     * Promised delivery date of an order inYYYY-MM-DDformat.
-     */
-    private String orderPromisedDeliveryDate;
+  /**
+   * Enter ISO Alpha-3 (three letters) to specify the destination of the shipment (e.g. USA for
+   * United States). If you use postal service to send international shipments, AfterShip will
+   * automatically get tracking results at destination courier as well.
+   */
+  private String destinationCountryIso3;
 
-    /**
-     * Shipment delivery type
-     *
-     * <p>pickup_at_store pickup_at_courier door_to_door
-     */
-    private String deliveryType;
+  /**
+   * ext field for the note
+   */
+  private String note;
 
-    /**
-     * Shipment pickup location for receiver
-     */
-    private String pickupLocation;
+  /**
+   * Slug group is a group of slugs which belong to same courier. For example, when you inpit "fedex-group" as slug_group, AfterShip will detect the tracking with "fedex-uk", "fedex-fims", and other slugs which belong to "fedex". It cannot be used with slug at the same time.
+   */
+  private String slugGroup;
 
-    /**
-     * Shipment pickup note for receiver
-     */
-    private String pickupNote;
+  /**
+   * Date and time of the order created
+   *
+   * <p>Date
+   */
+  private Date orderDate;
 
-    /**
-     * The carrier’s shipment type. When you input this field, AfterShip will not get updates from the carrier.
-     */
-    private String shipmentType;
+  /**
+   * Text field for order number
+   *
+   * <p>String
+   */
+  private String orderNumber;
+
+  /**
+   * The carrier’s shipment type. When you input this field, AfterShip will not get updates from the carrier.
+   */
+  private String shipmentType;
 }

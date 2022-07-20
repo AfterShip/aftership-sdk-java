@@ -13,33 +13,22 @@ import lombok.Data;
  */
 @Data
 public class GetTrackingsParams {
+  /**
+   * Destination country of trackings returned by courier. Use ISO Alpha-3 (three letters).
+   * Use comma for multiple values. (Example: USA,HKG)
+   */
+  private String courierDestinationCountryIso3;
 
   /**
-   * Page to show. (Default: 1)
+   * End date and time of trackings created. (Defaults: now, Example: 2013-04-15T16:41:56+08:00)
    */
-  private Integer page;
+  private Date createdAtMax;
 
   /**
-   * Number of trackings each page contain. (Default: 100, Max: 200)
+   * Start date and time of trackings created. AfterShip only stores data of 90 days. (Defaults: 30
+   * days ago, Example: 2013-03-15T16:41:56+08:00)
    */
-  private Integer limit;
-
-  /**
-   * Search the content of the tracking record fields: tracking_number, title, order_id,
-   * customer_name, custom_fields, order_id, emails, smses
-   */
-  private String keyword;
-
-  /**
-   * Tracking number of shipments. Use comma to separate multiple values
-   * Example: RA123456789US,LE123456789US
-   */
-  private String trackingNumbers;
-
-  /**
-   * Unique courier code Use comma for multiple values. (Example: dhl,ups,usps)
-   */
-  private String slug;
+  private Date createdAtMin;
 
   /**
    * Total delivery time in days. - Difference of 1st checkpoint time and delivered time for
@@ -49,43 +38,10 @@ public class GetTrackingsParams {
   private Integer deliveryTime;
 
   /**
-   * Origin country of trackings. Use ISO Alpha-3 (three letters). Use comma for multiple values.
-   * (Example: USA,HKG)
-   */
-  private String origin;
-
-  /**
    * Destination country of trackings. Use ISO Alpha-3 (three letters). Use comma for multiple
    * values. (Example: USA,HKG)
    */
   private String destination;
-
-  /**
-   * Current status of tracking. Values include Pending, InfoReceived, InTransit, OutForDelivery,
-   * AttemptFail, Delivered, AvailableForPickup, Exception, Expired(See tag definition)
-   */
-  private String tag;
-
-  /**
-   * Start date and time of trackings created. AfterShip only stores data of 90 days. (Defaults: 30
-   * days ago, Example: 2013-03-15T16:41:56+08:00)
-   */
-  private Date createdAtMin;
-
-  /**
-   * End date and time of trackings created. (Defaults: now, Example: 2013-04-15T16:41:56+08:00)
-   */
-  private Date createdAtMax;
-
-  /**
-   * Start date and time of trackings updated. (Example: 2013-04-15T16:41:56+08:00)
-   */
-  private Date updatedAtMin;
-
-  /**
-   * End date and time of trackings updated. (Example: 2013-04-15T16:41:56+08:00)
-   */
-  private Date updatedAtMax;
 
   /**
    * List of fields to include in the response. Use comma for multiple values. Fields to include:
@@ -93,6 +49,12 @@ public class GetTrackingsParams {
    * Example: title,order_id
    */
   private String fields;
+
+  /**
+   * Search the content of the tracking record fields: tracking_number, title, order_id,
+   * customer_name, custom_fields, order_id, emails, smses
+   */
+  private String keyword;
 
   /**
    * Default: '' / Example: 'en' Support Chinese to English translation for china-ems and china-post
@@ -106,15 +68,52 @@ public class GetTrackingsParams {
   private Date lastUpdatedAt;
 
   /**
+   * Number of trackings each page contain. (Default: 100, Max: 200)
+   */
+  private Integer limit;
+
+  /**
+   * Origin country of trackings. Use ISO Alpha-3 (three letters). Use comma for multiple values.
+   * (Example: USA,HKG)
+   */
+  private String origin;
+
+  /**
+   * Page to show. (Default: 1)
+   */
+  private Integer page;
+
+  /**
    * Select return to sender, the value should be true or false, with optional comma separated.
    */
   private Boolean returnToSender;
 
   /**
-   * Destination country of trackings returned by courier. Use ISO Alpha-3 (three letters).
-   * Use comma for multiple values. (Example: USA,HKG)
+   * Unique courier code Use comma for multiple values. (Example: dhl,ups,usps)
    */
-  private String courierDestinationCountryIso3;
+  private String slug;
+
+  /**
+   * Current status of tracking. Values include Pending, InfoReceived, InTransit, OutForDelivery,
+   * AttemptFail, Delivered, AvailableForPickup, Exception, Expired(See tag definition)
+   */
+  private String tag;
+
+  /**
+   * Tracking number of shipments. Use comma to separate multiple values
+   * Example: RA123456789US,LE123456789US
+   */
+  private String trackingNumbers;
+
+  /**
+   * End date and time of trackings updated. (Example: 2013-04-15T16:41:56+08:00)
+   */
+  private Date updatedAtMax;
+
+  /**
+   * Start date and time of trackings updated. (Example: 2013-04-15T16:41:56+08:00)
+   */
+  private Date updatedAtMin;
 
   /**
    * Generate a Map dictionary.
