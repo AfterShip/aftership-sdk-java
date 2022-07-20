@@ -149,4 +149,9 @@ public class UpdateTracking {
    * <p>Date
    */
   private Date orderDate;
+
+  /**
+   * The carrier’s shipment type. When you input this field, AfterShip will not get updates from the carrier.
+   */
+  private String shipmentType;
 }

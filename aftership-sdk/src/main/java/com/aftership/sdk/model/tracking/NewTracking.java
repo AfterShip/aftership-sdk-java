@@ -182,4 +182,9 @@ public class NewTracking {
    * <p>String
    */
   private String orderNumber;
+
+  /**
+   * The carrier’s shipment type. When you input this field, AfterShip will not get updates from the carrier.
+   */
+  private String shipmentType;
 }
