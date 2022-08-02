@@ -19,6 +19,8 @@ public class ErrorMessage {
   public static final String CONSTRUCTOR_PARAM_IS_NULL =
       "ConstructorError: Parameters cannot be null";
 
+  public static final String CONSTRUCTOR_SIGNATURE_ERROR = "ConstructorError: signature error";
+
   public static final String HANDLER_RESPONSE_BODY_IS_EMPTY =
       "HandlerError: return body json string is empty";
   public static final String HANDLER_RESPONSE_BODY_OBJECT_IS_NULL =

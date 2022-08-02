@@ -2,6 +2,9 @@ package com.aftership.sdk;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+
+import com.aftership.sdk.auth.AbstractSigner;
+import com.aftership.sdk.auth.HMACSigner;
 import com.aftership.sdk.endpoint.CheckpointEndpoint;
 import com.aftership.sdk.endpoint.CourierEndpoint;
 import com.aftership.sdk.endpoint.EstimatedDeliveryDateEndpoint;
@@ -17,39 +20,78 @@ import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.RateLimit;
 import com.aftership.sdk.request.ApiRequest;
 import com.aftership.sdk.request.ApiRequestImpl;
+import com.aftership.sdk.auth.AuthenticationType;
 import com.aftership.sdk.utils.StrUtils;
 import lombok.Getter;
 import lombok.Setter;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
-/** Entry class Of API function */
+/**
+ * Entry class Of API function
+ */
 @Getter
 public class AfterShip {
   private static final String DEFAULT_ENDPOINT = "https://api.aftership.com/v4";
   private static final String DEFAULT_USER_AGENT = "aftership-sdk-java";
-  /** instance of OkHttpClient */
+  /**
+   * instance of OkHttpClient
+   */
   private final OkHttpClient client;
 
-  /** apiKey parameter in API request */
+  /**
+   * apiKey parameter in API request
+   */
   private final String apiKey;
-  /** endpoint parameter in API request */
+
+  /**
+   * only when APIKeyType is AES  required
+   */
+  private final String apiSecret;
+
+  /**
+   * only support AES
+   */
+  private  final AbstractSigner signer;
+
+  /**
+   * apiKey authentication type in API request signature
+   */
+  private final AuthenticationType authenticationType;
+  /**
+   * endpoint parameter in API request
+   */
   private final String endpoint;
-  /** userAgentPrefix parameter in API request */
+  /**
+   * userAgentPrefix parameter in API request
+   */
   private final String userAgentPrefix;
 
-  /** Status of Rate Limit */
-  @Setter private RateLimit rateLimit;
+  /**
+   * Status of Rate Limit
+   */
+  @Setter
+  private RateLimit rateLimit;
 
-  /** Endpoint of Courier */
+  /**
+   * Endpoint of Courier
+   */
   private final CourierEndpoint courierEndpoint;
-  /** Endpoint of Tracking */
+  /**
+   * Endpoint of Tracking
+   */
   private final TrackingEndpoint trackingEndpoint;
-  /** Endpoint of Checkpoint */
+  /**
+   * Endpoint of Checkpoint
+   */
   private final CheckpointEndpoint checkpointEndpoint;
-  /** Endpoint of Notification */
+  /**
+   * Endpoint of Notification
+   */
   private final NotificationEndpoint notificationEndpoint;
-  /** Endpoint of EstimatedDeliveryDate */
+  /**
+   * Endpoint of EstimatedDeliveryDate
+   */
   private final EstimatedDeliveryDateEndpoint estimatedDeliveryDateEndpoint;
 
   /**
@@ -64,15 +106,42 @@ public class AfterShip {
   /**
    * Constructor
    *
-   * @param apiKey apiKey parameter in API request
+   * @param apiKey  apiKey parameter in API request
    * @param options Optional parameters for API request
    */
   public AfterShip(String apiKey, AftershipOption options) {
+    this(apiKey, null, null, options);
+  }
+
+  /**
+   * Constructor
+   *
+   * @param apiKey    apiKey parameter in API request
+   * @param type      apiKey authentication type in API request signature
+   * @param apiSecret only when APIKeyType is AES or RSA required
+   */
+  public AfterShip(String apiKey, AuthenticationType type, String apiSecret) {
+    this(apiKey, type, apiSecret, null);
+  }
+
+  /**
+   * Constructor
+   *
+   * @param apiKey    apiKey parameter in API request
+   * @param type      apiKey authentication type in API request signature
+   * @param apiSecret only when APIKeyType is AES or RSA required
+   * @param options   Optional parameters for API request
+   */
+  public AfterShip(String apiKey, AuthenticationType type, String apiSecret, AftershipOption options) {
     if (StrUtils.isBlank(apiKey)) {
       throw new IllegalArgumentException(ErrorMessage.CONSTRUCTOR_API_KEY_IS_NULL);
     }
 
     this.apiKey = apiKey;
+    this.apiSecret = apiSecret;
+    this.authenticationType = type;
+    this.signer = new HMACSigner(this.apiSecret);
+
 
     // http_client
     this.client = createClient(options);
@@ -80,11 +149,11 @@ public class AfterShip {
     // Setup
     if (options != null) {
       this.endpoint =
-          StrUtils.isNotBlank(options.getEndpoint()) ? options.getEndpoint() : DEFAULT_ENDPOINT;
+        StrUtils.isNotBlank(options.getEndpoint()) ? options.getEndpoint() : DEFAULT_ENDPOINT;
       this.userAgentPrefix =
-          StrUtils.isNotBlank(options.getUserAgentPrefix())
-              ? options.getUserAgentPrefix()
-              : DEFAULT_USER_AGENT;
+        StrUtils.isNotBlank(options.getUserAgentPrefix())
+          ? options.getUserAgentPrefix()
+          : DEFAULT_USER_AGENT;
     } else {
       this.endpoint = DEFAULT_ENDPOINT;
       this.userAgentPrefix = DEFAULT_USER_AGENT;
@@ -110,11 +179,11 @@ public class AfterShip {
    */
   private OkHttpClient createClient(AftershipOption options) {
     return new OkHttpClient.Builder()
-        .callTimeout(getCallTimeout(options), TimeUnit.MILLISECONDS)
-        .connectTimeout(getConnectTimeout(options), TimeUnit.MILLISECONDS)
-        .readTimeout(getReadTimeout(options), TimeUnit.MILLISECONDS)
-        .writeTimeout(getWriteTimeout(options), TimeUnit.MILLISECONDS)
-        .build();
+      .callTimeout(getCallTimeout(options), TimeUnit.MILLISECONDS)
+      .connectTimeout(getConnectTimeout(options), TimeUnit.MILLISECONDS)
+      .readTimeout(getReadTimeout(options), TimeUnit.MILLISECONDS)
+      .writeTimeout(getWriteTimeout(options), TimeUnit.MILLISECONDS)
+      .build();
   }
 
   private long getCallTimeout(AftershipOption options) {
@@ -122,8 +191,8 @@ public class AfterShip {
       return AftershipOption.DEFAULT_TIMEOUT;
     }
     return options.getCallTimeout() >= 0
-        ? options.getCallTimeout()
-        : AftershipOption.DEFAULT_TIMEOUT;
+      ? options.getCallTimeout()
+      : AftershipOption.DEFAULT_TIMEOUT;
   }
 
   private long getConnectTimeout(AftershipOption options) {
@@ -131,8 +200,8 @@ public class AfterShip {
       return AftershipOption.DEFAULT_TIMEOUT;
     }
     return options.getConnectTimeout() >= 0
-        ? options.getConnectTimeout()
-        : AftershipOption.DEFAULT_TIMEOUT;
+      ? options.getConnectTimeout()
+      : AftershipOption.DEFAULT_TIMEOUT;
   }
 
   private long getReadTimeout(AftershipOption options) {
@@ -140,8 +209,8 @@ public class AfterShip {
       return AftershipOption.DEFAULT_TIMEOUT;
     }
     return options.getReadTimeout() >= 0
-        ? options.getReadTimeout()
-        : AftershipOption.DEFAULT_TIMEOUT;
+      ? options.getReadTimeout()
+      : AftershipOption.DEFAULT_TIMEOUT;
   }
 
   private long getWriteTimeout(AftershipOption options) {
@@ -149,8 +218,8 @@ public class AfterShip {
       return AftershipOption.DEFAULT_TIMEOUT;
     }
     return options.getWriteTimeout() >= 0
-        ? options.getWriteTimeout()
-        : AftershipOption.DEFAULT_TIMEOUT;
+      ? options.getWriteTimeout()
+      : AftershipOption.DEFAULT_TIMEOUT;
   }
 
   /**
