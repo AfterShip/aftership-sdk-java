@@ -6,7 +6,6 @@ buildscript {
         mockitoVersion = '3.3.3'
         okhttpVersion = '4.6.0'
         gsonVersion = '2.8.6'
-
         lombokVersion = '1.18.10'
     }
     repositories {
