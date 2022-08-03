@@ -18,14 +18,14 @@ Requirements:
 <dependency>
   <groupId>com.aftership</groupId>
   <artifactId>aftership-sdk</artifactId>
-  <version>2.1.5</version>
+  <version>2.1.6</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```text
-implementation "com.aftership:aftership-sdk:2.1.5"
+implementation "com.aftership:aftership-sdk:2.1.6"
 ```
 
 
@@ -40,6 +40,10 @@ The following code example shows the `three main steps` to use aftership-sdk-jav
 ```java
 AfterShip afterShip = new AfterShip("YOUR_API_KEY", 
 	new AftershipOption("https://api.aftership.com/v4"));
+
+// if add aes sign
+AfterShip afterShip = new AfterShip("YOUR_API_KEY",AuthenticationType.AES,"YOUR_API_SECRET",
+        new AftershipOption("https://api.aftership.com/v4"));
 ```
 
 2. Get the Endpoint Interface and call the method, then return the object.
