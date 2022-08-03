@@ -3,16 +3,12 @@ package com.aftership.sdk.request;
 import com.aftership.sdk.auth.AuthenticationType;
 import com.aftership.sdk.auth.SignHeader;
 import com.aftership.sdk.auth.SignatureContent;
+import com.aftership.sdk.utils.*;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import com.aftership.sdk.AfterShip;
 import com.aftership.sdk.exception.AftershipException;
@@ -23,10 +19,6 @@ import com.aftership.sdk.exception.RequestException;
 import com.aftership.sdk.model.AftershipResponse;
 import com.aftership.sdk.model.Meta;
 import com.aftership.sdk.model.RateLimit;
-import com.aftership.sdk.utils.Define;
-import com.aftership.sdk.utils.JsonUtils;
-import com.aftership.sdk.utils.StrUtils;
-import com.aftership.sdk.utils.UrlUtils;
 import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -107,7 +99,9 @@ public class ApiRequestImpl implements ApiRequest {
     if (authenticationType == AuthenticationType.AES) {
       requestHeaders.put("as-api-key", app.getApiKey());
       // add sign
-      String date = DateTimeFormatter.RFC_1123_DATE_TIME.format(ZonedDateTime.now(ZoneOffset.UTC));
+      SimpleDateFormat sdf3 = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+      sdf3.setTimeZone(TimeZone.getTimeZone("GMT"));
+      String date = sdf3.format(new Date());
       SignHeader signHeader = app.getSigner().sign(
         SignatureContent.builder()
           .contentType(JSON.toString())
