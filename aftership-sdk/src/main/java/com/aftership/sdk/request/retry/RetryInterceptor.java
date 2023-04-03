@@ -36,6 +36,18 @@ public class RetryInterceptor implements Interceptor {
     this.retryConditions = retryConditions;
   }
 
+  /**
+   * Constructs a new RetryInterceptor with the specified parameters, using
+   * default values for backoffMultiplier and jitterFactor.
+   */
+  public RetryInterceptor(long initialDelay,
+                          long maxDelay,
+                          int maxRetries,
+                          List<RetryCondition> retryConditions) {
+    this(initialDelay, maxDelay, maxRetries, 1.6, 0.2, retryConditions);
+  }
+
+
   @Override
   public Response intercept(Chain chain) throws IOException {
     return retryWithBackoff(chain);

@@ -6,6 +6,7 @@ import com.aftership.sdk.exception.ApiException;
 import com.aftership.sdk.exception.RequestException;
 import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.AftershipOption;
+import com.aftership.sdk.model.RetryOption;
 import com.aftership.sdk.model.tracking.GetTrackingParams;
 import com.aftership.sdk.model.tracking.Tracking;
 import com.aftership.sdk.utils.JsonUtils;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -28,8 +30,15 @@ public class RetryInterceptorTest {
   public void setup() {
     mockWebServer = new MockWebServer();
 
+    RetryOption retryOption = new RetryOption();
+    retryOption.setRetryDelay(500);
+    retryOption.setRetryMaxDelay(18 * 1000L);
+    retryOption.setRetryCount(10);
+    retryOption.setRetryConditions(Arrays.asList((
+      (response, exception) -> exception != null || (response != null && response.code() >= 500))));
+
     AftershipOption option = new AftershipOption();
-    option.setRetryCount(3);
+    option.setRetryOption(retryOption);
     option.setEndpoint(String.format(TestUtil.ENDPOINT_FORMAT, mockWebServer.getPort()));
     aftership = new AfterShip(TestUtil.YOUR_API_KEY, option);
   }
@@ -56,6 +65,13 @@ public class RetryInterceptorTest {
     // first request fail
     mockWebServer.enqueue(new MockResponse().setResponseCode(500));
     // retry
+    mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+    mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+    mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+    mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+    mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+    mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+    mockWebServer.enqueue(new MockResponse().setResponseCode(500));
     mockWebServer.enqueue(new MockResponse().setResponseCode(500));
     mockWebServer.enqueue(new MockResponse().setResponseCode(500));
     mockWebServer.enqueue(TestUtil.createMockResponse()

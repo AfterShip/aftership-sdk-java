@@ -24,6 +24,11 @@ public class AftershipOption {
   public static final long DEFAULT_RETRY_DELAY = 500L;
 
   /**
+   * Default retry count
+   */
+  public static final int DEFAULT_RETRY_COUNT = 10;
+
+  /**
    * Default maximum retry delay
    */
   public static final long DEFAULT_RETRY_MAX_DELAY = DEFAULT_TIMEOUT - (2 * 1000L);
@@ -63,25 +68,7 @@ public class AftershipOption {
   private long writeTimeout;
 
   /**
-   * The initial retry delay in milliseconds. The default value is DEFAULT_RETRY_DELAY.
-   * Ensure that the value does not exceed retryMaxDelay.
+   * retry option
    */
-  private long retryDelay;
-
-  /**
-   * The maximum retry delay in milliseconds. The default value is DEFAULT_RETRY_MAX_DELAY.
-   * Ensure that the value does not exceed the timeout you set.
-   */
-  private long retryMaxDelay;
-
-  /**
-   * The number of retries. To use the retry function, this field must be set to a value greater than 0.
-   */
-  private int retryCount;
-
-  /**
-   * The list of retry conditions.
-   */
-  private List<RetryCondition> retryConditions;
-
+  private RetryOption retryOption;
 }

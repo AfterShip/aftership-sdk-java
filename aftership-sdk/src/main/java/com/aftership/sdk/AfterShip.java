@@ -3,6 +3,7 @@ package com.aftership.sdk;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import com.aftership.sdk.auth.AbstractSigner;
@@ -20,6 +21,7 @@ import com.aftership.sdk.endpoint.impl.TrackingImpl;
 import com.aftership.sdk.exception.ErrorMessage;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.RateLimit;
+import com.aftership.sdk.model.RetryOption;
 import com.aftership.sdk.request.ApiRequest;
 import com.aftership.sdk.request.ApiRequestImpl;
 import com.aftership.sdk.auth.AuthenticationType;
@@ -189,16 +191,15 @@ public class AfterShip {
       .readTimeout(getReadTimeout(options), TimeUnit.MILLISECONDS)
       .writeTimeout(getWriteTimeout(options), TimeUnit.MILLISECONDS);
 
-    // set retry interceptor
-    if (getRetryCount(options) > 0) {
-      Interceptor retryInterceptor = new RetryInterceptor(
-        getRetryDelay(options),
-        getRetryMaxDelay(options),
-        getRetryCount(options),
-        1.6,
-        0.2,
-        getRetryConditions(options));
 
+    // set retry interceptor
+    RetryOption retryOption = options.getRetryOption();
+    if (!Objects.isNull(retryOption)) {
+      Interceptor retryInterceptor = new RetryInterceptor(
+        getRetryDelay(retryOption),
+        getRetryMaxDelay(retryOption),
+        getRetryCount(retryOption),
+        getRetryConditions(retryOption));
       builder.addInterceptor(retryInterceptor);
     }
 
@@ -241,39 +242,35 @@ public class AfterShip {
       : AftershipOption.DEFAULT_TIMEOUT;
   }
 
-  private List<RetryCondition> getRetryConditions(AftershipOption options) {
+  private List<RetryCondition> getRetryConditions(RetryOption retryOption) {
     List<RetryCondition> defaultRetryConditions = Arrays.asList(
       (response, exception) -> exception != null || (response != null && response.code() >= 500));
 
-    if (options == null) {
+    if (retryOption == null) {
       return defaultRetryConditions;
     }
 
-    return options.getRetryConditions() != null && options.getRetryConditions().size() > 0
-      ? options.getRetryConditions()
+    return retryOption.getRetryConditions() != null && retryOption.getRetryConditions().size() > 0
+      ? retryOption.getRetryConditions()
       : defaultRetryConditions;
   }
 
-  private long getRetryMaxDelay(AftershipOption options) {
-    if (options == null) {
-      return AftershipOption.DEFAULT_RETRY_MAX_DELAY;
-    }
-    return options.getRetryMaxDelay() > 0
-      ? options.getRetryMaxDelay()
+  private long getRetryMaxDelay(RetryOption retryOption) {
+    return retryOption.getRetryMaxDelay() > 0
+      ? retryOption.getRetryMaxDelay()
       : AftershipOption.DEFAULT_RETRY_MAX_DELAY;
   }
 
-  private long getRetryDelay(AftershipOption options) {
-    if (options == null) {
-      return AftershipOption.DEFAULT_RETRY_DELAY;
-    }
-    return options.getRetryDelay() > 0
-      ? options.getRetryDelay()
+  private long getRetryDelay(RetryOption retryOption) {
+    return retryOption.getRetryDelay() > 0
+      ? retryOption.getRetryDelay()
       : AftershipOption.DEFAULT_RETRY_DELAY;
   }
 
-  private int getRetryCount(AftershipOption options) {
-    return options.getRetryCount();
+  private int getRetryCount(RetryOption retryOption) {
+    return retryOption.getRetryCount() > 0
+      ? retryOption.getRetryCount()
+      : AftershipOption.DEFAULT_RETRY_COUNT;
   }
 
 
