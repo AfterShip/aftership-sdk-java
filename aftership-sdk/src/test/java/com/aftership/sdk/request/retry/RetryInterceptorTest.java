@@ -29,7 +29,7 @@ public class RetryInterceptorTest {
     mockWebServer = new MockWebServer();
 
     AftershipOption option = new AftershipOption();
-    option.setRetryCount(10);
+    option.setRetryCount(3);
     option.setEndpoint(String.format(TestUtil.ENDPOINT_FORMAT, mockWebServer.getPort()));
     aftership = new AfterShip(TestUtil.YOUR_API_KEY, option);
   }
@@ -53,6 +53,9 @@ public class RetryInterceptorTest {
 
   @Test
   public void testRetryOnServerError() throws IOException, SdkException, RequestException, ApiException {
+    // first request fail
+    mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+    // retry
     mockWebServer.enqueue(new MockResponse().setResponseCode(500));
     mockWebServer.enqueue(new MockResponse().setResponseCode(500));
     mockWebServer.enqueue(TestUtil.createMockResponse()
