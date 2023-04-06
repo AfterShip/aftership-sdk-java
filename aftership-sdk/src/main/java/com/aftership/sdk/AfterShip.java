@@ -1,6 +1,9 @@
 package com.aftership.sdk;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import com.aftership.sdk.auth.AbstractSigner;
@@ -18,13 +21,17 @@ import com.aftership.sdk.endpoint.impl.TrackingImpl;
 import com.aftership.sdk.exception.ErrorMessage;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.model.RateLimit;
+import com.aftership.sdk.model.RetryOption;
 import com.aftership.sdk.request.ApiRequest;
 import com.aftership.sdk.request.ApiRequestImpl;
 import com.aftership.sdk.auth.AuthenticationType;
+import com.aftership.sdk.request.retry.RetryCondition;
+import com.aftership.sdk.request.retry.RetryInterceptor;
 import com.aftership.sdk.utils.StrUtils;
 import lombok.Getter;
 import lombok.Setter;
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 
 /**
@@ -52,7 +59,7 @@ public class AfterShip {
   /**
    * only support AES
    */
-  private  final AbstractSigner signer;
+  private final AbstractSigner signer;
 
   /**
    * apiKey authentication type in API request signature
@@ -178,12 +185,25 @@ public class AfterShip {
    * @return OkHttpClient
    */
   private OkHttpClient createClient(AftershipOption options) {
-    return new OkHttpClient.Builder()
+    OkHttpClient.Builder builder = new OkHttpClient.Builder()
       .callTimeout(getCallTimeout(options), TimeUnit.MILLISECONDS)
       .connectTimeout(getConnectTimeout(options), TimeUnit.MILLISECONDS)
       .readTimeout(getReadTimeout(options), TimeUnit.MILLISECONDS)
-      .writeTimeout(getWriteTimeout(options), TimeUnit.MILLISECONDS)
-      .build();
+      .writeTimeout(getWriteTimeout(options), TimeUnit.MILLISECONDS);
+
+
+    // set retry interceptor
+    RetryOption retryOption = options.getRetryOption();
+    if (!Objects.isNull(retryOption)) {
+      Interceptor retryInterceptor = new RetryInterceptor(
+        getRetryDelay(retryOption),
+        getRetryMaxDelay(retryOption),
+        getRetryCount(retryOption),
+        getRetryConditions(retryOption));
+      builder.addInterceptor(retryInterceptor);
+    }
+
+    return builder.build();
   }
 
   private long getCallTimeout(AftershipOption options) {
@@ -221,6 +241,38 @@ public class AfterShip {
       ? options.getWriteTimeout()
       : AftershipOption.DEFAULT_TIMEOUT;
   }
+
+  private List<RetryCondition> getRetryConditions(RetryOption retryOption) {
+    List<RetryCondition> defaultRetryConditions = Arrays.asList(
+      (response, exception) -> exception != null || (response != null && response.code() >= 500));
+
+    if (retryOption == null) {
+      return defaultRetryConditions;
+    }
+
+    return retryOption.getRetryConditions() != null && retryOption.getRetryConditions().size() > 0
+      ? retryOption.getRetryConditions()
+      : defaultRetryConditions;
+  }
+
+  private long getRetryMaxDelay(RetryOption retryOption) {
+    return retryOption.getRetryMaxDelay() > 0
+      ? retryOption.getRetryMaxDelay()
+      : AftershipOption.DEFAULT_RETRY_MAX_DELAY;
+  }
+
+  private long getRetryDelay(RetryOption retryOption) {
+    return retryOption.getRetryDelay() > 0
+      ? retryOption.getRetryDelay()
+      : AftershipOption.DEFAULT_RETRY_DELAY;
+  }
+
+  private int getRetryCount(RetryOption retryOption) {
+    return retryOption.getRetryCount() > 0
+      ? retryOption.getRetryCount()
+      : AftershipOption.DEFAULT_RETRY_COUNT;
+  }
+
 
   /**
    * Shutdown the OkHttpClient.

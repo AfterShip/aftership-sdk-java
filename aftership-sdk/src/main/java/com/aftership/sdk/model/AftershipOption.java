@@ -1,9 +1,14 @@
 package com.aftership.sdk.model;
 
+import com.aftership.sdk.request.retry.RetryCondition;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** Optional parameters for API request */
+import java.util.List;
+
+/**
+ * Optional parameters for API request
+ */
 @Data
 @NoArgsConstructor
 public class AftershipOption {
@@ -13,10 +18,29 @@ public class AftershipOption {
    */
   public static final long DEFAULT_TIMEOUT = 20 * 1000L;
 
-  /** Url of endpoint */
+  /**
+   * Default retry delay
+   */
+  public static final long DEFAULT_RETRY_DELAY = 500L;
+
+  /**
+   * Default retry count
+   */
+  public static final int DEFAULT_RETRY_COUNT = 10;
+
+  /**
+   * Default maximum retry delay
+   */
+  public static final long DEFAULT_RETRY_MAX_DELAY = DEFAULT_TIMEOUT - (2 * 1000L);
+
+  /**
+   * Url of endpoint
+   */
   private String endpoint;
 
-  /** Prefix of UserAgent */
+  /**
+   * Prefix of UserAgent
+   */
   private String userAgentPrefix;
 
   /**
@@ -43,4 +67,8 @@ public class AftershipOption {
    */
   private long writeTimeout;
 
+  /**
+   * retry option
+   */
+  private RetryOption retryOption;
 }
