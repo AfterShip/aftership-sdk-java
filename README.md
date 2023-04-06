@@ -18,14 +18,14 @@ Requirements:
 <dependency>
   <groupId>com.aftership</groupId>
   <artifactId>aftership-sdk</artifactId>
-  <version>2.1.6</version>
+  <version>2.1.7</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```text
-implementation "com.aftership:aftership-sdk:2.1.6"
+implementation "com.aftership:aftership-sdk:2.1.7"
 ```
 
 
@@ -271,6 +271,98 @@ option.setReadTimeout(10 * 1000);
 option.setWriteTimeout(10 * 1000);
 AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), option);
 ```
+
+### Retry
+Retry policy implemented using OKHttp interceptor. Allows to customize the delay interval, maximum retry interval, and number of retries; implements an exponential backoff delay strategy.
+#### 1 RetryInterceptor
+```java
+public class RetryInterceptor implements Interceptor {
+
+  private long initialDelay;              // Initial retry delay in milliseconds
+  private long maxDelay;                  // Maximum retry delay in milliseconds
+  private int maxRetries;                 // Maximum number of retries
+  private double backoffMultiplier;       // Exponential backoff multiplier. Should ideally be greater than 1.
+  private double jitterFactor;            // Jitter factor for randomized delay
+  private List<RetryCondition> retryConditions;  // Customizable retry condition
+
+}
+```
+
+- `initialDelay`: The initial retry interval. Default is `500ms`.
+- `maxDelay`: The maximum delay. After reaching the maximum delay, subsequent retries will use the same value. Default is `18s` (default timeout is 20s).
+- `maxRetries`: The maximum number of retries. Default is `10`.
+- `backoffMultiplier`: The exponential backoff multiplier. After each retry attempt, the retry interval will be multiplied by this value, resulting in exponential growth of delays. Default is `1.6`.
+- `jitterFactor`: The jitter factor. Adds positive or negative jitter to calculated exponential backoff delay, helping to distribute retry requests and reduce server load. Default is `0.2`.
+- `retryConditions`: Custom retry conditions allow customers to define their own retry criteria. Default is to retry on exceptions or when response status code is `≥500`.
+
+#### 2 backoff()
+Calculates the exponential backoff delay based on the number of retry attempts.
+
+```java
+public class RetryInterceptor implements Interceptor {
+  /**
+   * Calculates the exponential backoff delay for the specified retry attempt number, using the configured
+   * backoff multiplier and maximum delay, and adds randomized jitter to the delay.
+   *
+   * @param retries The current retry attempt number.
+   * @return The calculated delay before the next retry attempt, in milliseconds.
+   */
+  private long backoff(int retries) {
+    // Calculate exponential backoff delay: initialDelay * (backoffMultiplier ^ retries)
+    long delay = (long) (initialDelay * Math.pow(backoffMultiplier, retries));
+    // Calculate jitter: jitterFactor * delay * random number in [-1, 1) range
+    double jitter = jitterFactor * delay * (Math.random() - 0.5) * 2;
+    // Add the exponential backoff delay and jitter to get the final delay
+    long finalDelay = (long) (delay + jitter);
+
+    // Ensure the final delay does not exceed the maximum delay
+    if (finalDelay > maxDelay) {
+      finalDelay = maxDelay;
+    }
+
+    return finalDelay;
+  }
+```
+
+Assuming retries=10, initialDelay=500, backoffMultiplier=1.6, jitterFactor=0.2, and maxDelay=18,000; the time intervals required for each retry are as follows:
+
+| retries | delay |
+| --- | --- |
+| 1 | 586 |
+| 2 | 787 |
+| 3 | 1342 |
+| 4 | 2304 |
+| 5 | 3219 |
+| 6 | 4592 |
+| 7 | 7293 |
+| 8 | 12020 |
+| 9 | 18000 |
+| 10 | 18000 |
+
+#### 3 Example
+```java
+public class RetrySample {
+  public static void main(String[] args) {
+    AftershipOption option = SampleUtil.getAftershipOption();
+
+    RetryOption retryOption = new RetryOption();
+    retryOption.setRetryDelay(500);
+    retryOption.setRetryMaxDelay(18 * 1000L);
+    retryOption.setRetryCount(10);
+    retryOption.setRetryConditions(Arrays.asList((
+      (response, exception) -> exception != null || (response != null && response.code() >= 500))));
+
+    option.setRetryOption(retryOption);
+    AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), option);
+  }
+}
+```
+- Retry interval: 500ms
+- Maximum retry interval: 18s
+- Number of retries: 10
+- Retry conditions: exception != null || (response != null && response.code() >= 500)
+- backoffMultiplier and jitterFactor are set to 1.6 and 0.2 respectively by default
+
 
 ### Shutdown
 
