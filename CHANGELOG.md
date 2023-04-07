@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix No option constructor throws NullPointerException, add null options validate
   - PR: https://github.com/AfterShip/aftership-sdk-java/pull/48
   - Issue: https://github.com/AfterShip/aftership-sdk-java/issues/47
+- Fix retry issue (https://github.com/AfterShip/aftership-sdk-java/pull/50)
 
 ## [2.1.7] - 2023-04-06
 ### Added
