@@ -193,14 +193,16 @@ public class AfterShip {
 
 
     // set retry interceptor
-    RetryOption retryOption = options.getRetryOption();
-    if (!Objects.isNull(retryOption)) {
-      Interceptor retryInterceptor = new RetryInterceptor(
-        getRetryDelay(retryOption),
-        getRetryMaxDelay(retryOption),
-        getRetryCount(retryOption),
-        getRetryConditions(retryOption));
-      builder.addInterceptor(retryInterceptor);
+    if (!Objects.isNull(options)) {
+      RetryOption retryOption = options.getRetryOption();
+      if (!Objects.isNull(retryOption)) {
+        Interceptor retryInterceptor = new RetryInterceptor(
+          getRetryDelay(retryOption),
+          getRetryMaxDelay(retryOption),
+          getRetryCount(retryOption),
+          getRetryConditions(retryOption));
+        builder.addInterceptor(retryInterceptor);
+      }
     }
 
     return builder.build();
