@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [2.1.8] - 2023-04-07
+## [2.1.9] - 2023-04-07
 ### Fixed
 - Fix No option constructor throws NullPointerException, add null options validate
   - PR: https://github.com/AfterShip/aftership-sdk-java/pull/48
@@ -74,7 +74,7 @@ Compatibility
 - Solving issue at Checkpoint.java, typo in ```country_iso3```
 
 
-[2.1.8]: https://github.com/AfterShip/aftership-sdk-java/compare/2.1.7...2.1.8
+[2.1.9]: https://github.com/AfterShip/aftership-sdk-java/compare/2.1.7...2.1.9
 [2.1.7]: https://github.com/AfterShip/aftership-sdk-java/compare/2.1.6...2.1.7
 [2.1.6]: https://github.com/AfterShip/aftership-sdk-java/compare/2.1.5...2.1.6
 [2.1.5]: https://github.com/AfterShip/aftership-sdk-java/compare/v2.1.3...2.1.5
