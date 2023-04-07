@@ -10,6 +10,9 @@ import com.aftership.sdk.model.RetryOption;
 import com.aftership.sdk.model.tracking.GetTrackingParams;
 import com.aftership.sdk.model.tracking.Tracking;
 import com.aftership.sdk.utils.JsonUtils;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterEach;
@@ -25,6 +28,7 @@ public class RetryInterceptorTest {
 
   private MockWebServer mockWebServer;
   private AfterShip aftership;
+  private OkHttpClient okHttpClient;
 
   @BeforeEach
   public void setup() {
@@ -41,6 +45,17 @@ public class RetryInterceptorTest {
     option.setRetryOption(retryOption);
     option.setEndpoint(String.format(TestUtil.ENDPOINT_FORMAT, mockWebServer.getPort()));
     aftership = new AfterShip(TestUtil.YOUR_API_KEY, option);
+
+
+    okHttpClient = new OkHttpClient.Builder()
+      .addInterceptor(new RetryInterceptor(
+        500,
+        18 * 1000,
+        10,
+        Arrays.asList((
+          (response, exception) -> exception != null || (response != null && response.code() >= 500)))
+      ))
+      .build();
   }
 
   @AfterEach
@@ -58,6 +73,19 @@ public class RetryInterceptorTest {
       .getTracking("100", JsonUtils.getGson().fromJson(query, GetTrackingParams.class));
 
     assertEquals(tracking.getId(), "5b7658cec7c33c0e007de3c5");
+  }
+
+  @Test
+  public void testRetryOnStopRetry() throws IOException, SdkException, RequestException, ApiException {
+    mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+    mockWebServer.enqueue(new MockResponse().setResponseCode(400));
+    mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+    mockWebServer.enqueue(new MockResponse().setResponseCode(200));
+
+    Request request = new Request.Builder().url(mockWebServer.url("/")).build();
+    Response response = okHttpClient.newCall(request).execute();
+
+    assertEquals(400, response.code());
   }
 
   @Test
