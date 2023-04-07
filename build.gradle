@@ -106,9 +106,10 @@ project(':aftership-sdk') {
     }
 }
 
-project(':aftership-sample'){
+project(':aftership-sample') {
     dependencies {
 //        compile project(':aftership-sdk')
+        implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
         implementation "com.aftership:aftership-sdk:2.1.8"
     }
 

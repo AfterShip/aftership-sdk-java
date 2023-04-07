@@ -64,6 +64,9 @@ public class RetryInterceptor implements Interceptor {
     // The first time is the normal request, and only after that is the number of retries ons
     for (int retries = 0; retries <= maxRetries; retries++) {
       try {
+        if (response != null) {
+          response.close();
+        }
         response = chain.proceed(chain.request());
 
         if (response.isSuccessful()) {
@@ -73,10 +76,12 @@ public class RetryInterceptor implements Interceptor {
         exception = e;
       }
 
-      // If the custom retry condition is met, wait for the delay
-      if (shouldRetry(response, exception)) {
-        waitForDelay(retries);
+      // If the custom retry condition is not met, break
+      if (!shouldRetry(response, exception)) {
+        break;
       }
+
+      waitForDelay(retries);
     }
 
     if (exception != null) {
