@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.10] - 2023-05-15
+### Fixed
+- Fix sign bug (https://github.com/AfterShip/aftership-sdk-java/pull/53)
 
 ## [2.1.9] - 2023-04-07
 ### Fixed
@@ -73,7 +76,7 @@ Compatibility
 ### Changed
 - Solving issue at Checkpoint.java, typo in ```country_iso3```
 
-
+[2.1.10]: https://github.com/AfterShip/aftership-sdk-java/compare/2.1.9...2.1.10
 [2.1.9]: https://github.com/AfterShip/aftership-sdk-java/compare/2.1.7...2.1.9
 [2.1.7]: https://github.com/AfterShip/aftership-sdk-java/compare/2.1.6...2.1.7
 [2.1.6]: https://github.com/AfterShip/aftership-sdk-java/compare/2.1.5...2.1.6
