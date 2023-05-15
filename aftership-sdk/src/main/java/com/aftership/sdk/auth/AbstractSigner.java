@@ -128,7 +128,12 @@ public abstract class AbstractSigner {
     try {
       MessageDigest md5 = MessageDigest.getInstance("md5");
       byte[] digest = md5.digest(str.getBytes(StandardCharsets.UTF_8));
-      result = new BigInteger(1, digest).toString(16);
+
+      StringBuilder sb = new StringBuilder();
+      for (byte b : digest) {
+        sb.append(String.format("%02x", b & 0xff));
+      }
+      result = sb.toString();
     } catch (NoSuchAlgorithmException e) {
       e.printStackTrace();
     }
