@@ -216,6 +216,11 @@ public class Tracking {
   private String shipmentType;
 
   /**
+   * Used to add tags to your shipments to help categorize and filter them easily.
+   */
+  private List<String> shipmentTags;
+
+  /**
    * Shipment weight provied by carrier (if any)
    *
    * <p>Float

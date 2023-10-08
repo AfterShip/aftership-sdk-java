@@ -187,4 +187,9 @@ public class NewTracking {
    * The carrier’s shipment type. When you input this field, AfterShip will not get updates from the carrier.
    */
   private String shipmentType;
+
+  /**
+   * Used to add tags to your shipments to help categorize and filter them easily.
+   */
+  private String[] shipmentTags;
 }
