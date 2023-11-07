@@ -40,6 +40,7 @@ import okhttp3.OkHttpClient;
 @Getter
 public class AfterShip {
   private static final String DEFAULT_ENDPOINT = "https://api.aftership.com/v4";
+  private static final String DEFAULT_VERSION_ENDPOINT = "https://api.aftership.com/tracking/%s";
   private static final String DEFAULT_USER_AGENT = "aftership-sdk-java";
   /**
    * instance of OkHttpClient
@@ -69,6 +70,10 @@ public class AfterShip {
    * endpoint parameter in API request
    */
   private final String endpoint;
+  /**
+   * version in API request
+   */
+  private final String version;
   /**
    * userAgentPrefix parameter in API request
    */
@@ -155,14 +160,18 @@ public class AfterShip {
 
     // Setup
     if (options != null) {
+      String _version = options.getVersion() != null ? options.getVersion().getValue() : "";
+      this.version = _version;
       this.endpoint =
-        StrUtils.isNotBlank(options.getEndpoint()) ? options.getEndpoint() : DEFAULT_ENDPOINT;
+        StrUtils.isNotBlank(options.getEndpoint()) ? options.getEndpoint() :
+          (StrUtils.isNotBlank(_version) ? String.format(DEFAULT_VERSION_ENDPOINT, _version) : DEFAULT_ENDPOINT);
       this.userAgentPrefix =
         StrUtils.isNotBlank(options.getUserAgentPrefix())
           ? options.getUserAgentPrefix()
           : DEFAULT_USER_AGENT;
     } else {
       this.endpoint = DEFAULT_ENDPOINT;
+      this.version = "";
       this.userAgentPrefix = DEFAULT_USER_AGENT;
     }
 

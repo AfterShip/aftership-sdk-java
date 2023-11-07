@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import com.aftership.sdk.enums.Versions;
 import com.aftership.sdk.exception.SdkException;
 import com.aftership.sdk.model.AftershipOption;
 import com.aftership.sdk.utils.UrlUtils;
@@ -67,6 +69,13 @@ public class TestUtil {
   public static AfterShip createAfterShip(MockWebServer server) throws SdkException {
     AftershipOption option = new AftershipOption();
     option.setEndpoint(String.format(TestUtil.ENDPOINT_FORMAT, server.getPort()));
+    return new AfterShip(TestUtil.YOUR_API_KEY, option);
+  }
+
+  public static AfterShip createAfterShipNewVersion(MockWebServer server) throws SdkException {
+    AftershipOption option = new AftershipOption();
+    option.setVersion(Versions.V2023_10);
+    option.setEndpoint(String.format("http://localhost:%s/%s", server.getPort(), option.getVersion().getValue()));
     return new AfterShip(TestUtil.YOUR_API_KEY, option);
   }
 }
