@@ -50,6 +50,7 @@ public class GetTrackingBySlugTest {
             .getTracking(identifier, JsonUtils.getGson().fromJson(query, GetTrackingParams.class));
 
     Assertions.assertNotNull(tracking);
+    Assertions.assertEquals(10, tracking.getTransitTime(), "transit_time mismatch.");
     Assertions.assertEquals("fedex", tracking.getSlug(), "Slug mismatch.");
     Assertions.assertTrue(
         tracking.getCheckpoints().size() > 0, "Checkpoints need to be " + "greater than 0");

@@ -302,7 +302,8 @@
       "first_attempted_at": "2018-07-25T10:10:00+09:00",
       "aftership_estimated_delivery_date": null,
       "order_tags": null,
-      "destination_raw_location": "Sydney, Australia"
+      "destination_raw_location": "Sydney, Australia",
+      "transit_time": 10
     }
   }
 }

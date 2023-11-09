@@ -99,6 +99,16 @@ public class Tracking {
   private int deliveryTime;
 
   /**
+   * Total transit time in days.
+   * For delivered shipments: Transit time (in days) = Delivered date - Pick-up date
+   * For undelivered shipments: Transit time (in days) = Current date - Pick-up date
+   * Value as null for the shipment without pick-up date.
+   *
+   * <p>Number
+   */
+  private int transitTime;
+
+  /**
    * Destination country of the tracking. ISO Alpha-3 (three letters). If you use postal service to
    * send international shipments, AfterShip will automatically get tracking results from
    * destination postal service based on destination country.

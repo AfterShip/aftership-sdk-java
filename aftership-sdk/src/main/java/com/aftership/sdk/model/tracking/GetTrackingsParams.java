@@ -38,6 +38,16 @@ public class GetTrackingsParams {
   private Integer deliveryTime;
 
   /**
+   * Total transit time in days.
+   * For delivered shipments: Transit time (in days) = Delivered date - Pick-up date
+   * For undelivered shipments: Transit time (in days) = Current date - Pick-up date
+   * Value as null for the shipment without pick-up date.
+   *
+   * <p>Number
+   */
+  private Integer transitTime;
+
+  /**
    * Destination country of trackings. Use ISO Alpha-3 (three letters). Use comma for multiple
    * values. (Example: USA,HKG)
    */
@@ -136,6 +146,9 @@ public class GetTrackingsParams {
     map.put(
       "delivery_time",
       this.getDeliveryTime() != null ? this.getDeliveryTime().toString() : StrUtils.EMPTY);
+    map.put(
+      "transit_time",
+      this.getTransitTime() != null ? this.getTransitTime().toString() : StrUtils.EMPTY);
     map.put("origin", this.getOrigin());
     map.put("destination", this.getDestination());
     map.put("tag", this.getTag());

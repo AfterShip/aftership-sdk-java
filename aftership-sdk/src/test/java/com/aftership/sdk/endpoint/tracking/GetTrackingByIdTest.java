@@ -50,6 +50,7 @@ public class GetTrackingByIdTest {
 
     Assertions.assertNotNull(tracking);
     Assertions.assertEquals("fedex", tracking.getSlug(), "Slug mismatch.");
+    Assertions.assertEquals(10, tracking.getTransitTime(), "transit_time mismatch.");
     Assertions.assertTrue(
         tracking.getCheckpoints().size() > 0, "Checkpoints need to be " + "greater than 0");
     Assertions.assertEquals(
