@@ -50,6 +50,16 @@ public class GetTrackingByIdTest {
 
     Assertions.assertNotNull(tracking);
     Assertions.assertEquals("fedex", tracking.getSlug(), "Slug mismatch.");
+    Assertions.assertEquals(10, tracking.getTransitTime(), "transit_time mismatch.");
+    Assertions.assertEquals("usps", tracking.getNextCouriers().get(0).getSlug(), "next couriers mismatch.");
+    Assertions.assertEquals("61293150000079650811", tracking.getNextCouriers().get(0).getTrackingNumber(), "next couriers mismatch.");
+    Assertions.assertEquals("system", tracking.getNextCouriers().get(0).getSource(), "next couriers mismatch.");
+    Assertions.assertEquals("8e1261bde336436abbc7cb3eee8cd707", tracking.getCourierConnectionId(), "courier connection id mismatch.");
+    Assertions.assertEquals("Carrier EDD", tracking.getFirstEstimatedDelivery().getSource(), "first_estimated_delivery id mismatch.");
+    Assertions.assertEquals("specific", tracking.getFirstEstimatedDelivery().getType(), "first_estimated_delivery mismatch.");
+    Assertions.assertEquals("2022-01-05T12:11:11+01:00", tracking.getFirstEstimatedDelivery().getDatetime(), "first_estimated_delivery mismatch.");
+    Assertions.assertEquals(null, tracking.getFirstEstimatedDelivery().getDatetimeMax(), "first_estimated_delivery mismatch.");
+    Assertions.assertEquals(null, tracking.getFirstEstimatedDelivery().getDatetimeMin(), "first_estimated_delivery mismatch.");
     Assertions.assertTrue(
         tracking.getCheckpoints().size() > 0, "Checkpoints need to be " + "greater than 0");
     Assertions.assertEquals(
@@ -58,7 +68,7 @@ public class GetTrackingByIdTest {
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("GET", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        MessageFormat.format("/v4/trackings/{0}", id),
+        MessageFormat.format("/tracking/2023-10/trackings/{0}", id),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
     Assertions.assertNotNull(tracking.getCourierRedirectLink(), "courier_redirect_link mismatch");

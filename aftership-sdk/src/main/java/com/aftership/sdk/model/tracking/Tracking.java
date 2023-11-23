@@ -90,13 +90,14 @@ public class Tracking {
   private String customerName;
 
   /**
-   * Total delivery time in days. - Difference of 1st checkpoint time and delivered time for
-   * delivered shipments - Difference of 1st checkpoint time and current time for non-delivered
-   * shipments Value as 0 for pending shipments or delivered shipment with only one checkpoint.
+   * Total transit time in days.
+   * For delivered shipments: Transit time (in days) = Delivered date - Pick-up date
+   * For undelivered shipments: Transit time (in days) = Current date - Pick-up date
+   * Value as null for the shipment without pick-up date.
    *
    * <p>Number
    */
-  private int deliveryTime;
+  private int transitTime;
 
   /**
    * Destination country of the tracking. ISO Alpha-3 (three letters). If you use postal service to
@@ -475,6 +476,12 @@ public class Tracking {
   private String onTimeStatus;
 
   /**
+   * Estimated delivery time of the shipment based on your custom EDD settings.
+   * It uses the format YYYY-MM-DD based on the shipment recipient’s timezone.
+   */
+  private LatestEstimatedDelivery customEstimatedDeliveryDate;
+
+  /**
    * Array of Hash describes the checkpoint information.
    *
    * <p>EstimatedDeliveryDate
@@ -497,4 +504,24 @@ public class Tracking {
    * 3. Date, time, and time zone: `YYYY-MM-DDTHH:mm:ssZ`
    */
   private LatestEstimatedDelivery latestEstimatedDelivery;
+
+  /**
+   * The shipment’s original estimated delivery date. It could be provided by the carrier, AfterShip AI, or based on
+   * your custom settings. The format of carrier EDDs may differ depending on how the carrier provides it:
+   * YYYY-MM-DD
+   * YYYY-MM-DDTHH:mm:ss
+   * YYYY-MM-DDTHH:mm:ssZ
+   * AfterShip AI and custom EDDs always use the format YYYY-MM-DD. All EDDs use the shipment recipient’s timezone
+   */
+  private LatestEstimatedDelivery firstEstimatedDelivery;
+
+  /**
+   * The next couriers get the second carrier information from user or AfterShip.
+   */
+  private List<NextCourier> nextCouriers;
+
+  /**
+   * The courier connection id tells which carrier account you’ve used to handle a shipment so we can track it.
+   */
+  private String courierConnectionId;
 }

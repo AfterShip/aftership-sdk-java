@@ -1,5 +1,6 @@
 package com.aftership.sdk.model;
 
+import com.aftership.sdk.enums.Versions;
 import com.aftership.sdk.request.retry.RetryCondition;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,11 @@ public class AftershipOption {
    * Url of endpoint
    */
   private String endpoint;
+
+  /**
+   * version of API
+   */
+  private Versions version;
 
   /**
    * Prefix of UserAgent

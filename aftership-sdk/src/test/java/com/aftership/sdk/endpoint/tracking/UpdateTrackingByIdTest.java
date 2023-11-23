@@ -56,7 +56,7 @@ public class UpdateTrackingByIdTest {
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("PUT", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        MessageFormat.format("/v4/trackings/{0}", id),
+        MessageFormat.format("/tracking/2023-10/trackings/{0}", id),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 

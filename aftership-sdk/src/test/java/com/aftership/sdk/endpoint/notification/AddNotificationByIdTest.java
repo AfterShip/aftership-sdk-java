@@ -60,7 +60,7 @@ public class AddNotificationByIdTest {
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        MessageFormat.format("/v4/notifications/{0}/add", id),
+        MessageFormat.format("/tracking/2023-10/notifications/{0}/add", id),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 

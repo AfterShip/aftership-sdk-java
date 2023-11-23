@@ -49,7 +49,7 @@ public class GetNotificationByIdTest {
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("GET", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        MessageFormat.format("/v4/notifications/{0}", id),
+        MessageFormat.format("/tracking/2023-10/notifications/{0}", id),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 

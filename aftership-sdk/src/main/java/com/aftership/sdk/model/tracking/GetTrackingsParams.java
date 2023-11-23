@@ -31,11 +31,14 @@ public class GetTrackingsParams {
   private Date createdAtMin;
 
   /**
-   * Total delivery time in days. - Difference of 1st checkpoint time and delivered time for
-   * delivered shipments - Difference of 1st checkpoint time and current time for non-delivered
-   * shipments Value as 0 for pending shipments or delivered shipment with only one checkpoint.
+   * Total transit time in days.
+   * For delivered shipments: Transit time (in days) = Delivered date - Pick-up date
+   * For undelivered shipments: Transit time (in days) = Current date - Pick-up date
+   * Value as null for the shipment without pick-up date.
+   *
+   * <p>Number
    */
-  private Integer deliveryTime;
+  private Integer transitTime;
 
   /**
    * Destination country of trackings. Use ISO Alpha-3 (three letters). Use comma for multiple
@@ -134,8 +137,8 @@ public class GetTrackingsParams {
     map.put("keyword", this.getKeyword());
     map.put("slug", this.getSlug());
     map.put(
-      "delivery_time",
-      this.getDeliveryTime() != null ? this.getDeliveryTime().toString() : StrUtils.EMPTY);
+      "transit_time",
+      this.getTransitTime() != null ? this.getTransitTime().toString() : StrUtils.EMPTY);
     map.put("origin", this.getOrigin());
     map.put("destination", this.getDestination());
     map.put("tag", this.getTag());

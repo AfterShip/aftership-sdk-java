@@ -16,7 +16,7 @@ public class Concurrency {
 
   public static void main(String[] args) throws InterruptedException {
     AftershipOption option = new AftershipOption();
-    option.setEndpoint("http://localhost:8080/v4");
+    option.setEndpoint("http://localhost:8080/tracking/2023-10");
     AfterShip afterShip = new AfterShip(SampleUtil.getApiKey(), option);
 
     int nums = 50;

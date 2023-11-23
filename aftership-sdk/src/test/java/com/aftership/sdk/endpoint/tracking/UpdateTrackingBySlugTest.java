@@ -57,7 +57,7 @@ public class UpdateTrackingBySlugTest {
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("PUT", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        MessageFormat.format("/v4/trackings/{0}/{1}", identifier.getSlug(), identifier.getTrackingNumber()),
+        MessageFormat.format("/tracking/2023-10/trackings/{0}/{1}", identifier.getSlug(), identifier.getTrackingNumber()),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 

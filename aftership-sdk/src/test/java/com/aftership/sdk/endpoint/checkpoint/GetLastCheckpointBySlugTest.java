@@ -61,7 +61,7 @@ public class GetLastCheckpointBySlugTest {
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("GET", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        MessageFormat.format("/v4/last_checkpoint/{0}/{1}", slug, trackingNumber),
+        MessageFormat.format("/tracking/2023-10/last_checkpoint/{0}/{1}", slug, trackingNumber),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 

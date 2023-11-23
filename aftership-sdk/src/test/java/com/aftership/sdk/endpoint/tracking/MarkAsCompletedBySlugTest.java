@@ -55,7 +55,7 @@ public class MarkAsCompletedBySlugTest {
     Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
         MessageFormat.format(
-            "/v4/trackings/{0}/{1}/mark-as-completed",
+            "/tracking/2023-10/trackings/{0}/{1}/mark-as-completed",
             identifier.getSlug(), identifier.getTrackingNumber()),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");

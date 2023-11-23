@@ -60,7 +60,7 @@ public class ListAllCouriersTest {
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("GET", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        "/v4/couriers/all",
+        "/tracking/2023-10/couriers/all",
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 

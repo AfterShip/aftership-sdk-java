@@ -302,7 +302,39 @@
       "first_attempted_at": "2018-07-25T10:10:00+09:00",
       "aftership_estimated_delivery_date": null,
       "order_tags": null,
-      "destination_raw_location": "Sydney, Australia"
+      "destination_raw_location": "Sydney, Australia",
+      "shipment_tags": [
+        "Returned"
+      ],
+      "next_couriers": [
+        {
+          "slug": "usps",
+          "tracking_number": "61293150000079650811",
+          "source": "system"
+        }
+      ],
+      "courier_connection_id": "8e1261bde336436abbc7cb3eee8cd707",
+      "custom_estimated_delivery_date": {
+        "type": "specific",
+        "datetime": "2022-01-05",
+        "datetime_min": null,
+        "datetime_max": null
+      },
+      "first_estimated_delivery": {
+        "type": "specific",
+        "source": "Carrier EDD",
+        "datetime": "2022-01-05T12:11:11+01:00",
+        "datetime_min": null,
+        "datetime_max": null
+      },
+      "latest_estimated_delivery": {
+        "type": "specific",
+        "source": "AfterShip EDD",
+        "datetime": "2022-01-05T12:11:11+01:00",
+        "datetime_min": null,
+        "datetime_max": null
+      },
+      "transit_time": 10
     }
   }
 }

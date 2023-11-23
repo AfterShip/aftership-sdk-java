@@ -51,7 +51,7 @@ public class GetNotificationBySlugTest {
     Assertions.assertEquals("GET", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
         MessageFormat.format(
-            "/v4/notifications/{0}/{1}", identifier.getSlug(), identifier.getTrackingNumber()),
+            "/tracking/2023-10/notifications/{0}/{1}", identifier.getSlug(), identifier.getTrackingNumber()),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 

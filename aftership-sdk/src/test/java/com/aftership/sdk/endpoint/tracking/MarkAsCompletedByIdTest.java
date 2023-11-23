@@ -51,7 +51,7 @@ public class MarkAsCompletedByIdTest {
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        MessageFormat.format("/v4/trackings/{0}/mark-as-completed", id),
+        MessageFormat.format("/tracking/2023-10/trackings/{0}/mark-as-completed", id),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 
