@@ -68,7 +68,7 @@ public class GetTrackingByIdTest {
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("GET", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        MessageFormat.format("/v4/trackings/{0}", id),
+        MessageFormat.format("/tracking/2023-10/trackings/{0}", id),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
     Assertions.assertNotNull(tracking.getCourierRedirectLink(), "courier_redirect_link mismatch");

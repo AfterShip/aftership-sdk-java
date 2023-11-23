@@ -21,8 +21,8 @@ public class TestUtil {
   private static final int LimitValue = 1000;
   private static final AtomicInteger RemainingValue = new AtomicInteger(LimitValue);
 
-  public static final String ENDPOINT_VERSION = "v4";
-  public static final String ENDPOINT_FORMAT = "http://localhost:%s/" + ENDPOINT_VERSION;
+  public static final String ENDPOINT_VERSION = "2023-10";
+  public static final String ENDPOINT_FORMAT = "http://localhost:%s/tracking/" + ENDPOINT_VERSION;
   public static final String YOUR_API_KEY = "YOUR_API_KEY";
 
   public static String getRequestPath(String subPath) {
@@ -75,7 +75,7 @@ public class TestUtil {
   public static AfterShip createAfterShipNewVersion(MockWebServer server) throws SdkException {
     AftershipOption option = new AftershipOption();
     option.setVersion(Versions.V2023_10);
-    option.setEndpoint(String.format("http://localhost:%s/%s", server.getPort(), option.getVersion().getValue()));
+    option.setEndpoint(String.format("http://localhost:%s/tracking/%s", server.getPort(), option.getVersion().getValue()));
     return new AfterShip(TestUtil.YOUR_API_KEY, option);
   }
 }

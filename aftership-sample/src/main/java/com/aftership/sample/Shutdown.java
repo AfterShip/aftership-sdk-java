@@ -11,7 +11,7 @@ public class Shutdown {
 
   public static void main(String[] args) {
     AftershipOption option = new AftershipOption();
-    option.setEndpoint("https://api.aftership.com/v4");
+    option.setEndpoint("https://api.aftership.com/tracking/2023-10");
     // Set timeout value, Otherwise, default values are used.
     option.setCallTimeout(10 * 1000);
     option.setConnectTimeout(10 * 1000);

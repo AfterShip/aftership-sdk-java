@@ -50,7 +50,7 @@ public class ReTrackBySlugTest {
     Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
         MessageFormat.format(
-            "/v4/trackings/{0}/{1}/retrack", identifier.getSlug(), identifier.getTrackingNumber()),
+            "/tracking/2023-10/trackings/{0}/{1}/retrack", identifier.getSlug(), identifier.getTrackingNumber()),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 

@@ -90,15 +90,6 @@ public class Tracking {
   private String customerName;
 
   /**
-   * Total delivery time in days. - Difference of 1st checkpoint time and delivered time for
-   * delivered shipments - Difference of 1st checkpoint time and current time for non-delivered
-   * shipments Value as 0 for pending shipments or delivered shipment with only one checkpoint.
-   *
-   * <p>Number
-   */
-  private int deliveryTime;
-
-  /**
    * Total transit time in days.
    * For delivered shipments: Transit time (in days) = Delivered date - Pick-up date
    * For undelivered shipments: Transit time (in days) = Current date - Pick-up date

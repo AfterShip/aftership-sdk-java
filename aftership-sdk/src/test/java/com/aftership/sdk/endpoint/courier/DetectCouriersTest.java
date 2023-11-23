@@ -57,7 +57,7 @@ public class DetectCouriersTest {
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        "/v4/couriers/detect",
+        "/tracking/2023-10/couriers/detect",
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 

@@ -122,11 +122,7 @@ public class ApiRequestImpl implements ApiRequest {
       requestHeaders.put("date", date);
       requestHeaders.put(signHeader.getHeader(), signHeader.getSignature());
     } else {
-      if (StrUtils.isNotBlank(app.getVersion())) {
-        requestHeaders.put("as-api-key", app.getApiKey());
-      } else {
-        requestHeaders.put("aftership-api-key", app.getApiKey());
-      }
+      requestHeaders.put("as-api-key", app.getApiKey());
     }
 
     Request request =

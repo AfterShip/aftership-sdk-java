@@ -11,12 +11,12 @@ class AfterShipTest {
   @Test
   void testAfterShipConstructorApiKeyAndAftershipOption() throws SdkException {
     AftershipOption options = new AftershipOption();
-    options.setEndpoint("https://api.aftership.com/v4");
+    options.setEndpoint("https://api.aftership.com/tracking/2023-10");
     options.setUserAgentPrefix("aftership-sdk-java");
     AfterShip afterShip = new AfterShip("API key", options);
     Assertions.assertEquals("API key", afterShip.getApiKey());
     Assertions.assertEquals("aftership-sdk-java", afterShip.getUserAgentPrefix());
-    Assertions.assertEquals("https://api.aftership.com/v4", afterShip.getEndpoint());
+    Assertions.assertEquals("https://api.aftership.com/tracking/2023-10", afterShip.getEndpoint());
   }
   @Test
   void testAfterShipConstructorVersion() throws SdkException {
@@ -50,7 +50,7 @@ class AfterShipTest {
     AftershipOption options = new AftershipOption();
     options.setUserAgentPrefix("aftership-sdk-java");
     AfterShip afterShip = new AfterShip("API key", options);
-    Assertions.assertEquals("https://api.aftership.com/v4", afterShip.getEndpoint());
+    Assertions.assertEquals("https://api.aftership.com/tracking/2023-10", afterShip.getEndpoint());
   }
 
 

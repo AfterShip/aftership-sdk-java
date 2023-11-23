@@ -55,7 +55,7 @@ public class RemoveNotificationByIdTest {
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-        MessageFormat.format("/v4/notifications/{0}/remove", id),
+        MessageFormat.format("/tracking/2023-10/notifications/{0}/remove", id),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
 

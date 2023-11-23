@@ -35,37 +35,6 @@ public class CreateTrackingTest {
   }
 
   @Test
-  public void testCreateTracking()
-      throws IOException, InterruptedException, AftershipException, URISyntaxException {
-    AfterShip afterShip = TestUtil.createAfterShip(server);
-
-    System.out.println(">>>>> createTracking(NewTracking newTracking)");
-    String requestBody = TestUtil.getJson("endpoint/tracking/CreateTrackingRequest.json");
-
-    Tracking tracking =
-        afterShip
-            .getTrackingEndpoint()
-            .createTracking(
-                JsonUtils.getGson().fromJson(requestBody, NewTrackingRequest.class).getTracking());
-
-    Assertions.assertNotNull(tracking);
-    Assertions.assertEquals("fedex", tracking.getSlug(), "Slug mismatch.");
-    Assertions.assertEquals(
-        "2019-05-20", tracking.getOrderPromisedDeliveryDate(), "date mismatch.");
-    Assertions.assertEquals(0, tracking.getSmses().size(), "Smses size mismatch.");
-
-    RecordedRequest recordedRequest = server.takeRequest();
-    Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
-    Assertions.assertEquals(
-        "/v4/trackings",
-        new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
-        "path mismatch.");
-
-    TestUtil.printResponse(afterShip, tracking);
-    TestUtil.printRequest(recordedRequest);
-  }
-
-  @Test
   public void testCreateTrackingNewVersion()
     throws IOException, InterruptedException, AftershipException, URISyntaxException {
     AfterShip afterShip = TestUtil.createAfterShipNewVersion(server);
@@ -88,7 +57,7 @@ public class CreateTrackingTest {
     RecordedRequest recordedRequest = server.takeRequest();
     Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
-      "/2023-10/trackings",
+      "/tracking/2023-10/trackings",
       new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
       "path mismatch.");
     Assertions.assertEquals(

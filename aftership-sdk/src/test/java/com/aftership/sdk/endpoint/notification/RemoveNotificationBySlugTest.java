@@ -60,7 +60,7 @@ public class RemoveNotificationBySlugTest {
     Assertions.assertEquals("POST", recordedRequest.getMethod(), "Method mismatch.");
     Assertions.assertEquals(
         MessageFormat.format(
-            "/v4/notifications/{0}/{1}/remove",
+            "/tracking/2023-10/notifications/{0}/{1}/remove",
             identifier.getSlug(), identifier.getTrackingNumber()),
         new URI(UrlUtils.decode(recordedRequest.getPath())).getPath(),
         "path mismatch.");
