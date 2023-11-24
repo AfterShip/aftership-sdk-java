@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2023-11-24
+### Added
+- Support new api versions 2023-10 (https://github.com/AfterShip/aftership-sdk-java/pull/60)
+
 ## [2.1.11] - 2023-10-08
 ### Added
 - Add shipment_tags field (https://github.com/AfterShip/aftership-sdk-java/pull/57)
@@ -80,6 +84,7 @@ Compatibility
 ### Changed
 - Solving issue at Checkpoint.java, typo in ```country_iso3```
 
+[3.0.0]: https://github.com/AfterShip/aftership-sdk-java/compare/2.1.11...3.0.0
 [2.1.11]: https://github.com/AfterShip/aftership-sdk-java/compare/2.1.10...2.1.11
 [2.1.10]: https://github.com/AfterShip/aftership-sdk-java/compare/2.1.9...2.1.10
 [2.1.9]: https://github.com/AfterShip/aftership-sdk-java/compare/2.1.7...2.1.9
