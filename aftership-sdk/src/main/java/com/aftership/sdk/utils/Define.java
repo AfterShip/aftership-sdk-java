@@ -4,7 +4,7 @@ package com.aftership.sdk.utils;
 public final class Define {
 
   /** Version of the current component */
-  public static final String VERSION = "2.1.11";
+  public static final String VERSION = "3.0.0";
 
   /** The range of http status codes for successful API requests */
   public static final int[] SUCCESSFUL_CODE_RANGE;
