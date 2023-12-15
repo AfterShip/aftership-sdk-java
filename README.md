@@ -38,12 +38,13 @@ The following code example shows the `three main steps` to use aftership-sdk-jav
 1. Create `AfterShip` Object.
 
 ```java
-AfterShip afterShip = new AfterShip("YOUR_API_KEY", 
-	new AftershipOption("https://api.aftership.com/v4"));
+AftershipOption option = new AftershipOption();
+option.setEndpoint("https://api.aftership.com/v4");
+
+AfterShip afterShip = new AfterShip("YOUR_API_KEY", option);
 
 // if add aes sign
-AfterShip afterShip = new AfterShip("YOUR_API_KEY",AuthenticationType.AES,"YOUR_API_SECRET",
-        new AftershipOption("https://api.aftership.com/v4"));
+AfterShip afterShip = new AfterShip("YOUR_API_KEY",AuthenticationType.AES,"YOUR_API_SECRET", option);
 ```
 
 2. Get the Endpoint Interface and call the method, then return the object.
@@ -56,8 +57,9 @@ CourierList courierList = afterShip.getCourierEndpoint().listCouriers();
 
 ```java
 try {
-  AfterShip afterShip =
-    new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+  AftershipOption option = new AftershipOption();
+  option.setEndpoint("https://api.aftership.com/v4");
+  AfterShip afterShip = new AfterShip("YOUR_API_KEY", option);
   CourierList courierList = afterShip.getCourierEndpoint().listCouriers();
   // using data
   System.out.println(courierList);
