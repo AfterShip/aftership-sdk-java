@@ -2,7 +2,6 @@ package com.aftership.sdk.model.tracking;
 
 import lombok.Data;
 
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -148,7 +147,7 @@ public class UpdateTracking {
    *
    * <p>Date
    */
-  private Date orderDate;
+  private String orderDate;
 
   /**
    * The carrier’s shipment type. When you input this field, AfterShip will not get updates from the carrier.

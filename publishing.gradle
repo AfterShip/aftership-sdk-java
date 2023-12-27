@@ -18,7 +18,7 @@ if (file("${publishConfigFilePath}").exists()) {
                 pom {
                     name = 'aftership-sdk'
                     description = 'aftership-sdk library'
-                    url = 'https://docs.aftership.com/api/4/overview'
+                    url = 'https://www.aftership.com/docs/tracking/quickstart/api-quick-start'
                     licenses {
                         license {
                             name = 'MIT License'

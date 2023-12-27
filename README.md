@@ -4,7 +4,7 @@
 [![AfterShip SDKs channel](https://aftership-sdk-slackin.herokuapp.com/badge.svg)](https://aftership-sdk-slackin.herokuapp.com/)
 [![Build Status](https://api.travis-ci.org/chenjunbiao/aftership-sdk-java.svg?branch=v2)](https://travis-ci.org/github/chenjunbiao/aftership-sdk-java)
 
-The Java SDK of `AfterShip API`, please see API documentation in: https://www.aftership.com/docs/api/4
+The Java SDK of `AfterShip API`, please see API documentation in: https://www.aftership.com/docs/tracking/quickstart/api-quick-start
 
 Requirements:
 
@@ -18,14 +18,14 @@ Requirements:
 <dependency>
   <groupId>com.aftership</groupId>
   <artifactId>aftership-sdk</artifactId>
-  <version>3.0.0</version>
+  <version>4.0.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```text
-implementation "com.aftership:aftership-sdk:3.0.0"
+implementation "com.aftership:aftership-sdk:4.0.0"
 ```
 
 
@@ -39,12 +39,12 @@ The following code example shows the `three main steps` to use aftership-sdk-jav
 
 ```java
 AftershipOption option = new AftershipOption();
-option.setEndpoint("https://api.aftership.com/v4");
+option.setEndpoint("https://api.aftership.com/tracking/2023-10/trackings");
 
 AfterShip afterShip = new AfterShip("YOUR_API_KEY", option);
 
 // if add aes sign
-AfterShip afterShip = new AfterShip("YOUR_API_KEY",AuthenticationType.AES,"YOUR_API_SECRET", option);
+AfterShip afterShip = new AfterShip("YOUR_API_KEY", AuthenticationType.AES,"YOUR_API_SECRET", option);
 ```
 
 2. Get the Endpoint Interface and call the method, then return the object.
@@ -58,7 +58,7 @@ CourierList courierList = afterShip.getCourierEndpoint().listCouriers();
 ```java
 try {
   AftershipOption option = new AftershipOption();
-  option.setEndpoint("https://api.aftership.com/v4");
+  option.setEndpoint("https://api.aftership.com/tracking/2023-10/trackings");
   AfterShip afterShip = new AfterShip("YOUR_API_KEY", option);
   CourierList courierList = afterShip.getCourierEndpoint().listCouriers();
   // using data
@@ -179,7 +179,7 @@ error.Type is one of [ErrorType](https://github.com/AfterShip/aftership-sdk-java
 ```java
 try {
   AfterShip afterShip =
-      new AfterShip(null, new AftershipOption("https://api.aftership.com/v4"));
+      new AfterShip(null, new AftershipOption("https://api.aftership.com/tracking/2023-10/trackings"));
 } catch (SdkException e) {
   System.out.println(e.getMessage());
 }
@@ -192,7 +192,7 @@ try {
 ```java
 try {
   AfterShip afterShip =
-      new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+      new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/tracking/2023-10/trackings"));
   afterShip.getTrackingEndpoint().getTracking("", null);
 } catch (SdkException e) {
   System.out.println(e.getMessage());
@@ -209,7 +209,7 @@ Error return by the `request` module
 ```java
 try {
   AfterShip afterShip =
-      new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+      new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/tracking/2023-10/trackings"));
   afterShip.getTrackingEndpoint().getTracking("abc", null);
 } catch (RequestException e) {
   System.out.println(e.getMessage());
@@ -226,7 +226,7 @@ Error return by the AfterShip API
 ```java
 try {
   AfterShip afterShip =
-      new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+      new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/tracking/2023-10/trackings"));
   afterShip.getTrackingEndpoint().getTracking("abc", null);
 } catch (ApiException e) {
   System.out.println(e.getMessage());
@@ -244,7 +244,7 @@ You can get the recent rate limit by `ApiException.getRateLimit()`.
 ```java
 try {
   AfterShip afterShip =
-    new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/v4"));
+    new AfterShip("YOUR_API_KEY", new AftershipOption("https://api.aftership.com/tracking/2023-10/trackings"));
   afterShip.getCourierEndpoint().listCouriers();
 } catch (SdkException | RequestException e) {
   System.out.println(e.getType());
@@ -266,7 +266,7 @@ When creating an Aftership object, you can define the timeout time for http requ
 
 ```java 
 AftershipOption option = new AftershipOption();
-option.setEndpoint("https://api.aftership.com/v4");
+option.setEndpoint("https://api.aftership.com/tracking/2023-10/trackings");
 option.setCallTimeout(10 * 1000);
 option.setConnectTimeout(10 * 1000);
 option.setReadTimeout(10 * 1000);
