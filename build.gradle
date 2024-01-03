@@ -17,7 +17,7 @@ buildscript {
 
 allprojects {
     group 'com.aftership'
-    version '3.0.0'
+    version '4.0.0'
 
     repositories {
         mavenCentral()
@@ -110,7 +110,7 @@ project(':aftership-sample') {
     dependencies {
 //        compile project(':aftership-sdk')
         implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
-        implementation "com.aftership:aftership-sdk:3.0.0"
+        implementation "com.aftership:aftership-sdk:4.0.0"
     }
 
     jar {
