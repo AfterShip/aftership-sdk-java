@@ -1,6 +1,5 @@
 package com.aftership.sdk.model.tracking;
 
-import java.util.Date;
 import java.util.Map;
 
 import lombok.Data;
@@ -172,9 +171,9 @@ public class NewTracking {
   /**
    * Date and time of the order created
    *
-   * <p>Date
+   * <p>String
    */
-  private Date orderDate;
+  private String orderDate;
 
   /**
    * Text field for order number

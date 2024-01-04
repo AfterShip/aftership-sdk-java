@@ -177,9 +177,9 @@ public class Tracking {
   /**
    * Date and time of the order created
    *
-   * <p>Date
+   * <p>String
    */
-  private Date orderDate;
+  private String orderDate;
 
   /**
    * Origin country of the tracking. ISO Alpha-3 (three letters).
@@ -198,16 +198,16 @@ public class Tracking {
   /**
    * Date and time the tracking was picked up
    *
-   * <p>DateTime
+   * <p>String
    */
-  private Date shipmentPickupDate;
+  private String shipmentPickupDate;
 
   /**
    * Date and time the tracking was delivered
    *
-   * <p>DateTime
+   * <p>String
    */
-  private Date shipmentDeliveryDate;
+  private String shipmentDeliveryDate;
 
   /**
    * Shipment type provided by carrier (if any).
@@ -393,7 +393,7 @@ public class Tracking {
    *
    * <p><font color="red">String or Null</font>
    */
-  private Date firstAttemptedAt;
+  private String firstAttemptedAt;
 
   /**
    * Delivery instructions (delivery date or address) can be modified by visiting the link if
