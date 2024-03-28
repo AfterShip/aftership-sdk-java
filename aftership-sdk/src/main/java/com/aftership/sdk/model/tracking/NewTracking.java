@@ -191,4 +191,9 @@ public class NewTracking {
    * Used to add tags to your shipments to help categorize and filter them easily.
    */
   private String[] shipmentTags;
+
+  /**
+   * If you’ve connected multiple accounts for a single carrier on AfterShip, you can now use the courier_connection_id field to tell AfterShip which carrier account you’ve used to handle a shipment so we can track it.
+   */
+  private String courierConnectionId;
 }

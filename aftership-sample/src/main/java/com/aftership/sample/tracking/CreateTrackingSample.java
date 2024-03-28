@@ -27,6 +27,7 @@ public class CreateTrackingSample {
     newTracking.setEmails(new String[] {"email@yourdomain.com", "another_email@yourdomain.com"});
     newTracking.setOrderId("ID 1234");
     newTracking.setOrderIdPath("http://www.aftership.com/order_id=1234");
+    newTracking.setCourierConnectionId("YOUR_CONNECTION_ID");
     newTracking.setCustomFields(
         new HashMap<String, String>(2) {
           {
